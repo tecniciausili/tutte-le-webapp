@@ -1514,3 +1514,43 @@ body {
     .consegna { font-size: 1rem; }
     .app-header { padding: 6px 12px; }
 }
+
+/* ===== SESSIONE DI LAVORO: contatore e riepilogo finale ===== */
+.status-bar .status-chip.sessione-chip { color: var(--color-primary-dark); font-weight: 600; }
+
+.sessione-card .sessione-coppa {
+    display: block;
+    font-size: 3.4rem;
+    color: #FFB300;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.sessione-stats {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 0 0 22px;
+}
+
+.sessione-stats > div {
+    flex: 1 1 110px;
+    background: var(--color-bg);
+    border-radius: var(--radius-sm);
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sessione-stats strong {
+    font-size: 1.8rem;
+    color: var(--color-primary);
+    line-height: 1.1;
+}
+
+.sessione-stats span {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+}

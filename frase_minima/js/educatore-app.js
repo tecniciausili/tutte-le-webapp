@@ -33,6 +33,7 @@ const appState = {
 document.addEventListener('DOMContentLoaded', () => {
     loadExercises();
     loadRisultati();
+    caricaPerSessione();
     document.getElementById('fileImporta')?.addEventListener('change', alFileImporta);
 });
 
@@ -507,6 +508,36 @@ function renderRisultati() {
             <tbody>${righe}</tbody>
         </table>
     `;
+}
+
+
+// ===== SESSIONE DI LAVORO =====
+// Quanti frasi fa l'utente in una sessione (0 = libera). Salvato subito alla scelta.
+const SCELTE_PER_SESSIONE = [0, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30];
+
+function caricaPerSessione() {
+    const campo = document.getElementById('inputPerSessione');
+    if (!campo) return;
+    const attuale = Archivio.getImpostazioniSessione().per_sessione;
+    const scelte = SCELTE_PER_SESSIONE.includes(attuale)
+        ? SCELTE_PER_SESSIONE
+        : [...SCELTE_PER_SESSIONE, attuale].sort((a, b) => a - b);
+    campo.innerHTML = scelte.map(n => `<option value="${n}"${n === attuale ? ' selected' : ''}>${
+        n === 0 ? 'Libera (nessun numero fisso)' : n
+    }</option>`).join('');
+}
+
+function salvaPerSessione() {
+    const campo = document.getElementById('inputPerSessione');
+    if (!campo) return;
+    try {
+        const imp = Archivio.salvaImpostazioniSessione({ per_sessione: campo.value });
+        showToast(imp.per_sessione === 0
+            ? 'Sessione libera: nessun numero fisso di frasi'
+            : `Sessione di lavoro: ${imp.per_sessione} frasi`, 'success');
+    } catch (e) {
+        showToast('Impostazione non salvata: ' + e.message, 'error');
+    }
 }
 
 // ===== COPIA DEI DATI (ESPORTA / IMPORTA) =====

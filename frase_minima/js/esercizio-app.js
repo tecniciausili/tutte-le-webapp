@@ -49,8 +49,12 @@ const state = {
     autoAdvance: true,
     autoAdvanceTimer: null,
     // true = bordi colorati (indizio attivo); false = bordi neri
-    bordiColorati: true
+    bordiColorati: true,
+    // sessione di lavoro: quante frasi (scelto dall'educatore, 0 = libera)
+    sessione: null
 };
+
+const PAUSA_PRIMA_DEL_RIEPILOGO = 3500;   // ms: frase e BRAVO dell'ultima frase restano visibili
 
 let currentDragTile = null;
 let lastErrorTime = 0;
@@ -59,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     caricaPreferenzaBordi();
     caricaPreferenzaFontTesto();
     caricaImpostazioni();
+    nuovaSessione();
     initApp();
     setupSlots();
 });
@@ -141,14 +146,20 @@ function backToChooser() {
     state.completed = false;
     state.errori = 0;
     document.getElementById('celebrationOverlay').classList.remove('active');
+    document.getElementById('sessioneOverlay').classList.remove('active');
+    if (sessioneFinita()) nuovaSessione();
     renderChooser();
 }
 
 // ===== AVVIO ESERCIZIO =====
 function startExerciseFrom(config) {
     cancelAutoAdvance();
+    if (sessioneFinita()) nuovaSessione();
+    document.getElementById('sessioneOverlay').classList.remove('active');
 
     state.currentConfig = config;
+    if (!state.sessione.usati.includes(config.id_config)) state.sessione.usati.push(config.id_config);
+    aggiornaContatoreSessione();
     state.indiceCorrente = 0;
     state.inserite = [];
     state.errori = 0;
@@ -508,6 +519,7 @@ function fraseCompletata() {
 
     const tempo = Math.max(0, Math.round((Date.now() - state.startTime) / 1000));
     salvaRisultato(tempo, frase);
+    const finita = registraInSessione(state.errori, tempo);
 
     document.getElementById('bravoText').textContent = `${rinforzo.toUpperCase()}!`;
     document.getElementById('fraseCompleta').textContent = frase;
@@ -515,10 +527,15 @@ function fraseCompletata() {
         ? 'Frase completata senza errori!'
         : `Frase completata dopo ${state.errori} error${state.errori === 1 ? 'e' : 'i'}`;
 
+    // Ultima frase della sessione: niente pulsanti, dopo il BRAVO arriva il riepilogo
+    document.querySelector('#celebrationOverlay .celebration-actions').classList.toggle('hidden', finita);
+
     setTimeout(() => {
         document.getElementById('celebrationOverlay').classList.add('active');
-        if (state.autoAdvance) {
-            cancelAutoAdvance();
+        cancelAutoAdvance();
+        if (finita) {
+            state.autoAdvanceTimer = setTimeout(() => mostraFineSessione(), PAUSA_PRIMA_DEL_RIEPILOGO);
+        } else if (state.autoAdvance) {
             state.autoAdvanceTimer = setTimeout(() => goToRandomExercise(), 6000);
         }
     }, 1200);
@@ -567,10 +584,13 @@ function pickRandomExercise() {
     if (list.length === 0) return null;
     if (list.length === 1) return list[0];
 
-    let candidati = list;
-    if (state.currentConfig) {
-        const diversi = list.filter(ex => ex.id_config !== state.currentConfig.id_config);
-        if (diversi.length > 0) candidati = diversi;
+    const attuale = state.currentConfig ? state.currentConfig.id_config : null;
+    let candidati = list.filter(ex => !state.sessione.usati.includes(ex.id_config));
+    if (candidati.length === 0) {
+        // uscite tutte: si ricomincia il giro (senza ripetere subito quella appena fatta)
+        state.sessione.usati = [];
+        candidati = list.filter(ex => ex.id_config !== attuale);
+        if (candidati.length === 0) candidati = list;
     }
     return candidati[Math.floor(Math.random() * candidati.length)];
 }
@@ -594,6 +614,74 @@ function closeCelebration() {
 
 function closeCelebrationToChooser() {
     cancelAutoAdvance();
+    backToChooser();
+}
+
+// ===== SESSIONE DI LAVORO =====
+// L'educatore sceglie nell'Area Educatore quante frasi compone l'utente in una sessione.
+// Ogni frase completata conta una; all'ultima compare il riepilogo della sessione.
+function nuovaSessione() {
+    let totale = 0;
+    try { totale = Archivio.getImpostazioniSessione().per_sessione; } catch (e) { totale = 0; }
+    state.sessione = { totale, fatti: 0, primoColpo: 0, errori: 0, tempo: 0, usati: [] };
+    aggiornaContatoreSessione();
+}
+
+function sessioneFinita() {
+    const s = state.sessione;
+    return !!s && s.totale > 0 && s.fatti >= s.totale;
+}
+
+/** Conta la frase appena completata; true se era l'ultima della sessione */
+function registraInSessione(errori, tempoSecondi) {
+    const s = state.sessione;
+    s.fatti += 1;
+    if (errori === 0) s.primoColpo += 1;
+    s.errori += errori;
+    s.tempo += tempoSecondi;
+    return sessioneFinita();
+}
+
+function aggiornaContatoreSessione() {
+    const chip = document.getElementById('sessioneChip');
+    if (!chip || !state.sessione) return;
+    const { totale, fatti } = state.sessione;
+    chip.classList.toggle('hidden', totale === 0);
+    document.getElementById('sessioneNumero').textContent = Math.min(fatti + 1, totale);
+    document.getElementById('sessioneTotale').textContent = totale;
+}
+
+function formatoTempo(secondi) {
+    const m = Math.floor(secondi / 60);
+    const sec = secondi % 60;
+    return m > 0 ? `${m} min ${sec} s` : `${sec} s`;
+}
+
+function mostraFineSessione() {
+    cancelAutoAdvance();
+    const s = state.sessione;
+    document.getElementById('celebrationOverlay').classList.remove('active');
+    const frase = `Hai composto ${s.fatti === 1 ? '1 frase' : s.fatti + ' frasi'}`;
+    document.getElementById('sessioneFrase').textContent = frase;
+    document.getElementById('sessionePrimoColpo').textContent = s.primoColpo;
+    document.getElementById('sessioneErrori').textContent = s.errori;
+    document.getElementById('sessioneTempo').textContent = formatoTempo(s.tempo);
+    document.getElementById('sessioneOverlay').classList.add('active');
+    launchConfetti();
+    const rinforzo = state.gender === 'F' ? 'Brava' : 'Bravo';
+    speak(`Sessione finita! ${rinforzo}! ${frase}.`);
+}
+
+/** «Nuova sessione»: si riparte da zero con una frase a caso */
+function ricominciaSessione() {
+    nuovaSessione();
+    state.currentConfig = null;
+    goToRandomExercise();
+}
+
+/** «Altre frasi»: si riparte da zero dalla scelta delle frasi */
+function chiudiSessioneAllaScelta() {
+    nuovaSessione();
     backToChooser();
 }
 

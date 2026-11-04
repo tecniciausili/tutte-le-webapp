@@ -10,6 +10,7 @@
 //  - fm_impostazioni  → impostazioni del menu dell'Area Utente (voce, aiuto, scala…)
 //  - fm_scala_testo   → dimensione del testo sotto i pittogrammi
 //  - fm_bordi_colorati→ indizio colore dei bordi ('1' / '0')
+//  - fm_sessione      → impostazioni dell'educatore (frasi per sessione di lavoro)
 //
 // Prende il posto del vecchio archivio sul server del portale e
 // restituisce gli stessi campi che l'interfaccia si aspetta: ogni frase ha
@@ -22,6 +23,7 @@ const Archivio = (() => {
     impostazioni: 'fm_impostazioni',
     scalaTesto: 'fm_scala_testo',
     bordi: 'fm_bordi_colorati',
+    sessione: 'fm_sessione',
   };
   const APP = 'frase-minima';
   const RUOLI = ['soggetto', 'predicato', 'complemento'];
@@ -33,6 +35,9 @@ const Archivio = (() => {
   const MAX_TESTO = 60;
   const MAX_FRASE = 200;
   const MAX_RISULTATI = 2000;
+  // Frasi per sessione di lavoro: 0 = libera (nessun numero fisso)
+  const PER_SESSIONE_DEFAULT = 10;
+  const PER_SESSIONE_MAX = 50;
 
   // ==================== UTILITÀ ====================
 
@@ -191,11 +196,29 @@ const Archivio = (() => {
       .slice(0, n);
   }
 
+  // ==================== SESSIONE DI LAVORO ====================
+
+  function numeroPerSessione(v) {
+    const n = parseInt(v, 10);
+    return Number.isFinite(n) && n >= 0 ? Math.min(n, PER_SESSIONE_MAX) : PER_SESSIONE_DEFAULT;
+  }
+
+  function getImpostazioniSessione() {
+    const s = leggiJSON(CHIAVI.sessione, {});
+    return { per_sessione: numeroPerSessione(s && s.per_sessione) };
+  }
+
+  function salvaImpostazioniSessione({ per_sessione } = {}) {
+    const imp = { per_sessione: numeroPerSessione(per_sessione) };
+    scriviJSON(CHIAVI.sessione, imp);
+    return imp;
+  }
+
   // ==================== ESPORTA / IMPORTA ====================
 
   function esportaDati() {
     const preferenze = {};
-    [CHIAVI.impostazioni, CHIAVI.scalaTesto, CHIAVI.bordi].forEach((k) => {
+    [CHIAVI.impostazioni, CHIAVI.scalaTesto, CHIAVI.bordi, CHIAVI.sessione].forEach((k) => {
       try {
         const v = localStorage.getItem(k);
         if (v !== null) preferenze[k] = v;
@@ -219,7 +242,7 @@ const Archivio = (() => {
     scriviJSON(CHIAVI.risultati, Array.isArray(file.risultati) ? file.risultati : []);
     const pref = file.preferenze && typeof file.preferenze === 'object' ? file.preferenze : {};
     // Solo le chiavi di questa app, mai altre
-    [CHIAVI.impostazioni, CHIAVI.scalaTesto, CHIAVI.bordi].forEach((k) => {
+    [CHIAVI.impostazioni, CHIAVI.scalaTesto, CHIAVI.bordi, CHIAVI.sessione].forEach((k) => {
       if (typeof pref[k] === 'string') {
         try { localStorage.setItem(k, pref[k]); } catch (e) { /* ignora */ }
       }
@@ -236,6 +259,9 @@ const Archivio = (() => {
     eliminaConfig,
     salvaRisultato,
     getRisultati,
+    getImpostazioniSessione,
+    salvaImpostazioniSessione,
+    PER_SESSIONE_MAX,
     esportaDati,
     importaDati,
   };

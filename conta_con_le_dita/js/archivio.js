@@ -7,6 +7,7 @@
 //
 //  - cd_config     → elenco degli esercizi configurati dall'educatore
 //  - cd_risultati  → storico delle esecuzioni dell'utente
+//  - cd_impostazioni → impostazioni dell'educatore (esercizi per sessione)
 //
 // Questo modulo prende il posto delle vecchie API PHP (api_conta_dita.php,
 // api_immagini_dita.php): restituisce gli stessi dati che si aspetta l'interfaccia.
@@ -15,7 +16,12 @@ const Archivio = (() => {
   const CHIAVI = {
     config: 'cd_config',
     risultati: 'cd_risultati',
+    impostazioni: 'cd_impostazioni',
   };
+
+  // Esercizi per sessione di lavoro: 0 = libera (nessun numero fisso)
+  const PER_SESSIONE_DEFAULT = 10;
+  const PER_SESSIONE_MAX = 50;
 
   // Immagini incluse nell'app (cartella assets/dita/).
   // Il numero di dita è dedotto dal nome del file, come faceva il backend.
@@ -218,6 +224,24 @@ const Archivio = (() => {
       .map((r) => ({ ...r, immagine: immaginePerConfig[r.id_config] || null }));
   }
 
+  // ==================== SESSIONE DI LAVORO ====================
+
+  function numeroPerSessione(v) {
+    const n = parseInt(v, 10);
+    return Number.isFinite(n) && n >= 0 ? Math.min(n, PER_SESSIONE_MAX) : PER_SESSIONE_DEFAULT;
+  }
+
+  function getImpostazioni() {
+    const s = leggiJSON(CHIAVI.impostazioni, {});
+    return { per_sessione: numeroPerSessione(s && s.per_sessione) };
+  }
+
+  function salvaImpostazioni({ per_sessione } = {}) {
+    const imp = { per_sessione: numeroPerSessione(per_sessione) };
+    scriviJSON(CHIAVI.impostazioni, imp);
+    return imp;
+  }
+
   // ==================== ESPORTA / IMPORTA ====================
   // Utile per spostare i dati su un altro dispositivo o farne una copia:
   // i dati stanno solo in questo browser.
@@ -228,6 +252,7 @@ const Archivio = (() => {
       esportato: Date.now(),
       config: leggiConfigRaw(),
       risultati: leggiJSON(CHIAVI.risultati, []),
+      impostazioni: getImpostazioni(),
     };
   }
 
@@ -237,6 +262,7 @@ const Archivio = (() => {
     }
     scriviJSON(CHIAVI.config, file.config);
     scriviJSON(CHIAVI.risultati, Array.isArray(file.risultati) ? file.risultati : []);
+    if (file.impostazioni && typeof file.impostazioni === 'object') salvaImpostazioni(file.impostazioni);
     return { config: file.config.length };
   }
 
@@ -247,6 +273,9 @@ const Archivio = (() => {
     eliminaConfig,
     salvaRisultato,
     getRisultati,
+    getImpostazioni,
+    salvaImpostazioni,
+    PER_SESSIONE_MAX,
     esportaDati,
     importaDati,
   };

@@ -17,7 +17,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 
-    <link rel="stylesheet" href="css/styles.css?v=2.0">
+    <link rel="stylesheet" href="css/styles.css?v=20261104.3">
     <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
     <script src="js/raccolta.js?v=1.0"></script>
 </head>
@@ -133,6 +133,10 @@
         <div class="board-bottom" id="pictosRow"></div>
 
         <div class="status-bar">
+            <span class="status-chip sessione-chip hidden" id="sessioneChip">
+                <i class="bi bi-flag"></i>
+                Frase <strong id="sessioneNumero">1</strong> di <strong id="sessioneTotale">10</strong>
+            </span>
             <span class="status-chip">
                 <i class="bi bi-x-circle"></i>
                 Errori: <strong id="erroriCount">0</strong>
@@ -267,6 +271,28 @@
         </div>
     </div>
 
+    <!-- Fine della sessione di lavoro (numero scelto dall'educatore) -->
+    <div class="celebration-overlay" id="sessioneOverlay">
+        <div class="celebration-card sessione-card" role="dialog" aria-modal="true" aria-labelledby="sessioneTitolo">
+            <i class="bi bi-trophy-fill sessione-coppa" aria-hidden="true"></i>
+            <div class="bravo-text" id="sessioneTitolo">Sessione finita!</div>
+            <p id="sessioneFrase">Hai composto tutte le frasi</p>
+            <div class="sessione-stats">
+                <div><strong id="sessionePrimoColpo">0</strong><span>senza errori</span></div>
+                <div><strong id="sessioneErrori">0</strong><span>errori in tutto</span></div>
+                <div><strong id="sessioneTempo">0 s</strong><span>tempo</span></div>
+            </div>
+            <div class="celebration-actions">
+                <button class="btn-primary" onclick="ricominciaSessione()">
+                    <i class="bi bi-arrow-repeat"></i> Nuova sessione
+                </button>
+                <button class="btn-secondary" onclick="chiudiSessioneAllaScelta()">
+                    <i class="bi bi-grid-3x3-gap"></i> Altre frasi
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Overlay errore -->
     <div class="error-overlay" id="errorOverlay">
         <div class="error-card">
@@ -279,8 +305,8 @@
     <div id="toastContainer" class="toast-container"></div>
 
     <script src="js/clear-cache.js?v=2.0"></script>
-    <script src="js/archivio.js?v=2.0"></script>
-    <script src="js/esercizio-app.js?v=20261104.2"></script>
+    <script src="js/archivio.js?v=20261104.3"></script>
+    <script src="js/esercizio-app.js?v=20261104.3"></script>
 
     <script>
         if ('serviceWorker' in navigator) {

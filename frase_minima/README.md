@@ -41,6 +41,10 @@ rispettando la sequenza **soggetto → predicato → complemento**.
   l'educatore può ripristinare i bordi colorati quando vuole. La scelta viene
   ricordata tra le frasi e tra le sessioni (sul dispositivo).
 - Ogni completamento viene registrato con numero di errori e tempo impiegato.
+- **Sessione di lavoro**: nell'Area Educatore si sceglie quante frasi compone l'utente in
+  una sessione (oppure «Libera», chiave `fm_sessione`). Durante l'esercizio compare il contatore
+  «Frase 3 di 10», le frasi escono a caso senza ripetersi finché non sono uscite tutte, e alla
+  fine c'è il **riepilogo** (frasi senza errori, errori in tutto, tempo).
 
 Modalità di risposta: **drag & drop col mouse**, **trascinamento col dito**,
 **tap semplice** (il pittogramma va nel box attivo) e **tastiera** (Tab + Invio).

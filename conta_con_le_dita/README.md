@@ -18,6 +18,7 @@ computer. **Un dispositivo = un utente**: non c'è registrazione né login, i da
   dal nome del file (`mano-03.png` → 3).
 - Si scrivono i **tre numeri** (uno deve corrispondere alle dita; gli altri due sono distrattori,
   fino a 99) e si sceglie se **mescolare** la posizione dei box.
+- **Sessione di lavoro**: quanti esercizi fa l'utente in una sessione (oppure «Libera»).
 - Elenco degli **esercizi creati** (con eliminazione) e tabella degli **ultimi risultati**.
 - **Copia dei dati**: Esporta / Importa in un file JSON (backup o travaso su un altro dispositivo).
 
@@ -26,6 +27,8 @@ computer. **Un dispositivo = un utente**: non c'è registrazione né login, i da
   numero nel box.
 - Voce di rinforzo, coriandoli, aiuto dopo 3 errori, avanzamento automatico, dimensione dei box
   regolabile. Impostazioni nel menu laterale.
+- Con la sessione di lavoro impostata: contatore «Esercizio 3 di 10», esercizi a caso senza
+  ripetizioni finché non sono usciti tutti, e alla fine il **riepilogo** (al primo colpo, errori, tempo).
 
 ## Architettura dati
 
@@ -33,6 +36,7 @@ computer. **Un dispositivo = un utente**: non c'è registrazione né login, i da
 |---|---|---|
 | Esercizi configurati | `localStorage` | `cd_config` |
 | Storico dei risultati | `localStorage` | `cd_risultati` |
+| Esercizi per sessione | `localStorage` | `cd_impostazioni` |
 
 Le chiavi hanno il prefisso `cd_` e la cache del service worker il prefisso `conta_con_le_dita_`:
 non toccano le altre app sullo stesso dominio. Nell'Area Educatore i pulsanti **Esporta dati** /

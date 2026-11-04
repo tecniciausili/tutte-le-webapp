@@ -17,7 +17,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 
-    <link rel="stylesheet" href="css/styles.css?v=2.0">
+    <link rel="stylesheet" href="css/styles.css?v=20261104.3">
     <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
     <script src="js/raccolta.js?v=1.0"></script>
 </head>
@@ -50,6 +50,25 @@
 
     <main class="app-main educator-main">
         <div id="mainContent">
+
+            <!-- Sessione di lavoro -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-flag"></i>
+                    <h2>Sessione di lavoro</h2>
+                </div>
+                <div class="section-content">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="inputPerSessione">Frasi per sessione:</label>
+                        <select id="inputPerSessione" class="form-select" onchange="salvaPerSessione()"></select>
+                        <small class="form-hint">
+                            Quante frasi l'utente compone in una sessione di lavoro: durante l'esercizio
+                            vede a che punto è (es. <strong>Frase 3 di 10</strong>) e alla fine compare il
+                            riepilogo della sessione. Con <strong>Libera</strong> si continua senza un numero fisso.
+                        </small>
+                    </div>
+                </div>
+            </section>
 
             <!-- Composizione frase -->
             <section class="config-section">
@@ -292,8 +311,8 @@
 
     <script src="js/arasaac-service.js?v=1.0"></script>
     <script src="js/clear-cache.js?v=2.0"></script>
-    <script src="js/archivio.js?v=2.0"></script>
-    <script src="js/educatore-app.js?v=20261104.2"></script>
+    <script src="js/archivio.js?v=20261104.3"></script>
+    <script src="js/educatore-app.js?v=20261104.3"></script>
 
     <script>
         if ('serviceWorker' in navigator) {
