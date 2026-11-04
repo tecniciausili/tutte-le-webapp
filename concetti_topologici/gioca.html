@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#F7F3EA">
+    <meta name="description" content="Concetti topologici - Area Utente: le scene preparate dall'educatore, una alla volta">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Concetti">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Esercizio - Concetti topologici</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    <link rel="stylesheet" href="css/styles.css?v=1.1.2">
+    <link rel="stylesheet" href="css/gioco.css?v=1.1.2">
+</head>
+<body class="gioco">
+
+    <header class="gioco-barra">
+        <div id="barraSx"></div>
+        <div class="spazio"></div>
+        <div class="avanzamento" id="avanzamento" aria-label="Avanzamento"></div>
+        <div class="spazio"></div>
+        <div class="lis-box" id="lisBox"></div>
+    </header>
+
+    <main id="gioco" style="flex:1;min-height:0;display:flex;flex-direction:column">
+        <div class="schermo-centro"><p class="nota">Caricamento…</p></div>
+    </main>
+
+    <div id="toast" class="toast-contenitore" aria-live="polite"></div>
+
+    <script src="js/comune.js?v=1.1.2"></script>
+    <script src="js/concetti.js?v=1.1.2"></script>
+    <script src="js/archivio.js?v=1.1.2"></script>
+    <script src="js/gioca.js?v=1.1.2"></script>
+</body>
+</html>

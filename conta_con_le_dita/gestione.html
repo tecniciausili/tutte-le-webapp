@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#673AB7">
+    <meta name="description" content="Area Educatore - Conta con le Dita">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Conta con le Dita">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Area Educatore - Conta con le Dita</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
+</head>
+<body class="educator-page">
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-buttons-left">
+                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Conta con le dita" title="Torna a: Conta con le dita">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                    <i class="bi bi-house-door-fill"></i>
+                </button>
+            </div>
+            <h1 class="app-title">
+                <i class="bi bi-person-gear"></i>
+                Area Educatore
+            </h1>
+            <div class="header-buttons-right">
+                <button class="btn-go-exercise" onclick="goToExercise()" title="Vai agli esercizi" aria-label="Vai agli esercizi">
+                    <i class="bi bi-controller"></i>
+                    <span>Esercizi</span>
+                </button>
+                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Cancella cache e ricarica" title="Cancella cache e ricarica">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main educator-main">
+        <div id="mainContent">
+
+            <!-- Crea nuovo esercizio -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-plus-circle"></i>
+                    <h2>Crea Nuovo Esercizio</h2>
+                </div>
+                <div class="section-content">
+
+                    <!-- 1. Immagine delle dita -->
+                    <div class="form-group">
+                        <label>1. Scegli l'immagine delle dita:</label>
+
+                        <div class="gallery-toolbar">
+                            <input type="text" id="inputFiltroImmagini" class="form-input"
+                                   placeholder="Filtra per nome o numero..." oninput="renderGallery()">
+                            <button class="btn-secondary" type="button" onclick="loadGallery(true)">
+                                <i class="bi bi-arrow-clockwise"></i> Aggiorna galleria
+                            </button>
+                            <span id="galleryCount" class="form-hint" style="margin:0;"></span>
+                        </div>
+
+                        <div id="ditaGallery" class="dita-gallery"></div>
+                        <div id="galleryEmpty" class="gallery-empty hidden">
+                            <i class="bi bi-images"></i>
+                            <strong>Nessuna immagine nella cartella</strong>
+                            <p>Copia le immagini delle dita in <code>assets/dita/</code> e premi
+                            "Aggiorna galleria".<br>
+                            Il nome del file deve contenere il numero di dita mostrate, isolato:
+                            <code>dita_3.png</code>, <code>mano_destra_7.jpg</code>, <code>10.png</code>.</p>
+                        </div>
+
+                        <div id="selectedPreview" class="selected-preview hidden">
+                            <img id="selectedPreviewImg" src="" alt="Immagine selezionata">
+                            <div>
+                                <div class="sp-number" id="selectedPreviewNumber">-</div>
+                                <div class="sp-file" id="selectedPreviewFile"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. I tre numeri -->
+                    <div class="form-group">
+                        <label>2. Scrivi i tre numeri (uno deve corrispondere alle dita):</label>
+                        <div class="numeri-inputs">
+                            <div class="numero-input-box" id="numeroBox0">
+                                <span class="box-label">Box 1</span>
+                                <input type="number" id="inputNumero0" min="0" max="99" step="1"
+                                       inputmode="numeric" placeholder="-" oninput="onNumeriChange()">
+                                <span class="box-flag" id="numeroFlag0"></span>
+                            </div>
+                            <div class="numero-input-box" id="numeroBox1">
+                                <span class="box-label">Box 2</span>
+                                <input type="number" id="inputNumero1" min="0" max="99" step="1"
+                                       inputmode="numeric" placeholder="-" oninput="onNumeriChange()">
+                                <span class="box-flag" id="numeroFlag1"></span>
+                            </div>
+                            <div class="numero-input-box" id="numeroBox2">
+                                <span class="box-label">Box 3</span>
+                                <input type="number" id="inputNumero2" min="0" max="99" step="1"
+                                       inputmode="numeric" placeholder="-" oninput="onNumeriChange()">
+                                <span class="box-flag" id="numeroFlag2"></span>
+                            </div>
+                        </div>
+                        <small class="form-hint" id="numeriHint">
+                            Il numero corretto viene riconosciuto dal nome del file immagine e segnato in verde.
+                            Gli altri due sono i distrattori. I tre numeri devono essere diversi fra loro.
+                        </small>
+                    </div>
+
+                    <!-- 3. Opzioni -->
+                    <div class="form-group">
+                        <label class="checkbox-row">
+                            <input type="checkbox" id="inputMescola" checked>
+                            Mescola la posizione dei tre box a ogni avvio
+                        </label>
+                        <small class="form-hint">
+                            Se disattivato, i numeri appaiono all'utente nell'ordine in cui li hai scritti qui.
+                        </small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn-primary btn-large" onclick="addExercise()" id="btnAddExercise">
+                            <i class="bi bi-plus-lg"></i> Aggiungi Esercizio
+                        </button>
+                        <button class="btn-secondary" type="button" onclick="resetForm()">
+                            <i class="bi bi-eraser"></i> Pulisci
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lista esercizi creati -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-list-ul"></i>
+                    <h2>Esercizi Creati</h2>
+                    <span id="exerciseCount" class="badge">0</span>
+                </div>
+                <div class="section-content">
+                    <div id="exercisesList" class="exercises-list">
+                        <p class="empty-message">Nessun esercizio creato</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Risultati -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-graph-up"></i>
+                    <h2>Ultimi Risultati</h2>
+                    <span id="risultatiCount" class="badge">0</span>
+                </div>
+                <div class="section-content">
+                    <div id="risultatiWrap" class="risultati-wrap">
+                        <p class="empty-message">Nessun esercizio ancora svolto</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Copia dei dati (esporta / importa) -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-hdd"></i>
+                    <h2>Copia dei dati</h2>
+                </div>
+                <div class="section-content">
+                    <p class="form-hint" style="margin-top:0;">
+                        Gli esercizi e i risultati restano <strong>solo su questo dispositivo</strong>.
+                        Con <strong>Esporta dati</strong> ne salvi una copia in un file;
+                        con <strong>Importa dati</strong> la ricarichi qui o su un altro tablet
+                        (sostituisce i dati attuali).
+                    </p>
+                    <div class="form-actions">
+                        <button class="btn-secondary" type="button" onclick="esportaBackup()">
+                            <i class="bi bi-box-arrow-up"></i> Esporta dati
+                        </button>
+                        <button class="btn-secondary" type="button" onclick="importaBackup()">
+                            <i class="bi bi-box-arrow-in-down"></i> Importa dati
+                        </button>
+                    </div>
+                    <input type="file" id="fileImporta" accept="application/json,.json" hidden>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/clear-cache.js?v=1.0"></script>
+    <script src="js/archivio.js?v=1.0"></script>
+    <script src="js/educatore-app.js?v=20261104.2"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js?v=1.0')
+                    .then(() => console.log('Service Worker registrato'))
+                    .catch(err => console.log('Service Worker errore:', err));
+            });
+        }
+    </script>
+</body>
+</html>

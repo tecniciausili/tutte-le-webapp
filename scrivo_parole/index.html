@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#E91E63">
+    <meta name="description" content="Scrivo parole: comporre parole con le lettere o con le sillabe">
+
+    <!-- PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Scrivo parole">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+    <title>Scrivo parole - AssistiveTech</title>
+
+    <!--
+        PAGINA DI SCELTA di «Scrivo parole»: l'educatore sceglie su quale delle due app lavorare.
+        Le due app (lettere/ e sillabe/) sono autonome: ognuna ha i suoi dati, il suo service worker
+        e il suo Esporta/Importa. Il loro tasto Home (../index.html) riporta qui.
+        Grafica: riusa il foglio di stile e le icone dell'app lettere.
+    -->
+    <link rel="stylesheet" href="lettere/css/styles.css?v=3.0">
+    <link rel="stylesheet" href="lettere/assets/fonts/bootstrap-icons/bootstrap-icons.css">
+    <style>
+        .area-card.sillabe-card {
+            border-color: #00897B;
+        }
+
+        .area-card.sillabe-card:hover {
+            background: linear-gradient(135deg, #E0F2F1, #FFFFFF);
+        }
+
+        .sillabe-card .card-icon,
+        .sillabe-card .card-arrow {
+            color: #00897B;
+        }
+
+        .scelta-esempio {
+            display: inline-flex;
+            gap: 0.3rem;
+            margin-top: 0.6rem;
+        }
+
+        .scelta-esempio span {
+            min-width: 2.2rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 8px;
+            border: 2px solid currentColor;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 0.05em;
+        }
+
+        .lettere-card .scelta-esempio {
+            color: #C2185B;
+        }
+
+        .sillabe-card .scelta-esempio {
+            color: #00796B;
+        }
+    </style>
+</head>
+<body class="selection-page">
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-buttons-left">
+                <button class="btn-back" onclick="tornaAllElenco()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn-home" onclick="tornaAllElenco()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                    <i class="bi bi-house-door-fill"></i>
+                </button>
+            </div>
+            <h1 class="app-title">
+                <i class="bi bi-pencil-square"></i>
+                Scrivo parole
+            </h1>
+            <div class="header-buttons-right"></div>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div class="selection-container">
+            <div class="welcome-message">
+                <div class="welcome-icon">
+                    <i class="bi bi-pencil-square"></i>
+                </div>
+                <h2>Con che cosa si scrive?</h2>
+                <p>Scegli l'esercizio su cui vuoi lavorare</p>
+            </div>
+
+            <div class="area-cards">
+                <a href="lettere/" class="area-card educatore-card lettere-card" aria-label="Scrivo parole con le lettere">
+                    <div class="card-icon">
+                        <i class="bi bi-type"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Con le lettere</h3>
+                        <p>L'utente compone la parola lettera per lettera</p>
+                        <div class="scelta-esempio" aria-hidden="true"><span>C</span><span>A</span><span>S</span><span>A</span></div>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="bi bi-arrow-right-circle-fill"></i>
+                    </div>
+                </a>
+
+                <a href="sillabe/" class="area-card utente-card sillabe-card" aria-label="Scrivo parole con le sillabe">
+                    <div class="card-icon">
+                        <i class="bi bi-puzzle"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Con le sillabe</h3>
+                        <p>L'utente compone la parola sillaba per sillaba</p>
+                        <div class="scelta-esempio" aria-hidden="true"><span>CA</span><span>SA</span></div>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="bi bi-arrow-right-circle-fill"></i>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Installazione come app: pulsante sempre visibile (js/installa.js) -->
+            <div data-installa data-nome="Scrivo parole"></div>
+
+            <div class="info-box">
+                <i class="bi bi-info-circle"></i>
+                <div>
+                    <strong>Due esercizi separati</strong>
+                    <p>Ognuno ha i suoi esercizi, i suoi risultati e la sua «Copia dei dati» nell'Area Educatore. Il tasto Home di ciascuno riporta a questa pagina.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <p>AssistiveTech.it - Training Cognitivo · Pittogrammi ARASAAC, CC BY-NC-SA</p>
+    </footer>
+
+    <script src="js/installa.js?v=1.0"></script>
+    <script>
+        function tornaAllElenco() {
+            window.location.href = '../';
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js?v=1.0.0').catch(() => {});
+            });
+        }
+    </script>
+</body>
+</html>

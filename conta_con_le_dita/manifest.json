@@ -1,0 +1,40 @@
+{
+    "name": "Conta con le Dita - AssistiveTech",
+    "short_name": "Conta Dita",
+    "description": "Riconoscimento della quantità mostrata con le dita: trascina il numero corretto",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "any",
+    "background_color": "#673AB7",
+    "theme_color": "#673AB7",
+    "lang": "it-IT",
+    "categories": ["education", "health"],
+    "prefer_related_applications": false,
+    "icons": [
+        { "src": "assets/icons/icon-72.png",  "sizes": "72x72",   "type": "image/png", "purpose": "any maskable" },
+        { "src": "assets/icons/icon-96.png",  "sizes": "96x96",   "type": "image/png", "purpose": "any maskable" },
+        { "src": "assets/icons/icon-128.png", "sizes": "128x128", "type": "image/png", "purpose": "any maskable" },
+        { "src": "assets/icons/icon-144.png", "sizes": "144x144", "type": "image/png", "purpose": "any maskable" },
+        { "src": "assets/icons/icon-152.png", "sizes": "152x152", "type": "image/png", "purpose": "any maskable" },
+        { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+        { "src": "assets/icons/icon-384.png", "sizes": "384x384", "type": "image/png", "purpose": "any maskable" },
+        { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    ],
+    "shortcuts": [
+        {
+            "name": "Area Educatore",
+            "short_name": "Educatore",
+            "description": "Configura l'esercizio",
+            "url": "./gestione.html",
+            "icons": [{ "src": "assets/icons/icon-96.png", "sizes": "96x96" }]
+        },
+        {
+            "name": "Esercizio",
+            "short_name": "Esercizio",
+            "description": "Conta le dita",
+            "url": "./esercizio.html",
+            "icons": [{ "src": "assets/icons/icon-96.png", "sizes": "96x96" }]
+        }
+    ]
+}

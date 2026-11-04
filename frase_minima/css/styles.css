@@ -1,0 +1,1516 @@
+/**
+ * Frase Minima - Stili
+ * AssistiveTech.it - Training Cognitivo
+ *
+ * Codice colore dei ruoli della frase:
+ *   soggetto = blu, predicato = rosso, complemento = verde
+ */
+
+/* ===== RESET / BASE ===== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --color-primary: #673AB7;
+    --color-primary-dark: #512DA8;
+    --color-primary-light: #9575CD;
+    --color-accent: #FF9800;
+    --color-success: #4CAF50;
+    --color-success-dark: #2E7D32;
+    --color-error: #F44336;
+    --color-bg: #F5F3FA;
+    --color-surface: #FFFFFF;
+    --color-text: #212121;
+    --color-text-light: #616161;
+    --color-border: #E0E0E0;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.18);
+    --radius: 14px;
+    --radius-sm: 8px;
+    --radius-lg: 22px;
+    /* Scala dei box dell'esercizio: modificabile dal menu impostazioni */
+    --scala-box: 1;
+    /* Scala del testo (parola) sotto le immagini: modificabile dal menu impostazioni */
+    --scala-testo: 1;
+
+    /* Codice colore dei ruoli della frase */
+    --col-soggetto: #1565C0;
+    --col-soggetto-tenue: #E3F2FD;
+    --col-predicato: #C62828;
+    --col-predicato-tenue: #FFEBEE;
+    --col-complemento: #2E7D32;
+    --col-complemento-tenue: #E8F5E9;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+.hidden { display: none !important; }
+
+/* ===== HEADER ===== */
+.app-header {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: white;
+    padding: 12px 16px;
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header-buttons-left,
+.header-buttons-right {
+    display: flex;
+    gap: 8px;
+}
+
+.app-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-back, .btn-home, .btn-menu, .btn-refresh, .btn-voce, .btn-bordi {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.btn-back:hover, .btn-home:hover, .btn-menu:hover,
+.btn-refresh:hover, .btn-voce:hover, .btn-bordi:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Bottone attivo = indizio colore spento (bordi neri) */
+.btn-bordi.attivo {
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.btn-voce.muted {
+    background: rgba(244, 67, 54, 0.55);
+}
+
+.btn-go-exercise {
+    background: var(--color-accent);
+    border: none;
+    color: white;
+    height: 44px;
+    padding: 0 16px;
+    border-radius: 22px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-go-exercise:hover {
+    background: #F57C00;
+    transform: translateY(-1px);
+}
+
+.btn-go-exercise i { font-size: 1.2rem; }
+
+@media (max-width: 700px) {
+    .app-title { font-size: 1rem; }
+    .btn-go-exercise span { display: none; }
+    .btn-go-exercise { width: 44px; padding: 0; border-radius: 50%; }
+}
+
+/* ===== MAIN ===== */
+.app-main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 16px;
+}
+
+.app-footer {
+    text-align: center;
+    padding: 18px;
+    color: var(--color-text-light);
+    font-size: 0.85rem;
+}
+
+/* ===== PAGINA SELEZIONE (index.html) ===== */
+.selection-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.welcome-message {
+    text-align: center;
+    padding: 24px 20px;
+}
+
+.welcome-icon {
+    font-size: 4rem;
+    color: var(--color-primary);
+    margin-bottom: 16px;
+}
+
+.welcome-message h2 {
+    color: var(--color-primary-dark);
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.welcome-message p {
+    color: var(--color-text-light);
+    font-size: 1.1rem;
+}
+
+.area-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 26px 0;
+}
+
+@media (max-width: 700px) {
+    .area-cards { grid-template-columns: 1fr; }
+}
+
+.area-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    text-decoration: none;
+    color: var(--color-text);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: var(--shadow-md);
+    border: 3px solid transparent;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    cursor: pointer;
+}
+
+.area-card:hover, .area-card:focus {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-primary);
+}
+
+.educatore-card { border-top: 6px solid var(--color-primary); }
+.utente-card    { border-top: 6px solid var(--color-accent); }
+
+.card-icon {
+    font-size: 3rem;
+    color: var(--color-primary);
+}
+
+.utente-card .card-icon { color: var(--color-accent); }
+
+.card-content h3 {
+    font-size: 1.5rem;
+    color: var(--color-primary-dark);
+    margin-bottom: 6px;
+}
+
+.card-content p {
+    color: var(--color-text-light);
+    margin-bottom: 12px;
+}
+
+.card-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.card-features li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+}
+
+.card-features i { color: var(--color-success); }
+
+.card-arrow {
+    text-align: right;
+    font-size: 2rem;
+    color: var(--color-primary);
+}
+
+.info-box {
+    background: #EDE7F6;
+    border-left: 5px solid var(--color-primary);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.info-box i {
+    font-size: 1.5rem;
+    color: var(--color-primary);
+}
+
+.info-box p {
+    color: var(--color-text-light);
+    margin-top: 4px;
+}
+
+/* ===== SEZIONI CONFIGURAZIONE ===== */
+.config-section {
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.section-header {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: white;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-header i { font-size: 1.3rem; }
+
+.section-header h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    flex: 1;
+}
+
+.section-content { padding: 20px; }
+
+.badge {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.form-group { margin-bottom: 22px; }
+
+.form-group > label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--color-text);
+}
+
+.form-select, .form-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    font-family: inherit;
+    background: white;
+    color: var(--color-text);
+}
+
+.form-select:focus, .form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.form-hint {
+    display: block;
+    color: var(--color-text-light);
+    font-size: 0.88rem;
+    margin-top: 6px;
+    line-height: 1.5;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 12px 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.btn-primary:hover { background: var(--color-primary-dark); transform: translateY(-1px); }
+
+.btn-secondary {
+    background: white;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    border-radius: var(--radius-sm);
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-secondary:hover { background: #EDE7F6; }
+
+.btn-large { padding: 15px 30px; font-size: 1.1rem; }
+
+.empty-message {
+    color: var(--color-text-light);
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.checkbox-row input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+}
+
+/* ===== CONFIGURAZIONE DEI TRE ELEMENTI (educatore) ===== */
+.elementi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+@media (max-width: 900px) {
+    .elementi-grid { grid-template-columns: 1fr; }
+}
+
+.elemento-card {
+    border: 3px solid;
+    border-radius: var(--radius);
+    padding: 14px;
+    background: white;
+}
+
+.elemento-card.e-soggetto    { border-color: var(--col-soggetto);    background: var(--col-soggetto-tenue); }
+.elemento-card.e-predicato   { border-color: var(--col-predicato);   background: var(--col-predicato-tenue); }
+.elemento-card.e-complemento { border-color: var(--col-complemento); background: var(--col-complemento-tenue); }
+
+.elemento-card .el-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+}
+
+.e-soggetto .el-header    { color: var(--col-soggetto); }
+.e-predicato .el-header   { color: var(--col-predicato); }
+.e-complemento .el-header { color: var(--col-complemento); }
+
+.elemento-card .el-domanda {
+    font-weight: 600;
+    font-size: 0.82rem;
+    opacity: 0.75;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+/* Anteprima dell'immagine scelta per l'elemento */
+.el-preview {
+    background: white;
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-sm);
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.el-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+.el-preview .el-vuoto {
+    color: var(--color-text-light);
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 10px;
+}
+
+.el-preview .el-vuoto i { font-size: 2rem; display: block; margin-bottom: 6px; opacity: 0.5; }
+
+/* Selettore fonte immagine: ARASAAC o computer */
+.el-fonti {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.el-fonti button {
+    flex: 1;
+    border: 2px solid var(--color-border);
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 8px 6px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: var(--color-text);
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.el-fonti button:hover { border-color: var(--color-primary-light); }
+.el-fonti button.active { border-color: var(--color-primary); background: #EDE7F6; color: var(--color-primary-dark); }
+
+.el-search-box { margin-bottom: 10px; }
+
+.arasaac-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 8px;
+    max-height: 220px;
+    overflow-y: auto;
+    margin-top: 8px;
+}
+
+.arasaac-result-item {
+    background: white;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.15s, transform 0.15s;
+}
+
+.arasaac-result-item:hover { border-color: var(--color-primary-light); transform: translateY(-2px); }
+.arasaac-result-item.selected { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.2); }
+
+.arasaac-result-item img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+}
+
+.arasaac-result-item span {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--color-text-light);
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.el-upload-label {
+    display: block;
+    border: 2px dashed var(--color-primary-light);
+    border-radius: var(--radius-sm);
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    background: white;
+    color: var(--color-primary-dark);
+    font-weight: 600;
+    font-size: 0.88rem;
+}
+
+.el-upload-label:hover { background: #EDE7F6; }
+.el-upload-label i { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+.el-upload-label input[type="file"] { display: none; }
+
+.el-testo-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-family: inherit;
+    text-align: center;
+    text-transform: uppercase;
+    background: white;
+    color: var(--color-text);
+}
+
+.el-testo-input:focus { outline: none; border-color: var(--color-primary); }
+
+/* Anteprima della frase composta */
+.frase-preview {
+    background: #EDE7F6;
+    border-left: 5px solid var(--color-primary);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.frase-preview .fp-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-light);
+    font-weight: 700;
+}
+
+.frase-preview .fp-input {
+    flex: 1;
+    min-width: 200px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--color-primary-dark);
+    font-family: inherit;
+    background: white;
+    border: 2px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    transition: border-color 0.2s;
+}
+
+.frase-preview .fp-input:hover  { border-color: var(--color-primary-light); }
+.frase-preview .fp-input:focus  { outline: none; border-color: var(--color-primary); }
+.frase-preview .fp-input::placeholder { color: var(--color-text-light); opacity: 0.5; }
+
+.btn-ripristina {
+    background: white;
+    color: var(--color-primary-dark);
+    border: 2px solid var(--color-primary-light);
+    border-radius: 24px;
+    padding: 8px 16px;
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-ripristina:hover { background: #EDE7F6; }
+
+.btn-ascolta-prova {
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: 24px;
+    padding: 9px 18px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-ascolta-prova:hover { background: var(--color-primary-dark); }
+
+/* ===== LISTA ESERCIZI (educatore) ===== */
+.exercises-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.exercise-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #FAFAFA;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 12px;
+}
+
+.exercise-card .ex-immagini {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.exercise-card .ex-img {
+    width: 66px;
+    height: 66px;
+    object-fit: contain;
+    background: white;
+    border-radius: var(--radius-sm);
+    border: 3px solid var(--color-border);
+    flex-shrink: 0;
+}
+
+.exercise-card .ex-img.r-soggetto    { border-color: var(--col-soggetto); }
+.exercise-card .ex-img.r-predicato   { border-color: var(--col-predicato); }
+.exercise-card .ex-img.r-complemento { border-color: var(--col-complemento); }
+
+.exercise-card .ex-frase {
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--color-primary-dark);
+    margin-bottom: 4px;
+}
+
+.exercise-card .ex-info { flex: 1; min-width: 0; }
+
+.exercise-card .ex-numeri {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+}
+
+.ex-num-chip {
+    background: white;
+    border: 2px solid var(--color-border);
+    border-radius: 10px;
+    padding: 2px 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-text);
+}
+
+.ex-num-chip.correct {
+    border-color: var(--color-success);
+    background: #E8F5E9;
+    color: var(--color-success-dark);
+}
+
+.exercise-card .ex-meta {
+    font-size: 0.82rem;
+    color: var(--color-text-light);
+    word-break: break-all;
+}
+
+.btn-delete {
+    background: transparent;
+    border: none;
+    color: var(--color-error);
+    font-size: 1.4rem;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.btn-delete:hover { background: #FFEBEE; }
+
+/* ===== TABELLA RISULTATI (educatore) ===== */
+.risultati-wrap { overflow-x: auto; }
+
+.risultati-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+}
+
+.risultati-table th,
+.risultati-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+}
+
+.risultati-table th {
+    background: #F3E5F5;
+    color: var(--color-primary-dark);
+    font-weight: 700;
+}
+
+.risultati-table .esito-ok    { color: var(--color-success-dark); font-weight: 700; }
+.risultati-table .esito-warn  { color: var(--color-accent); font-weight: 700; }
+
+/* ===== LISTA ESERCIZI (utente) ===== */
+.user-exercises-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+.user-exercise-card {
+    background: white;
+    border: 3px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 14px;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.user-exercise-card:hover, .user-exercise-card:focus {
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+}
+
+.user-exercise-card .uex-immagini {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+}
+
+.user-exercise-card img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    background: #FAFAFA;
+    border-radius: var(--radius-sm);
+    border: 3px solid var(--color-border);
+}
+
+.user-exercise-card img.r-soggetto    { border-color: var(--col-soggetto); }
+.user-exercise-card img.r-predicato   { border-color: var(--col-predicato); }
+.user-exercise-card img.r-complemento { border-color: var(--col-complemento); }
+
+.user-exercise-card .uex-frase {
+    margin-top: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    color: var(--color-primary-dark);
+}
+
+.user-exercise-card .uex-numeri {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.uex-num {
+    background: #EDE7F6;
+    color: var(--color-primary-dark);
+    border-radius: 8px;
+    padding: 2px 10px;
+    font-weight: 700;
+}
+
+/* ===================================================================
+   AREA ESERCIZIO
+   Riga 1: 3 box colorati (soggetto blu, predicato rosso, complemento verde)
+           con sfondo tenue, da riempire in sequenza
+   Riga 2: 3 pittogrammi mescolati, bordo sfumato del colore di destinazione
+   =================================================================== */
+.exercise-board {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 10px 14px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(10px, 2vh, 22px);
+    min-height: calc(100vh - 72px);
+    min-height: calc(100dvh - 72px);
+}
+
+.consegna {
+    text-align: center;
+    color: var(--color-primary-dark);
+    font-size: clamp(1rem, 2.4vw, 1.4rem);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.consegna .btn-speak {
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.consegna .btn-speak:hover { background: var(--color-primary-dark); }
+
+/* --- Riga 1: i tre box della frase --- */
+.board-top {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(8px, 1.6vw, 20px);
+    width: 100%;
+}
+
+.slot {
+    border: 4px dashed;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    /* Altezza fissa: il box non deve crescere quando riceve l'immagine,
+       altrimenti il resto della schermata scivola fuori dallo schermo */
+    height: calc(clamp(120px, 30vh, 300px) * var(--scala-box));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 24px 8px 8px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s, background 0.2s;
+}
+
+.slot .slot-label {
+    position: absolute;
+    top: 6px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: clamp(0.62rem, 1.5vw, 0.8rem);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    pointer-events: none;
+    opacity: 0.75;
+}
+
+.slot .slot-hint {
+    flex: 0 0 auto;
+    text-align: center;
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+.slot .slot-hint i { font-size: clamp(1.6rem, 5vw, 2.8rem); display: block; }
+
+.slot .slot-hint span { font-size: clamp(0.7rem, 1.8vw, 0.95rem); font-weight: 600; }
+
+.slot img {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    animation: pop-in 0.35s ease-out;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.slot .slot-word {
+    flex: 0 0 auto;
+    font-size: calc(clamp(0.9rem, 2.4vw, 1.5rem) * var(--scala-testo));
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-align: center;
+    line-height: 1.1;
+}
+
+/* Colori dei tre ruoli */
+.slot-soggetto {
+    background: var(--col-soggetto-tenue);
+    border-color: var(--col-soggetto);
+    color: var(--col-soggetto);
+}
+.slot-predicato {
+    background: var(--col-predicato-tenue);
+    border-color: var(--col-predicato);
+    color: var(--col-predicato);
+}
+.slot-complemento {
+    background: var(--col-complemento-tenue);
+    border-color: var(--col-complemento);
+    color: var(--col-complemento);
+}
+
+/* Box da riempire adesso: pulsa per guidare la sequenza */
+.slot.attivo {
+    border-style: solid;
+    transform: scale(1.02);
+    animation: slot-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes slot-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(103, 58, 183, 0.18); }
+    50%      { box-shadow: 0 0 0 10px rgba(103, 58, 183, 0.10); }
+}
+
+.slot.drag-over {
+    border-style: solid;
+    transform: scale(1.05);
+    filter: brightness(0.97);
+}
+
+.slot.riempito {
+    border-style: solid;
+    animation: none;
+}
+
+/* Box non ancora disponibile: la sequenza è rigida */
+.slot.bloccato { opacity: 0.55; }
+
+.slot.errore { animation: shake 0.5s; }
+
+/* --- Frase in costruzione --- */
+.frase-strip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    min-height: 44px;
+}
+
+.frase-testo {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: clamp(1.1rem, 3.2vw, 2rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-align: center;
+    color: var(--color-text);
+}
+
+.frase-testo .parola-vuota {
+    color: transparent;
+    border-bottom: 4px solid #C5C0D6;
+    margin: 0 4px;
+    letter-spacing: -0.05em;
+}
+.frase-testo .p-soggetto    { color: var(--col-soggetto); }
+.frase-testo .p-predicato   { color: var(--col-predicato); }
+.frase-testo .p-complemento { color: var(--col-complemento); }
+
+/* Bottone per farsi rileggere la frase */
+.btn-ripeti {
+    background: var(--color-accent);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 22px;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.15s, background 0.2s;
+}
+
+.btn-ripeti:hover  { background: #F57C00; transform: translateY(-2px); }
+.btn-ripeti:active { transform: translateY(0); }
+.btn-ripeti i      { font-size: 1.3rem; }
+
+/* --- Riga 2: i pittogrammi da trascinare --- */
+.board-bottom {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(8px, 1.6vw, 20px);
+    width: 100%;
+}
+
+.picto-tile {
+    background: var(--color-surface);
+    border: 5px solid;
+    border-radius: var(--radius-lg);
+    height: calc(clamp(110px, 26vh, 280px) * var(--scala-box));
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.2s, opacity 0.25s;
+}
+
+.picto-tile img {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    -webkit-user-drag: none;
+}
+
+.picto-tile .picto-word {
+    flex: 0 0 auto;
+    font-size: calc(clamp(0.8rem, 2vw, 1.25rem) * var(--scala-testo));
+    font-weight: 800;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.1;
+    color: var(--color-text);
+}
+
+/* Il bordo sfumato ricorda in quale box va il pittogramma */
+.picto-soggetto {
+    border-color: rgba(21, 101, 192, 0.45);
+    box-shadow: 0 0 16px rgba(21, 101, 192, 0.32);
+}
+.picto-predicato {
+    border-color: rgba(198, 40, 40, 0.45);
+    box-shadow: 0 0 16px rgba(198, 40, 40, 0.32);
+}
+.picto-complemento {
+    border-color: rgba(46, 125, 50, 0.45);
+    box-shadow: 0 0 16px rgba(46, 125, 50, 0.32);
+}
+
+.picto-tile:hover  { transform: translateY(-4px); }
+.picto-tile:focus  { outline: 4px solid var(--color-accent); outline-offset: 2px; }
+.picto-tile:active { cursor: grabbing; }
+
+.picto-tile.dragging { opacity: 0.4; transform: scale(0.96); }
+
+.picto-tile.placed {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.picto-tile.hint { animation: hint-pulse 1s ease-in-out infinite; }
+
+@keyframes hint-pulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.05); }
+}
+
+.picto-tile.shake { animation: shake 0.5s; }
+
+@keyframes shake {
+    0%, 100%      { transform: translateX(0); }
+    20%, 60%      { transform: translateX(-10px); }
+    40%, 80%      { transform: translateX(10px); }
+}
+
+/* Clone trascinato col dito */
+.drag-ghost {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.92;
+    background: var(--color-surface);
+    border: 5px solid var(--color-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    overflow: hidden;
+}
+
+.drag-ghost img { max-width: 100%; max-height: 75%; object-fit: contain; }
+
+.drag-ghost .picto-word {
+    font-size: calc(0.9rem * var(--scala-testo));
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+/* Barra di stato */
+.status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    color: var(--color-text-light);
+    font-size: 0.95rem;
+}
+
+.status-bar .status-chip {
+    background: white;
+    border-radius: 20px;
+    padding: 6px 16px;
+    box-shadow: var(--shadow-sm);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-bar .status-chip i { color: var(--color-primary); }
+
+/* ===================================================================
+   MODALITÀ SENZA INDIZIO COLORE (bordi neri)
+   L'educatore la attiva quando l'utente ha imparato la successione:
+   sparisce l'accoppiamento cromatico pittogramma <-> box.
+   =================================================================== */
+.exercise-board.bordi-neutri .slot-soggetto,
+.exercise-board.bordi-neutri .slot-predicato,
+.exercise-board.bordi-neutri .slot-complemento {
+    background: #FFFFFF;
+    border-color: #2b2b2b;
+    color: #2b2b2b;
+}
+
+.exercise-board.bordi-neutri .picto-soggetto,
+.exercise-board.bordi-neutri .picto-predicato,
+.exercise-board.bordi-neutri .picto-complemento {
+    border-color: #2b2b2b;
+    box-shadow: var(--shadow-md);
+}
+
+/* Anche le parole già collocate nella riga della frase diventano neutre */
+.exercise-board.bordi-neutri .frase-testo .p-soggetto,
+.exercise-board.bordi-neutri .frase-testo .p-predicato,
+.exercise-board.bordi-neutri .frase-testo .p-complemento {
+    color: var(--color-text);
+}
+
+/* Il box riempito correttamente resta comunque verde: è un feedback di
+   correttezza (giusto/sbagliato), non l'indizio di quale colore va dove */
+.exercise-board.bordi-neutri .slot.riempito {
+    border-color: var(--color-success);
+}
+
+/* ===== OVERLAY CELEBRAZIONE ===== */
+.celebration-overlay,
+.error-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 500;
+    padding: 20px;
+}
+
+.celebration-overlay.active,
+.error-overlay.active { display: flex; }
+
+.celebration-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 36px 30px;
+    text-align: center;
+    max-width: 460px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    animation: pop-in 0.4s ease-out;
+}
+
+.celebration-card .bravo-text {
+    font-size: clamp(2.4rem, 9vw, 4rem);
+    font-weight: 800;
+    color: var(--color-success);
+    margin-bottom: 8px;
+}
+
+.celebration-card .reached {
+    font-size: clamp(3.5rem, 16vw, 6rem);
+    font-weight: 800;
+    color: var(--color-primary);
+    line-height: 1;
+    margin-bottom: 6px;
+}
+
+.celebration-card p {
+    color: var(--color-text-light);
+    margin-bottom: 22px;
+}
+
+.celebration-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.error-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 28px 26px;
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    border-top: 8px solid var(--color-error);
+    animation: pop-in 0.3s ease-out;
+}
+
+.error-card i {
+    font-size: 3rem;
+    color: var(--color-error);
+    display: block;
+    margin-bottom: 10px;
+}
+
+.error-card h3 {
+    font-size: 1.6rem;
+    color: var(--color-error);
+    margin-bottom: 6px;
+}
+
+.error-card p { color: var(--color-text-light); }
+
+.confetti {
+    position: fixed;
+    top: -20px;
+    width: 12px;
+    height: 12px;
+    z-index: 600;
+    pointer-events: none;
+    animation: confetti-fall linear forwards;
+}
+
+@keyframes confetti-fall {
+    0%   { transform: translateY(0) rotate(0deg);      opacity: 1; }
+    100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+}
+
+/* ===== MENU LATERALE IMPOSTAZIONI ===== */
+.side-menu-toggle {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background: var(--color-primary);
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: var(--shadow-lg);
+    cursor: pointer;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.side-menu-toggle:hover { background: var(--color-primary-dark); }
+
+.side-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 400;
+    display: none;
+}
+
+.side-menu-backdrop.active { display: block; }
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: min(340px, 88vw);
+    background: white;
+    box-shadow: var(--shadow-lg);
+    z-index: 401;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.side-menu.active { transform: translateX(0); }
+
+.side-menu-header {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: white;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.side-menu-header h3 {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.side-menu-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.side-menu-body {
+    padding: 18px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.sm-section { margin-bottom: 24px; }
+
+.sm-section h4 {
+    font-size: 0.95rem;
+    color: var(--color-primary-dark);
+    margin-bottom: 10px;
+}
+
+.rs-radios { display: flex; gap: 10px; }
+
+.rs-radio {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #F5F3FA;
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.rs-radio input { accent-color: var(--color-primary); width: 18px; height: 18px; }
+
+.sm-slider { width: 100%; accent-color: var(--color-primary); }
+
+.sm-value {
+    display: inline-block;
+    margin-top: 6px;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+}
+
+/* ===== TOAST ===== */
+.toast-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 800;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    pointer-events: none;
+    width: min(92vw, 520px);
+}
+
+.toast {
+    background: var(--color-text);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 30px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    transition: opacity 0.3s;
+    max-width: 100%;
+}
+
+.toast.success { background: var(--color-success); }
+.toast.error   { background: var(--color-error); }
+.toast i       { font-size: 1.2rem; flex-shrink: 0; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .app-main { padding: 14px 10px; }
+    .arasaac-results { grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); }
+}
+
+@media (max-width: 520px) {
+    .board-top, .board-bottom { gap: 6px; }
+    .slot {
+        border-width: 3px;
+        padding: 20px 4px 4px;
+        height: calc(clamp(100px, 23vh, 300px) * var(--scala-box));
+    }
+    .picto-tile {
+        border-width: 4px;
+        padding: 6px;
+        height: calc(clamp(100px, 21vh, 280px) * var(--scala-box));
+    }
+    .slot .slot-label { font-size: 0.58rem; }
+    .btn-ripeti { padding: 8px 16px; }
+}
+
+/* Schermi bassi in orizzontale (tablet in landscape): box più compatti */
+@media (max-height: 560px) and (orientation: landscape) {
+    .slot       { height: calc(clamp(90px, 26vh, 300px) * var(--scala-box)); }
+    .picto-tile { height: calc(clamp(90px, 24vh, 280px) * var(--scala-box)); }
+    .consegna { font-size: 1rem; }
+    .app-header { padding: 6px 12px; }
+}

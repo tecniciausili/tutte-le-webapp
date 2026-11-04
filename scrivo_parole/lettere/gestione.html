@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#E91E63">
+    <meta name="description" content="Area Educatore - Scrivo Parole con le Lettere">
+
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Scrivo parole">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Area Educatore - Scrivo Parole con le Lettere</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="../manifest.json">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="../assets/icons/icon-192.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css?v=4.0">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
+</head>
+<body class="educator-page">
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-buttons-left">
+                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Scrivo parole con le lettere" title="Torna a: Scrivo parole con le lettere">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                    <i class="bi bi-house-door-fill"></i>
+                </button>
+            </div>
+            <h1 class="app-title">
+                <i class="bi bi-person-gear"></i>
+                Area Educatore
+            </h1>
+            <div class="header-buttons-right">
+                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Cancella cache e ricarica" title="Cancella cache e ricarica">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main educator-main">
+        <!-- Contenuto principale -->
+        <div id="mainContent">
+            
+            <!-- Impostazioni -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-gear"></i>
+                    <h2>Impostazioni</h2>
+                </div>
+                <div class="section-content settings-grid">
+                    <div class="setting-item">
+                        <label for="numProve">Numero prove per sessione:</label>
+                        <input type="number" id="numProve" min="1" max="50" value="10" class="form-input">
+                    </div>
+                    <div class="setting-item">
+                        <label for="tastoCancella">
+                            <input type="checkbox" id="tastoCancella">
+                            Mostra tasto cancella (backspace)
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label for="genereFeedback">Complimento a risposta esatta:</label>
+                        <select id="genereFeedback" class="form-input">
+                            <option value="maschile">BRAVO (maschile)</option>
+                            <option value="femminile">BRAVA (femminile)</option>
+                        </select>
+                    </div>
+                    <button class="btn-save-settings" onclick="saveSettings()">
+                        <i class="bi bi-check-lg"></i> Salva Impostazioni
+                    </button>
+                </div>
+            </section>
+
+            <!-- Creazione Parola -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-pencil-square"></i>
+                    <h2>Crea Nuovo Esercizio</h2>
+                </div>
+                <div class="section-content">
+                    <!-- Parola Target -->
+                    <div class="form-group">
+                        <label for="parolaTarget">Parola da scrivere:</label>
+                        <input type="text" id="parolaTarget" class="form-input form-input-large"
+                               placeholder="Es: CANE" maxlength="30" oninput="onParolaChange()">
+                    </div>
+
+                    <!-- Tipo Immagine -->
+                    <div class="form-group">
+                        <label>Immagine esercizio:</label>
+                        <div class="image-type-options">
+                            <label class="image-type-option">
+                                <input type="radio" name="tipoImmagine" value="arasaac"
+                                       onchange="updateImageTypeFields()">
+                                <i class="bi bi-search"></i> Cerca da ARASAAC
+                            </label>
+                            <label class="image-type-option">
+                                <input type="radio" name="tipoImmagine" value="upload"
+                                       onchange="updateImageTypeFields()">
+                                <i class="bi bi-upload"></i> Carica dal PC
+                            </label>
+                            <label class="image-type-option">
+                                <input type="radio" name="tipoImmagine" value="nessuna" checked
+                                       onchange="updateImageTypeFields()">
+                                <i class="bi bi-fonts"></i> Solo testo
+                            </label>
+                        </div>
+
+                        <!-- Campo ARASAAC (nascosto di default) -->
+                        <div id="fieldArasaac" style="display: none;">
+                            <input type="text" id="inputSearchArasaac" class="form-input"
+                                   placeholder="Cerca pittogramma..." oninput="searchArasaac()">
+                            <div id="arasaacResults" class="arasaac-results"></div>
+                            <input type="hidden" id="selectedArasaacId">
+                            <input type="hidden" id="selectedArasaacUrl">
+                        </div>
+
+                        <!-- Campo Upload (nascosto di default) -->
+                        <div id="fieldUpload" style="display: none;">
+                            <input type="file" id="inputFileImmagine" accept="image/*"
+                                   onchange="previewUploadImage()">
+                            <div id="uploadPreview"></div>
+                        </div>
+
+                        <!-- Preview immagine selezionata -->
+                        <div id="imagePreview" class="image-preview" style="display: none;"></div>
+                    </div>
+
+                    <!-- Lettere Disponibili -->
+                    <div class="form-group">
+                        <label>Lettere disponibili:</label>
+                        <div class="letters-toolbar">
+                            <button class="btn-toolbar" onclick="addAllAlphabet()">
+                                <i class="bi bi-type"></i> Tutto l'alfabeto
+                            </button>
+                            <button class="btn-toolbar" onclick="addTargetLetters()">
+                                <i class="bi bi-magic"></i> Lettere della parola
+                            </button>
+                            <button class="btn-toolbar btn-danger" onclick="clearLetters()">
+                                <i class="bi bi-trash"></i> Svuota
+                            </button>
+                        </div>
+                        
+                        <div class="letters-input-area">
+                            <input type="text" id="letterInput" class="form-input" 
+                                   placeholder="Digita lettere (es: A, B, C)" 
+                                   onkeydown="onLetterKeydown(event)">
+                            <button class="btn-add-letter" onclick="addLetterFromInput()">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+                        
+                        <div id="selectedLetters" class="selected-letters">
+                            <!-- Lettere selezionate appariranno qui -->
+                        </div>
+                    </div>
+                    
+                    <!-- Pulsante Salva -->
+                    <div class="form-actions">
+                        <button class="btn-primary btn-large" onclick="saveConfig()" id="btnSaveConfig" disabled>
+                            <i class="bi bi-plus-circle"></i> Aggiungi Esercizio
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lista Esercizi Creati -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-list-ul"></i>
+                    <h2>Esercizi Creati</h2>
+                    <span id="exerciseCount" class="badge">0</span>
+                </div>
+                <div class="section-content">
+                    <div id="exercisesList" class="exercises-list">
+                        <p class="empty-message">Nessun esercizio creato</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Copia dei dati (esporta / importa) -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-hdd"></i>
+                    <h2>Copia dei dati</h2>
+                </div>
+                <div class="section-content">
+                    <p style="margin: 0 0 1rem;">
+                        Esercizi, impostazioni e risultati restano <strong>solo su questo dispositivo</strong>.
+                        Con <strong>Esporta dati</strong> ne salvi una copia in un file;
+                        con <strong>Importa dati</strong> la ricarichi qui o su un altro tablet
+                        (sostituisce i dati attuali).
+                    </p>
+                    <div class="letters-toolbar">
+                        <button class="btn-toolbar" type="button" onclick="esportaBackup()">
+                            <i class="bi bi-box-arrow-up"></i> Esporta dati
+                        </button>
+                        <button class="btn-toolbar" type="button" onclick="importaBackup()">
+                            <i class="bi bi-box-arrow-in-down"></i> Importa dati
+                        </button>
+                    </div>
+                    <input type="file" id="fileImporta" accept="application/json,.json" hidden>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/arasaac-service.js?v=1.0"></script>
+    <script src="js/clear-cache.js?v=3.0"></script>
+    <script src="js/archivio.js?v=1.0"></script>
+    <script src="js/educatore-app.js?v=20261104.2"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js?v=3.0')
+                    .then(reg => console.log('Service Worker registrato'))
+                    .catch(err => console.log('Service Worker errore:', err));
+            });
+        }
+    </script>
+
+    <!-- LIM-touch-guard: blocco menu contestuale e zoom a pizzico su LIM/touch -->
+    <script>
+    (function () {
+        // Viewport: niente zoom utente
+        var vp = document.querySelector('meta[name="viewport"]');
+        if (!vp) { vp = document.createElement('meta'); vp.setAttribute('name', 'viewport'); document.head.appendChild(vp); }
+        vp.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover');
+        // CSS: niente selezione, callout, zoom doppio-tap, scroll elastico
+        var st = document.createElement('style');
+        st.textContent = 'html,body{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overscroll-behavior:none;}';
+        document.head.appendChild(st);
+        // Niente menu contestuale (tasto destro / pressione prolungata)
+        document.addEventListener('contextmenu', function (e) { e.preventDefault(); }, { passive: false });
+        // Niente gesti di zoom Safari/iOS
+        ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (ev) {
+            document.addEventListener(ev, function (e) { e.preventDefault(); }, { passive: false });
+        });
+        // Niente pizzico a due dita
+        document.addEventListener('touchmove', function (e) {
+            if (e.touches && e.touches.length > 1) { e.preventDefault(); }
+        }, { passive: false });
+        // Niente zoom da tastiera/trackpad
+        document.addEventListener('wheel', function (e) { if (e.ctrlKey) { e.preventDefault(); } }, { passive: false });
+        document.addEventListener('keydown', function (e) {
+            if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].indexOf(e.key) !== -1) { e.preventDefault(); }
+        });
+    })();
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

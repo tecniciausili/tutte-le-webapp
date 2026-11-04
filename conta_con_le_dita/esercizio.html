@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#673AB7">
+    <meta name="description" content="Esercizio - Conta con le Dita">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Conta con le Dita">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Esercizio - Conta con le Dita</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
+</head>
+<body class="exercise-page">
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-buttons-left">
+                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Conta con le dita" title="Torna a: Conta con le dita">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                    <i class="bi bi-house-door-fill"></i>
+                </button>
+            </div>
+            <h1 class="app-title">
+                <i class="bi bi-hand-index-thumb"></i>
+                Conta con le Dita
+            </h1>
+            <div class="header-buttons-right">
+                <button class="btn-voce" id="btnVoce" onclick="toggleVoce()" aria-label="Attiva o disattiva la voce" title="Voce">
+                    <i class="bi bi-volume-up-fill" id="iconVoce"></i>
+                </button>
+                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Cancella cache e ricarica" title="Cancella cache e ricarica">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <!-- Messaggio nessuna config -->
+        <div id="noConfigMessage" class="config-section hidden">
+            <div class="section-content" style="text-align: center;">
+                <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: var(--color-accent);"></i>
+                <p style="margin-top: 12px; font-size: 1.1rem;">
+                    Nessun esercizio configurato per te.<br>
+                    Chiedi al tuo educatore di configurarne uno.
+                </p>
+            </div>
+        </div>
+
+        <!-- Scelta esercizio (lista) -->
+        <div id="exerciseChooser" class="hidden">
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-grid-3x3-gap"></i>
+                    <h2>Scegli un esercizio</h2>
+                    <span id="chooserCount" class="badge">0</span>
+                </div>
+                <div class="section-content">
+                    <p style="text-align: center; color: var(--color-text-light); margin-bottom: 14px;">
+                        Tocca l'immagine con cui vuoi giocare
+                    </p>
+                    <div id="userExercisesList" class="user-exercises-list"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Area esercizio -->
+    <div id="exerciseArea" class="exercise-board hidden">
+
+        <div class="consegna">
+            <span>Quante dita vedi? Trascina il numero giusto nel box</span>
+            <button class="btn-speak" onclick="speakConsegna(true)" aria-label="Ascolta la consegna" title="Ascolta (riattiva la voce se spenta)">
+                <i class="bi bi-volume-up-fill"></i>
+            </button>
+        </div>
+
+        <!-- Riga 1: immagine dita + box di rilascio -->
+        <div class="board-top">
+            <div class="big-box finger-box">
+                <span class="box-caption">Quante dita?</span>
+                <img id="fingerImg" src="" alt="Mano che mostra un numero con le dita">
+            </div>
+
+            <div class="board-arrow" aria-hidden="true">
+                <i class="bi bi-arrow-right"></i>
+            </div>
+
+            <div class="big-box drop-box" id="dropBox" role="region" aria-label="Trascina qui il numero corretto">
+                <span class="box-caption">Il tuo numero</span>
+                <div class="drop-hint" id="dropHint">
+                    <i class="bi bi-hand-index"></i>
+                    <span>Trascina qui</span>
+                </div>
+                <div class="dropped-number hidden" id="droppedNumber"></div>
+            </div>
+        </div>
+
+        <!-- Riga 2: i tre numeri -->
+        <div class="board-bottom" id="numbersRow"></div>
+
+        <div class="status-bar">
+            <span class="status-chip">
+                <i class="bi bi-x-circle"></i>
+                Errori: <strong id="erroriCount">0</strong>
+            </span>
+            <button class="btn-secondary" type="button" onclick="backToChooser()">
+                <i class="bi bi-grid-3x3-gap"></i> Cambia esercizio
+            </button>
+        </div>
+    </div>
+
+    <!-- Pulsante e menu laterale impostazioni -->
+    <button class="side-menu-toggle hidden" id="sideMenuToggle" onclick="toggleSideMenu()" aria-label="Apri impostazioni" title="Impostazioni">
+        <i class="bi bi-sliders"></i>
+    </button>
+    <div class="side-menu-backdrop" id="sideMenuBackdrop" onclick="toggleSideMenu()"></div>
+
+    <aside class="side-menu" id="sideMenu">
+        <div class="side-menu-header">
+            <h3><i class="bi bi-sliders"></i> Impostazioni</h3>
+            <button class="side-menu-close" onclick="toggleSideMenu()" aria-label="Chiudi">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="side-menu-body">
+
+            <div class="sm-section">
+                <h4>Genere voce di rinforzo</h4>
+                <div class="rs-radios">
+                    <label class="rs-radio">
+                        <input type="radio" name="genderRinforzo" value="M" checked onchange="onGenderChange()">
+                        <span>M <small>(bravo!)</small></span>
+                    </label>
+                    <label class="rs-radio">
+                        <input type="radio" name="genderRinforzo" value="F" onchange="onGenderChange()">
+                        <span>F <small>(brava!)</small></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="sm-section">
+                <h4>Dimensione dei box</h4>
+                <input type="range" class="sm-slider" id="scaleSlider" min="70" max="130" step="5" value="100"
+                       oninput="onScaleChange()">
+                <span class="sm-value" id="scaleValue">100%</span>
+            </div>
+
+            <div class="sm-section">
+                <h4>Aiuto dopo gli errori</h4>
+                <label class="checkbox-row">
+                    <input type="checkbox" id="hintCheck" checked onchange="onHintChange()">
+                    Evidenzia il numero giusto dopo 3 errori
+                </label>
+            </div>
+
+            <div class="sm-section">
+                <h4>Avanzamento automatico</h4>
+                <label class="checkbox-row">
+                    <input type="checkbox" id="autoAdvanceCheck" checked onchange="onAutoAdvanceChange()">
+                    Passa a un altro esercizio dopo la risposta giusta
+                </label>
+            </div>
+
+            <div class="sm-section">
+                <h4>Voce</h4>
+                <label class="checkbox-row">
+                    <input type="checkbox" id="voceCheck" checked onchange="onVoceCheckChange()">
+                    Leggi consegna e feedback ad alta voce
+                </label>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Overlay celebrazione -->
+    <div class="celebration-overlay" id="celebrationOverlay">
+        <div class="celebration-card">
+            <div class="bravo-text" id="bravoText">BRAVO!</div>
+            <div class="reached" id="reachedNumber">0</div>
+            <p id="celebrationDetail">Hai indovinato al primo colpo!</p>
+            <div class="celebration-actions">
+                <button class="btn-primary" onclick="closeCelebration()">
+                    <i class="bi bi-arrow-repeat"></i> Rifai
+                </button>
+                <button class="btn-secondary" onclick="closeCelebrationToChooser()">
+                    <i class="bi bi-grid-3x3-gap"></i> Altri esercizi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay errore -->
+    <div class="error-overlay" id="errorOverlay">
+        <div class="error-card">
+            <i class="bi bi-x-circle-fill"></i>
+            <h3 id="errorTitle">Non è questo</h3>
+            <p id="errorMessage">Riprova: conta di nuovo le dita</p>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/clear-cache.js?v=1.0"></script>
+    <script src="js/archivio.js?v=1.0"></script>
+    <script src="js/esercizio-app.js?v=20261104.2"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js?v=1.0')
+                    .then(() => console.log('Service Worker registrato'))
+                    .catch(err => console.log('Service Worker errore:', err));
+            });
+        }
+    </script>
+</body>
+</html>

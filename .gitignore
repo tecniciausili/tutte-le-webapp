@@ -1,0 +1,30 @@
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Dipendenze (non usate: app statiche pure)
+node_modules/
+
+# Backend e credenziali dei vecchi moduli PHP del portale: MAI su GitHub
+api/
+*.php
+*.sql
+
+# Copie di sicurezza scaricate dalle app: non vanno nel repository né online
+backup/
+*-copia-*.json
+
+# Strumenti di Claude Code e file di lavoro (non fanno parte del sito)
+.agents/
+.claude/
+skills-lock.json
+/npm
+
+# Documenti interni (la guida contiene credenziali): MAI su GitHub né online
+*.docx
+*.doc
+*.pdf

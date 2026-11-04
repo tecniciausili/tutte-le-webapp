@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#673AB7">
+    <meta name="description" content="Area Educatore - Frase Minima">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Frase Minima">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Area Educatore - Frase Minima</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+    <link rel="stylesheet" href="css/styles.css?v=2.0">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
+</head>
+<body class="educator-page">
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-buttons-left">
+                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Frase minima" title="Torna a: Frase minima">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                    <i class="bi bi-house-door-fill"></i>
+                </button>
+            </div>
+            <h1 class="app-title">
+                <i class="bi bi-person-gear"></i>
+                Area Educatore
+            </h1>
+            <div class="header-buttons-right">
+                <button class="btn-go-exercise" onclick="goToExercise()" title="Vai agli esercizi" aria-label="Vai agli esercizi">
+                    <i class="bi bi-controller"></i>
+                    <span>Esercizi</span>
+                </button>
+                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Cancella cache e ricarica" title="Cancella cache e ricarica">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main educator-main">
+        <div id="mainContent">
+
+            <!-- Composizione frase -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-plus-circle"></i>
+                    <h2>Componi una Frase Minima</h2>
+                </div>
+                <div class="section-content">
+
+                    <p class="form-hint" style="margin-bottom: 16px;">
+                        Per ogni elemento scegli un pittogramma ARASAAC oppure carica un'immagine dal tuo
+                        dispositivo, poi scrivi la parola che verrà letta ad alta voce
+                        (es. <strong>IO</strong> · <strong>MANGIO</strong> · <strong>IL PANE</strong>).
+                    </p>
+
+                    <div class="elementi-grid">
+                        <!-- SOGGETTO -->
+                        <div class="elemento-card e-soggetto" id="card-soggetto">
+                            <div class="el-header">
+                                <i class="bi bi-1-circle-fill"></i>
+                                <span>Soggetto</span>
+                                <span class="el-domanda">chi?</span>
+                            </div>
+
+                            <div class="el-preview" id="preview-soggetto">
+                                <div class="el-vuoto">
+                                    <i class="bi bi-image"></i>
+                                    Nessuna immagine
+                                </div>
+                            </div>
+
+                            <div class="el-fonti">
+                                <button type="button" class="active" data-fonte="arasaac" onclick="setFonte('soggetto','arasaac')">
+                                    <i class="bi bi-search"></i> ARASAAC
+                                </button>
+                                <button type="button" data-fonte="upload" onclick="setFonte('soggetto','upload')">
+                                    <i class="bi bi-upload"></i> Dal PC
+                                </button>
+                            </div>
+
+                            <div class="el-search-box" id="search-soggetto">
+                                <input type="text" class="form-input" id="input-search-soggetto"
+                                       placeholder="Cerca: io, bambino, mamma..."
+                                       oninput="onSearchArasaac('soggetto')">
+                                <div class="arasaac-results" id="results-soggetto"></div>
+                            </div>
+
+                            <label class="el-upload-label hidden" id="upload-soggetto">
+                                <i class="bi bi-cloud-arrow-up"></i>
+                                Scegli un'immagine dal dispositivo
+                                <input type="file" accept="image/*" onchange="onUploadFile('soggetto', this)">
+                            </label>
+
+                            <input type="text" class="el-testo-input" id="testo-soggetto"
+                                   placeholder="IO" maxlength="60" oninput="onTestoChange()"
+                                   style="margin-top: 10px;">
+                        </div>
+
+                        <!-- PREDICATO -->
+                        <div class="elemento-card e-predicato" id="card-predicato">
+                            <div class="el-header">
+                                <i class="bi bi-2-circle-fill"></i>
+                                <span>Predicato</span>
+                                <span class="el-domanda">fa che cosa?</span>
+                            </div>
+
+                            <div class="el-preview" id="preview-predicato">
+                                <div class="el-vuoto">
+                                    <i class="bi bi-image"></i>
+                                    Nessuna immagine
+                                </div>
+                            </div>
+
+                            <div class="el-fonti">
+                                <button type="button" class="active" data-fonte="arasaac" onclick="setFonte('predicato','arasaac')">
+                                    <i class="bi bi-search"></i> ARASAAC
+                                </button>
+                                <button type="button" data-fonte="upload" onclick="setFonte('predicato','upload')">
+                                    <i class="bi bi-upload"></i> Dal PC
+                                </button>
+                            </div>
+
+                            <div class="el-search-box" id="search-predicato">
+                                <input type="text" class="form-input" id="input-search-predicato"
+                                       placeholder="Cerca: mangiare, correre..."
+                                       oninput="onSearchArasaac('predicato')">
+                                <div class="arasaac-results" id="results-predicato"></div>
+                            </div>
+
+                            <label class="el-upload-label hidden" id="upload-predicato">
+                                <i class="bi bi-cloud-arrow-up"></i>
+                                Scegli un'immagine dal dispositivo
+                                <input type="file" accept="image/*" onchange="onUploadFile('predicato', this)">
+                            </label>
+
+                            <input type="text" class="el-testo-input" id="testo-predicato"
+                                   placeholder="MANGIO" maxlength="60" oninput="onTestoChange()"
+                                   style="margin-top: 10px;">
+                        </div>
+
+                        <!-- COMPLEMENTO -->
+                        <div class="elemento-card e-complemento" id="card-complemento">
+                            <div class="el-header">
+                                <i class="bi bi-3-circle-fill"></i>
+                                <span>Complemento</span>
+                                <span class="el-domanda">che cosa?</span>
+                            </div>
+
+                            <div class="el-preview" id="preview-complemento">
+                                <div class="el-vuoto">
+                                    <i class="bi bi-image"></i>
+                                    Nessuna immagine
+                                </div>
+                            </div>
+
+                            <div class="el-fonti">
+                                <button type="button" class="active" data-fonte="arasaac" onclick="setFonte('complemento','arasaac')">
+                                    <i class="bi bi-search"></i> ARASAAC
+                                </button>
+                                <button type="button" data-fonte="upload" onclick="setFonte('complemento','upload')">
+                                    <i class="bi bi-upload"></i> Dal PC
+                                </button>
+                            </div>
+
+                            <div class="el-search-box" id="search-complemento">
+                                <input type="text" class="form-input" id="input-search-complemento"
+                                       placeholder="Cerca: pane, palla, acqua..."
+                                       oninput="onSearchArasaac('complemento')">
+                                <div class="arasaac-results" id="results-complemento"></div>
+                            </div>
+
+                            <label class="el-upload-label hidden" id="upload-complemento">
+                                <i class="bi bi-cloud-arrow-up"></i>
+                                Scegli un'immagine dal dispositivo
+                                <input type="file" accept="image/*" onchange="onUploadFile('complemento', this)">
+                            </label>
+
+                            <input type="text" class="el-testo-input" id="testo-complemento"
+                                   placeholder="IL PANE" maxlength="60" oninput="onTestoChange()"
+                                   style="margin-top: 10px;">
+                        </div>
+                    </div>
+
+                    <!-- Frase da leggere: si compone da sola ma è modificabile -->
+                    <div class="frase-preview">
+                        <span class="fp-label">Frase letta</span>
+                        <input type="text" class="fp-input" id="inputFrase" maxlength="200"
+                               placeholder="il bambino - mangia - la mela" oninput="onFraseModificata()" onchange="distribuisciFraseSuiTesti()"
+                               aria-label="Frase letta: separa soggetto, predicato e complemento con un trattino">
+                        <button class="btn-ripristina hidden" type="button" id="btnRipristinaFrase"
+                                onclick="ripristinaFraseAutomatica()" title="Torna alla frase composta dalle tre parti">
+                            <i class="bi bi-arrow-counterclockwise"></i> Automatica
+                        </button>
+                        <button class="btn-ascolta-prova" type="button" onclick="ascoltaFrase()">
+                            <i class="bi bi-volume-up-fill"></i> Ascolta
+                        </button>
+                    </div>
+                    <small class="form-hint">
+                        Si compone da sola con le tre parti, separate da un <strong>trattino</strong>.
+                        Puoi correggerla a mano — anche aggiungendo gli articoli — purché resti il trattino
+                        fra una parte e l'altra: <em>il bambino - mangia - la mela</em>.
+                        Ogni parte compare sotto la sua immagine nell'esercizio; la voce legge la frase
+                        intera senza i trattini.
+                    </small>
+
+                    <div class="form-group" style="margin-top: 18px;">
+                        <label class="checkbox-row">
+                            <input type="checkbox" id="inputMostraTesto" checked>
+                            Mostra le parole scritte sotto i pittogrammi durante l'esercizio
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn-primary btn-large" onclick="addFrase()" id="btnAddFrase">
+                            <i class="bi bi-plus-lg"></i> Aggiungi Frase
+                        </button>
+                        <button class="btn-secondary" type="button" onclick="resetForm()">
+                            <i class="bi bi-eraser"></i> Pulisci
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lista frasi -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-list-ul"></i>
+                    <h2>Frasi Create</h2>
+                    <span id="exerciseCount" class="badge">0</span>
+                </div>
+                <div class="section-content">
+                    <div id="exercisesList" class="exercises-list">
+                        <p class="empty-message">Nessuna frase creata</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Risultati -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-graph-up"></i>
+                    <h2>Ultimi Risultati</h2>
+                    <span id="risultatiCount" class="badge">0</span>
+                </div>
+                <div class="section-content">
+                    <div id="risultatiWrap" class="risultati-wrap">
+                        <p class="empty-message">Nessuna frase ancora composta</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Copia dei dati (esporta / importa) -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-hdd"></i>
+                    <h2>Copia dei dati</h2>
+                </div>
+                <div class="section-content">
+                    <p style="margin: 0 0 1rem;">
+                        Frasi, risultati e impostazioni restano <strong>solo su questo dispositivo</strong>.
+                        Con <strong>Esporta dati</strong> ne salvi una copia in un file;
+                        con <strong>Importa dati</strong> la ricarichi qui o su un altro tablet
+                        (sostituisce i dati attuali).
+                    </p>
+                    <div class="form-actions">
+                        <button class="btn-secondary" type="button" id="btnEsporta" onclick="esportaBackup()">
+                            <i class="bi bi-box-arrow-up"></i> Esporta dati
+                        </button>
+                        <button class="btn-secondary" type="button" id="btnImporta" onclick="importaBackup()">
+                            <i class="bi bi-box-arrow-in-down"></i> Importa dati
+                        </button>
+                    </div>
+                    <input type="file" id="fileImporta" accept="application/json,.json" hidden>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/arasaac-service.js?v=1.0"></script>
+    <script src="js/clear-cache.js?v=2.0"></script>
+    <script src="js/archivio.js?v=2.0"></script>
+    <script src="js/educatore-app.js?v=20261104.2"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js?v=2.0')
+                    .then(() => console.log('Service Worker registrato'))
+                    .catch(err => console.log('Service Worker errore:', err));
+            });
+        }
+    </script>
+</body>
+</html>

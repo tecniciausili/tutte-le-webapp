@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#673AB7">
+    <meta name="description" content="Esercizio - Scrivo Parole con le Sillabe">
+    
+    <title>Esercizio - Scrivo Parole con le Sillabe</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css?v=5.0">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+</head>
+<body class="exercise-page">
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-buttons-left">
+                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Scrivo parole con le sillabe" title="Torna a: Scrivo parole con le sillabe">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                    <i class="bi bi-house-door-fill"></i>
+                </button>
+            </div>
+            <h1 class="app-title">
+                <i class="bi bi-puzzle"></i>
+                Scrivo con le Sillabe
+            </h1>
+            <div class="header-buttons-right">
+                <div class="zoom-control" title="Dimensione dei box e delle lettere">
+                    <i class="bi bi-fonts zoom-icon-min" aria-hidden="true"></i>
+                    <input type="range" id="zoomSlider" min="70" max="220" step="5" value="100"
+                           oninput="onZoomSlider()" aria-label="Dimensione dei box e delle lettere">
+                    <i class="bi bi-fonts zoom-icon-max" aria-hidden="true"></i>
+                </div>
+                <button class="btn-syllable" id="btnSyllable" onclick="toggleSillabazione()" aria-label="Attiva o disattiva la lettura per sillabe" title="Lettura per sillabe">
+                    <i class="bi bi-soundwave" id="iconSyllable"></i>
+                </button>
+                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Aggiorna l'app" title="Aggiorna l'app (i dati restano)">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main exercise-main">
+        <!-- Lista Esercizi -->
+        <section class="exercises-selection" id="exercisesSelectionSection">
+            <div class="exercises-header">
+                <h2><i class="bi bi-list-ul"></i> Scegli un esercizio</h2>
+            </div>
+            <div id="exercisesListContainer" class="exercises-list-container">
+                <p class="loading-message"><i class="bi bi-hourglass-split"></i> Caricamento esercizi...</p>
+            </div>
+        </section>
+
+        <!-- Area Esercizio (nascosta inizialmente) -->
+        <section class="exercise-area" id="exerciseArea" style="display: none;">
+            <!-- Zona immagini: domanda (sinistra) e risposta (destra) -->
+            <div class="images-comparison-zone">
+                <div class="image-box target-image-box">
+                    <p class="image-label">SCRIVI:</p>
+                    <div id="targetImageContainer">
+                        <div class="no-image">
+                            <i class="bi bi-image"></i>
+                            <p id="targetWordText">PAROLA</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-box answer-image-box" id="answerImageBox">
+                    <p class="image-label">TU SCRIVI:</p>
+                    <div class="no-image" id="answerImagePlaceholder">
+                        <i class="bi bi-question-circle"></i>
+                        <p>?</p>
+                    </div>
+                    <img id="answerImage" src="" alt="" style="display: none;" />
+                </div>
+            </div>
+            
+            <!-- Zona composizione sillabe -->
+            <div class="answer-zone empty" id="answerZone">
+                <span style="color: #999;">Clicca le sillabe per comporre la parola</span>
+            </div>
+            
+            <!-- Zona sillabe cliccabili -->
+            <div class="syllables-zone" id="syllablesZone">
+                <!-- Sillabe verranno inserite qui -->
+            </div>
+            
+            <!-- Pulsante Verifica -->
+            <div class="verify-zone" id="verifyZone">
+                <button class="btn-verify" id="verifyButton" onclick="verifyWord()" disabled>
+                    <i class="bi bi-check2-circle"></i> VERIFICA PAROLA
+                </button>
+                <p class="verify-hint">Clicca quando hai finito di comporre la parola</p>
+            </div>
+            
+            <!-- Pulsanti azione (nascosti fino a completamento) -->
+            <div class="action-buttons" id="actionButtons" style="display: none;">
+                <button class="btn-primary" onclick="sameExercise()">
+                    <i class="bi bi-arrow-repeat"></i> Stesso Esercizio
+                </button>
+                <button class="btn-secondary" onclick="nextRandomExercise()">
+                    <i class="bi bi-shuffle"></i> Prossimo Esercizio
+                </button>
+                <button class="btn-secondary" onclick="backToExercisesList()">
+                    <i class="bi bi-list-ul"></i> Scegli Esercizio
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Successo -->
+    <div class="modal" id="successModal">
+        <div class="modal-content modal-success">
+            <div class="modal-body" style="text-align: center; padding: 2rem;">
+                <div class="success-icon">
+                    <i class="bi bi-trophy-fill"></i>
+                </div>
+                <h2 style="color: var(--success-color); margin: 1rem 0;">BRAVO!</h2>
+                <div id="successImageContainer" style="margin: 1.5rem 0;">
+                    <img id="successImage" src="" alt="" 
+                         style="max-width: 200px; max-height: 200px; border-radius: 20px; border: 5px solid var(--success-color); box-shadow: 0 8px 24px rgba(76, 175, 80, 0.3);">
+                </div>
+                <p style="font-size: 1.3rem; margin-bottom: 1rem;">Hai scritto la parola:</p>
+                <p id="successWordDisplay" style="font-size: 3rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase;"></p>
+                <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn-primary" onclick="continueExercise()">
+                        <i class="bi bi-arrow-right-circle"></i> Continua
+                    </button>
+                    <button class="btn-secondary" onclick="nextRandomExercise()">
+                        <i class="bi bi-shuffle"></i> Prossimo Esercizio
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Errore -->
+    <div class="modal" id="errorModal">
+        <div class="modal-content modal-error">
+            <div class="modal-body" style="text-align: center; padding: 2rem;">
+                <div class="error-icon">
+                    <i class="bi bi-x-circle-fill"></i>
+                </div>
+                <h2 style="color: var(--error-color); margin: 1rem 0;">Riprova!</h2>
+                <p style="font-size: 1.2rem;">La parola corretta era:</p>
+                <p id="errorCorrectWord" style="font-size: 2.5rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase;"></p>
+                <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn-primary" onclick="sameExercise()">
+                        <i class="bi bi-arrow-repeat"></i> Riprova
+                    </button>
+                    <button class="btn-secondary" onclick="nextRandomExercise()">
+                        <i class="bi bi-shuffle"></i> Prossimo Esercizio
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/clear-cache.js?v=5.0"></script>
+    <script src="js/archivio.js?v=5.0"></script>
+    <script src="js/esercizio-app.js?v=20261104.2"></script>
+
+    <!-- LIM-touch-guard: blocco menu contestuale e zoom a pizzico su LIM/touch -->
+    <script>
+    (function () {
+        // Viewport: niente zoom utente
+        var vp = document.querySelector('meta[name="viewport"]');
+        if (!vp) { vp = document.createElement('meta'); vp.setAttribute('name', 'viewport'); document.head.appendChild(vp); }
+        vp.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover');
+        // CSS: niente selezione, callout, zoom doppio-tap, scroll elastico
+        var st = document.createElement('style');
+        st.textContent = 'html,body{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overscroll-behavior:none;}';
+        document.head.appendChild(st);
+        // Niente menu contestuale (tasto destro / pressione prolungata)
+        document.addEventListener('contextmenu', function (e) { e.preventDefault(); }, { passive: false });
+        // Niente gesti di zoom Safari/iOS
+        ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (ev) {
+            document.addEventListener(ev, function (e) { e.preventDefault(); }, { passive: false });
+        });
+        // Niente pizzico a due dita
+        document.addEventListener('touchmove', function (e) {
+            if (e.touches && e.touches.length > 1) { e.preventDefault(); }
+        }, { passive: false });
+        // Niente zoom da tastiera/trackpad
+        document.addEventListener('wheel', function (e) { if (e.ctrlKey) { e.preventDefault(); } }, { passive: false });
+        document.addEventListener('keydown', function (e) {
+            if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].indexOf(e.key) !== -1) { e.preventDefault(); }
+        });
+    })();
+    </script>
+
+</body>
+</html>

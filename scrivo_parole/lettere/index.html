@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#E91E63">
+    <meta name="description" content="Scrivo Parole con le Lettere - Esercizio di composizione parole">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Scrivo parole">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <title>Scrivo Parole con le Lettere - AssistiveTech</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="../manifest.json">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="../assets/icons/icon-192.png">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css?v=3.0">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
+</head>
+<body class="selection-page">
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-buttons-left">
+                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Scrivo parole (scelta lettere o sillabe)" title="Torna a: Scrivo parole (scelta lettere o sillabe)">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                    <i class="bi bi-house-door-fill"></i>
+                </button>
+            </div>
+            <h1 class="app-title">
+                <i class="bi bi-type"></i>
+                Scrivo Parole con le Lettere
+            </h1>
+            <div class="header-buttons-right">
+                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Cancella cache e ricarica" title="Cancella cache e ricarica">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content - Selezione Area -->
+    <main class="app-main">
+        <div class="selection-container">
+            <div class="welcome-message">
+                <div class="welcome-icon">
+                    <i class="bi bi-type"></i>
+                </div>
+                <h2>Benvenuto!</h2>
+                <p>Seleziona l'area in cui vuoi entrare</p>
+            </div>
+            
+            <div class="area-cards">
+                <!-- Card Educatore -->
+                <a href="gestione.html" class="area-card educatore-card" tabindex="0" aria-label="Entra nell'area educatore">
+                    <div class="card-icon">
+                        <i class="bi bi-person-gear"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Area Educatore</h3>
+                        <p>Crea gli esercizi dell'utente</p>
+                        <ul class="card-features">
+                            <li><i class="bi bi-check-circle"></i> Inserisci parole target</li>
+                            <li><i class="bi bi-check-circle"></i> Scegli lettere disponibili</li>
+                            <li><i class="bi bi-check-circle"></i> Imposta numero prove</li>
+                            <li><i class="bi bi-check-circle"></i> Gestisci tasto cancella</li>
+                        </ul>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="bi bi-arrow-right-circle-fill"></i>
+                    </div>
+                </a>
+                
+                <!-- Card Utente -->
+                <a href="esercizio.html" class="area-card utente-card" tabindex="0" aria-label="Entra nell'area utente">
+                    <div class="card-icon">
+                        <i class="bi bi-controller"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Area Utente</h3>
+                        <p>Componi le parole con le lettere</p>
+                        <ul class="card-features">
+                            <li><i class="bi bi-eye"></i> Vedi la parola da scrivere</li>
+                            <li><i class="bi bi-hand-index"></i> Clicca le lettere</li>
+                            <li><i class="bi bi-volume-up"></i> Ascolto con TTS</li>
+                            <li><i class="bi bi-trophy"></i> Verifica il risultato</li>
+                        </ul>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="bi bi-arrow-right-circle-fill"></i>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- Info Box -->
+            <div class="info-box">
+                <i class="bi bi-info-circle"></i>
+                <div>
+                    <strong>Come funziona?</strong>
+                    <p>L'educatore crea le parole e sceglie le lettere disponibili (inclusi distrattori). L'utente compone le parole cliccando sulle lettere nell'ordine corretto.</p>
+                </div>
+            </div>
+            
+            <!-- Installazione come app: si installa «Scrivo parole» (lettere + sillabe) -->
+            <div data-installa data-nome="Scrivo parole" data-icona="../assets/icons/icon-192.png"
+                 data-nota="Si installa «Scrivo parole»: una sola icona sulla schermata Home per lettere e sillabe. Funziona anche senza connessione."></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <p>AssistiveTech.it © 2025 - Training Cognitivo</p>
+    </footer>
+
+    <script src="js/installa.js?v=1.0"></script>
+    <script src="js/clear-cache.js?v=3.0"></script>
+    <script>
+        // App autonoma: nessun login. "Home" e "Indietro" portano all'elenco delle app.
+        function goHome() {
+            window.location.href = '../../';   // Tutte le Web App
+        }
+
+        function goBack() {
+            window.location.href = '../';   // Scrivo parole (scelta lettere o sillabe)
+        }
+
+        // Gestione tasti per accessibilità
+        document.querySelectorAll('.area-card').forEach(card => {
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    card.click();
+                }
+            });
+        });
+        
+        // Registra Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js?v=3.0')
+                    .then(reg => console.log('Service Worker registrato'))
+                    .catch(err => console.log('Service Worker errore:', err));
+            });
+        }
+    </script>
+
+    <!-- LIM-touch-guard: blocco menu contestuale e zoom a pizzico su LIM/touch -->
+    <script>
+    (function () {
+        // Viewport: niente zoom utente
+        var vp = document.querySelector('meta[name="viewport"]');
+        if (!vp) { vp = document.createElement('meta'); vp.setAttribute('name', 'viewport'); document.head.appendChild(vp); }
+        vp.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover');
+        // CSS: niente selezione, callout, zoom doppio-tap, scroll elastico
+        var st = document.createElement('style');
+        st.textContent = 'html,body{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overscroll-behavior:none;}';
+        document.head.appendChild(st);
+        // Niente menu contestuale (tasto destro / pressione prolungata)
+        document.addEventListener('contextmenu', function (e) { e.preventDefault(); }, { passive: false });
+        // Niente gesti di zoom Safari/iOS
+        ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (ev) {
+            document.addEventListener(ev, function (e) { e.preventDefault(); }, { passive: false });
+        });
+        // Niente pizzico a due dita
+        document.addEventListener('touchmove', function (e) {
+            if (e.touches && e.touches.length > 1) { e.preventDefault(); }
+        }, { passive: false });
+        // Niente zoom da tastiera/trackpad
+        document.addEventListener('wheel', function (e) { if (e.ctrlKey) { e.preventDefault(); } }, { passive: false });
+        document.addEventListener('keydown', function (e) {
+            if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].indexOf(e.key) !== -1) { e.preventDefault(); }
+        });
+    })();
+    </script>
+</body>
+</html>

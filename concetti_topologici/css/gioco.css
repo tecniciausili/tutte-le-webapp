@@ -1,0 +1,163 @@
+/* ============================================================
+   Concetti topologici - Schermata dell'esercizio (tablet, mobile-first)
+   L'utente è sordo: nessun testo e nessun suono per lui; tutto visivo.
+   I pochi testi (pulsante Avanti, uscita) sono per l'educatore.
+   ============================================================ */
+
+body.gioco {
+    height: 100vh; height: 100dvh; overflow: hidden;
+    display: flex; flex-direction: column;
+    background: #F7F3EA;
+    user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+    touch-action: manipulation;
+}
+
+/* ---------- Barra in alto ---------- */
+.gioco-barra {
+    flex: none; display: flex; align-items: center; gap: 12px;
+    height: 64px; padding: 8px max(12px, env(safe-area-inset-left)) 8px max(12px, env(safe-area-inset-right));
+}
+.gioco-barra .spazio { flex: 1; }
+.btn-blocco {
+    position: relative; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;
+    border: 2px solid rgba(20, 22, 43, .25); border-radius: 14px; background: transparent; color: rgba(20, 22, 43, .45);
+}
+.btn-blocco .icona { width: 24px; height: 24px; }
+.btn-blocco .anello { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); pointer-events: none; }
+.btn-blocco .anello circle { fill: none; stroke: var(--ink); stroke-width: 4; stroke-dasharray: 176; stroke-dashoffset: 176; transform: rotate(-90deg); transform-origin: center; }
+.btn-blocco.premuto .anello circle { transition: stroke-dashoffset 2s linear; stroke-dashoffset: 0; }
+
+/* Avanzamento: un pallino per scena */
+.avanzamento { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; max-width: 70vw; }
+.avanzamento i { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--ink); background: var(--carta); }
+.avanzamento i.fatta { background: var(--ink); }
+.avanzamento i.giusta { background: var(--verde); }
+.avanzamento i.attuale { box-shadow: 0 0 0 3px var(--giallo); }
+
+/* ---------- Area dell'esercizio ---------- */
+.gioco-area {
+    flex: 1; min-height: 0;
+    display: grid; gap: clamp(12px, 2vw, 24px);
+    padding: 0 clamp(12px, 2.5vw, 32px) clamp(12px, 2.5vw, 28px);
+    grid-template-columns: minmax(0, 1fr) clamp(220px, 28vw, 340px);
+    grid-template-areas: "palco lato";
+}
+.palco-box { grid-area: palco; min-height: 0; display: flex; align-items: center; justify-content: center; position: relative; }
+.palco {
+    position: relative; width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    background: #FFFDF8; border: var(--bordo) solid var(--ink); border-radius: 28px;
+    transition: box-shadow .25s ease;
+}
+.palco svg { display: block; width: 100%; height: 100%; max-height: 100%; }
+.palco.ok { box-shadow: 0 0 0 8px var(--verde); }
+
+.lato { grid-area: lato; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: clamp(12px, 2vh, 22px); }
+.lato.nascosto .tessera-scelta { visibility: hidden; }
+
+/* Tessere di risposta: grandi, da toccare */
+.tessera-scelta {
+    position: relative; flex: 1 1 0; min-height: 0; max-height: 46%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    padding: 10px; background: var(--carta); color: var(--ink);
+    border: 4px solid var(--ink); border-radius: 24px; box-shadow: 6px 6px 0 var(--ink);
+    transition: transform .1s ease, box-shadow .1s ease, opacity .3s ease;
+}
+.tessera-scelta:active { transform: translate(3px, 3px); box-shadow: 3px 3px 0 var(--ink); }
+.tessera-scelta .tessera-disegno { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; width: 100%; }
+.tessera-scelta .tessera-disegno svg { width: 100%; height: 100%; max-height: 100%; }
+.tessera-scelta .tessera-parola { font-size: clamp(16px, 2.4vw, 26px); }
+.tessera-scelta:disabled { cursor: default; }
+.tessera-scelta.giusta { border-color: var(--ok); box-shadow: 0 0 0 8px var(--verde); }
+.tessera-scelta.sbagliata { animation: scuoti .45s ease; opacity: .35; }
+.tessera-scelta.indica { animation: lampeggia 1s ease 2; }
+.tessera-scelta .segno { position: absolute; top: -18px; right: -18px; width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid var(--ink); background: var(--verde); }
+.tessera-scelta .segno .icona { width: 30px; height: 30px; stroke-width: 3; }
+
+/* Consegna della modalità Esegui: la tessera da realizzare */
+.consegna {
+    flex: 0 1 auto; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px;
+    background: var(--carta); border: 4px solid var(--ink); border-radius: 24px; box-shadow: 6px 6px 0 var(--giallo);
+}
+.consegna .tessera-disegno svg { width: 100%; height: auto; }
+.consegna .tessera-parola { font-size: clamp(16px, 2.4vw, 26px); }
+
+/* Esegui: posti tratteggiati e vassoio */
+.palco .posto { cursor: pointer; }
+.palco .posto-area { fill: rgba(255, 228, 92, .18); stroke: var(--ink); stroke-width: 3; stroke-dasharray: 10 8; }
+.palco .posto:hover .posto-area, .palco .posto.vicino .posto-area { fill: rgba(255, 228, 92, .5); }
+.palco.posti-nascosti .posto { display: none; }
+.palco .vassoio-area { fill: #EDE6D6; stroke: var(--ink); stroke-width: 3; }
+.palco .oggetto-vassoio { cursor: grab; }
+.palco .trascinando { cursor: grabbing; }
+.palco.posti-nascosti .oggetto-vassoio { cursor: default; }
+
+/* Feedback visivo */
+.palco .oggetto.salta { animation: salta .7s ease; transform-box: fill-box; transform-origin: center bottom; }
+/* La stella sta nell'angolo: la scena giusta deve restare visibile mentre l'educatore conferma in LIS */
+.premio {
+    position: absolute; inset: 0; display: flex; align-items: flex-start; justify-content: flex-end;
+    padding: clamp(10px, 2vw, 22px); pointer-events: none;
+}
+.premio .stellona { width: min(22%, 150px); aspect-ratio: 1; color: #E8A400; filter: drop-shadow(5px 5px 0 var(--ink)); animation: premio 1.3s ease forwards; }
+.premio .stellona .icona { width: 100%; height: 100%; fill: var(--giallo); stroke: var(--ink); stroke-width: 1.4; }
+
+/* Pausa per la LIS dell'educatore */
+.lis-box { display: flex; align-items: center; gap: 10px; min-width: 48px; justify-content: flex-end; }
+.pausa-lis {
+    display: flex; align-items: center; gap: 10px; height: 52px; padding: 0 20px 0 14px;
+    background: var(--ink); color: var(--carta); border: 3px solid var(--ink); border-radius: 999px;
+    font-family: var(--font-display); font-weight: 700; font-size: 18px; box-shadow: 4px 4px 0 var(--giallo);
+    animation: respira 2.2s ease-in-out infinite;
+}
+.pausa-lis .icona { width: 26px; height: 26px; }
+.pausa-lis[hidden] { display: none; }
+.conto-lis { width: 48px; height: 48px; pointer-events: none; flex: none; }
+.conto-lis circle { fill: none; stroke-width: 7; }
+.conto-lis .fondo { stroke: rgba(20, 22, 43, .12); }
+.conto-lis .avanzo { stroke: var(--ink); stroke-linecap: round; transform: rotate(-90deg); transform-origin: center; stroke-dasharray: 176; }
+
+/* ---------- Schermate di inizio e fine ---------- */
+.schermo-centro { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 24px; text-align: center; }
+.btn-grande {
+    width: clamp(120px, 22vmin, 200px); aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    border: 5px solid var(--ink); border-radius: 50%; background: var(--verde); color: var(--ink); box-shadow: 8px 8px 0 var(--ink);
+}
+.btn-grande .icona { width: 55%; height: 55%; fill: var(--ink); }
+.btn-grande:active { transform: translate(4px, 4px); box-shadow: 4px 4px 0 var(--ink); }
+.btn-grande.giallo { background: var(--giallo); }
+.btn-grande.giallo .icona { fill: none; stroke-width: 2.6; }
+.schermo-centro .anteprima-coppie { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 900px; }
+.schermo-centro .anteprima-coppie .tessera { width: clamp(86px, 12vw, 130px); border-radius: 14px; }
+.stelle-finali { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; max-width: 90vw; }
+.stelle-finali .icona { width: clamp(44px, 7vmin, 72px); height: clamp(44px, 7vmin, 72px); stroke: var(--ink); stroke-width: 1.4; fill: #fff; }
+.stelle-finali .icona.piena { fill: var(--giallo); animation: premio-stella .5s ease backwards; }
+.riassunto-educatore { font-size: 15px; color: var(--ink-3); }
+.azioni-fine { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; justify-content: center; }
+.nota-educatore { font-size: 14px; color: var(--ink-3); max-width: 520px; }
+
+.btn-esci-prova { display: inline-flex; align-items: center; gap: 6px; }
+
+/* Verticale (tablet in piedi, telefono): palco sopra, tessere sotto */
+@media (max-aspect-ratio: 1/1) {
+    .gioco-area {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(0, 1.5fr) minmax(0, 1fr);
+        grid-template-areas: "palco" "lato";
+    }
+    .lato { flex-direction: row; align-items: stretch; }
+    .tessera-scelta { max-height: none; }
+    .consegna { flex: 0 1 50%; margin: 0 auto; }
+    .consegna .tessera-disegno svg { max-height: 26vh; }
+}
+
+@keyframes scuoti { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-10px); } 40% { transform: translateX(10px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
+@keyframes lampeggia { 0%, 100% { box-shadow: 6px 6px 0 var(--ink); } 50% { box-shadow: 0 0 0 12px var(--giallo); } }
+@keyframes salta { 0%, 100% { transform: translateY(0) scale(1); } 30% { transform: translateY(-14%) scale(1.08); } 60% { transform: translateY(0) scale(.96); } }
+@keyframes premio { 0% { transform: scale(.2) rotate(-30deg); opacity: 0; } 40% { transform: scale(1.15) rotate(8deg); opacity: 1; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+@keyframes premio-stella { from { transform: scale(.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes respira { 0%, 100% { box-shadow: 4px 4px 0 var(--giallo); } 50% { box-shadow: 4px 4px 0 var(--giallo), 0 0 0 8px rgba(255, 228, 92, .45); } }
+
+@media (prefers-reduced-motion: reduce) {
+    .tessera-scelta.sbagliata, .tessera-scelta.indica, .palco .oggetto.salta, .pausa-lis { animation: none; }
+}

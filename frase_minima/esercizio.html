@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#673AB7">
+    <meta name="description" content="Esercizio - Frase Minima">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Frase Minima">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Esercizio - Frase Minima</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+    <link rel="stylesheet" href="css/styles.css?v=2.0">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
+</head>
+<body class="exercise-page">
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-buttons-left">
+                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Frase minima" title="Torna a: Frase minima">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                    <i class="bi bi-house-door-fill"></i>
+                </button>
+            </div>
+            <h1 class="app-title">
+                <i class="bi bi-chat-square-text"></i>
+                Frase Minima
+            </h1>
+            <div class="header-buttons-right">
+                <button class="btn-bordi" id="btnImpostazioni" onclick="toggleSideMenu()" aria-label="Apri impostazioni (dimensione testo e box)" title="Impostazioni">
+                    <i class="bi bi-sliders"></i>
+                </button>
+                <button class="btn-bordi" id="btnBordi" onclick="toggleBordi()" aria-label="Mostra o nascondi l'indizio colore dei bordi" title="Indizio colore dei bordi">
+                    <i class="bi bi-palette-fill" id="iconBordi"></i>
+                </button>
+                <button class="btn-voce" id="btnVoce" onclick="toggleVoce()" aria-label="Attiva o disattiva la voce" title="Voce">
+                    <i class="bi bi-volume-up-fill" id="iconVoce"></i>
+                </button>
+                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Cancella cache e ricarica" title="Cancella cache e ricarica">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <!-- Messaggio nessuna config -->
+        <div id="noConfigMessage" class="config-section hidden">
+            <div class="section-content" style="text-align: center;">
+                <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: var(--color-accent);"></i>
+                <p style="margin-top: 12px; font-size: 1.1rem;">
+                    Non ci sono ancora frasi su questo dispositivo.<br>
+                    L'educatore le prepara nell'Area Educatore.
+                </p>
+                <a href="gestione.html" class="btn-primary" style="display: inline-flex; margin-top: 16px; text-decoration: none;">
+                    <i class="bi bi-person-gear"></i>&nbsp;Vai all'Area Educatore
+                </a>
+            </div>
+        </div>
+
+        <!-- Scelta frase -->
+        <div id="exerciseChooser" class="hidden">
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-grid-3x3-gap"></i>
+                    <h2>Scegli una frase</h2>
+                    <span id="chooserCount" class="badge">0</span>
+                </div>
+                <div class="section-content">
+                    <p style="text-align: center; color: var(--color-text-light); margin-bottom: 14px;">
+                        Tocca la frase che vuoi comporre
+                    </p>
+                    <div id="userExercisesList" class="user-exercises-list"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Area esercizio -->
+    <div id="exerciseArea" class="exercise-board hidden">
+
+        <div class="consegna">
+            <span id="consegnaTesto">Componi la frase: trascina le immagini nei box colorati</span>
+            <button class="btn-speak" onclick="speakConsegna(true)" aria-label="Ascolta la consegna" title="Ascolta (riattiva la voce se spenta)">
+                <i class="bi bi-volume-up-fill"></i>
+            </button>
+        </div>
+
+        <!-- Riga 1: i tre box della frase -->
+        <div class="board-top" id="slotsRow">
+            <div class="slot slot-soggetto" id="slot-0" data-ruolo="soggetto">
+                <span class="slot-label">Chi?</span>
+                <div class="slot-hint">
+                    <i class="bi bi-1-circle"></i>
+                    <span>Soggetto</span>
+                </div>
+            </div>
+            <div class="slot slot-predicato" id="slot-1" data-ruolo="predicato">
+                <span class="slot-label">Fa che cosa?</span>
+                <div class="slot-hint">
+                    <i class="bi bi-2-circle"></i>
+                    <span>Predicato</span>
+                </div>
+            </div>
+            <div class="slot slot-complemento" id="slot-2" data-ruolo="complemento">
+                <span class="slot-label">Che cosa?</span>
+                <div class="slot-hint">
+                    <i class="bi bi-3-circle"></i>
+                    <span>Complemento</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Frase in costruzione + bottone per riascoltarla -->
+        <div class="frase-strip">
+            <div class="frase-testo" id="fraseTesto"></div>
+            <button class="btn-ripeti" id="btnRipeti" onclick="ripetiFrase()" aria-label="Ripeti la frase da comporre">
+                <i class="bi bi-volume-up-fill"></i> Ripeti la frase
+            </button>
+        </div>
+
+        <!-- Riga 2: i pittogrammi mescolati -->
+        <div class="board-bottom" id="pictosRow"></div>
+
+        <div class="status-bar">
+            <span class="status-chip">
+                <i class="bi bi-x-circle"></i>
+                Errori: <strong id="erroriCount">0</strong>
+            </span>
+            <button class="btn-secondary" type="button" onclick="resetExercise()">
+                <i class="bi bi-arrow-counterclockwise"></i> Ricomincia
+            </button>
+            <button class="btn-secondary" type="button" onclick="backToChooser()">
+                <i class="bi bi-grid-3x3-gap"></i> Cambia frase
+            </button>
+        </div>
+    </div>
+
+    <!-- Pulsante e menu laterale impostazioni -->
+    <button class="side-menu-toggle hidden" id="sideMenuToggle" onclick="toggleSideMenu()" aria-label="Apri impostazioni" title="Impostazioni">
+        <i class="bi bi-sliders"></i>
+    </button>
+    <div class="side-menu-backdrop" id="sideMenuBackdrop" onclick="toggleSideMenu()"></div>
+
+    <aside class="side-menu" id="sideMenu">
+        <div class="side-menu-header">
+            <h3><i class="bi bi-sliders"></i> Impostazioni</h3>
+            <button class="side-menu-close" onclick="toggleSideMenu()" aria-label="Chiudi">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="side-menu-body">
+
+            <div class="sm-section">
+                <h4>Indizio colore dei bordi</h4>
+                <label class="checkbox-row">
+                    <input type="checkbox" id="bordiCheck" checked onchange="onBordiCheckChange()">
+                    Bordi colorati come aiuto
+                </label>
+                <small style="display:block; color: var(--color-text-light); margin-top:6px;">
+                    Toglilo quando l'utente ha imparato la successione soggetto-predicato-complemento:
+                    i bordi diventano neri e sparisce l'indizio del colore. Puoi rimetterlo quando vuoi
+                    (anche dal pulsante <i class="bi bi-palette-fill"></i> in alto).
+                </small>
+            </div>
+
+            <div class="sm-section">
+                <h4>Genere voce di rinforzo</h4>
+                <div class="rs-radios">
+                    <label class="rs-radio">
+                        <input type="radio" name="genderRinforzo" value="M" checked onchange="onGenderChange()">
+                        <span>M <small>(bravo!)</small></span>
+                    </label>
+                    <label class="rs-radio">
+                        <input type="radio" name="genderRinforzo" value="F" onchange="onGenderChange()">
+                        <span>F <small>(brava!)</small></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="sm-section">
+                <h4>Velocità di lettura</h4>
+                <input type="range" class="sm-slider" id="rateSlider" min="60" max="120" step="5" value="90"
+                       oninput="onRateChange()">
+                <span class="sm-value" id="rateValue">Normale</span>
+            </div>
+
+            <div class="sm-section">
+                <h4>Dimensione dei box</h4>
+                <input type="range" class="sm-slider" id="scaleSlider" min="70" max="130" step="5" value="100"
+                       oninput="onScaleChange()">
+                <span class="sm-value" id="scaleValue">100%</span>
+            </div>
+
+            <div class="sm-section">
+                <h4>Dimensione del testo</h4>
+                <input type="range" class="sm-slider" id="fontTestoSlider" min="100" max="300" step="10" value="100"
+                       oninput="onFontTestoChange()">
+                <span class="sm-value" id="fontTestoValue">100%</span>
+                <small style="display:block; color: var(--color-text-light); margin-top:6px;">
+                    Ingrandisce la parola nel box sotto ogni immagine (utile per ipovisione).
+                </small>
+            </div>
+
+            <div class="sm-section">
+                <h4>Aiuto dopo gli errori</h4>
+                <label class="checkbox-row">
+                    <input type="checkbox" id="hintCheck" checked onchange="onHintChange()">
+                    Evidenzia il pittogramma giusto dopo 3 errori
+                </label>
+            </div>
+
+            <div class="sm-section">
+                <h4>Avanzamento automatico</h4>
+                <label class="checkbox-row">
+                    <input type="checkbox" id="autoAdvanceCheck" checked onchange="onAutoAdvanceChange()">
+                    Passa a un'altra frase dopo il completamento
+                </label>
+            </div>
+
+            <div class="sm-section">
+                <h4>Voce</h4>
+                <label class="checkbox-row">
+                    <input type="checkbox" id="voceCheck" checked onchange="onVoceCheckChange()">
+                    Leggi consegna, parole e frase ad alta voce
+                </label>
+            </div>
+
+            <div class="sm-section">
+                <button class="btn-primary" style="width:100%;" onclick="salvaImpostazioni()">
+                    <i class="bi bi-check2-circle"></i> Salva impostazioni
+                </button>
+                <small style="display:block; color: var(--color-text-light); margin-top:6px;">
+                    Memorizza tutte le impostazioni scelte, così restano attive alla prossima apertura.
+                </small>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Overlay celebrazione -->
+    <div class="celebration-overlay" id="celebrationOverlay">
+        <div class="celebration-card">
+            <div class="bravo-text" id="bravoText">BRAVO!</div>
+            <div class="reached" id="fraseCompleta" style="font-size: clamp(1.4rem, 6vw, 2.6rem); text-transform: uppercase;">—</div>
+            <p id="celebrationDetail">Frase completata senza errori!</p>
+            <div class="celebration-actions">
+                <button class="btn-primary" onclick="ripetiFrase()">
+                    <i class="bi bi-volume-up-fill"></i> Riascolta
+                </button>
+                <button class="btn-primary" onclick="closeCelebration()">
+                    <i class="bi bi-arrow-repeat"></i> Rifai
+                </button>
+                <button class="btn-secondary" onclick="closeCelebrationToChooser()">
+                    <i class="bi bi-grid-3x3-gap"></i> Altre frasi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay errore -->
+    <div class="error-overlay" id="errorOverlay">
+        <div class="error-card">
+            <i class="bi bi-x-circle-fill"></i>
+            <h3 id="errorTitle">Non è questo</h3>
+            <p id="errorMessage">Riprova</p>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/clear-cache.js?v=2.0"></script>
+    <script src="js/archivio.js?v=2.0"></script>
+    <script src="js/esercizio-app.js?v=20261104.2"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js?v=2.0')
+                    .then(() => console.log('Service Worker registrato'))
+                    .catch(err => console.log('Service Worker errore:', err));
+            });
+        }
+    </script>
+</body>
+</html>

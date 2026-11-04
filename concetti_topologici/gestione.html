@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#F4F5FF">
+    <meta name="description" content="Concetti topologici - Area Educatore: scene, impostazioni, risultati e copia di sicurezza">
+
+    <title>Area Educatore - Concetti topologici</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    <link rel="stylesheet" href="css/styles.css?v=1.1.2">
+</head>
+<body class="avvio">
+
+    <header class="avvio-testata">
+        <nav class="ct-frecce" aria-label="Navigazione">
+            <a class="ct-freccia" href="./" title="Torna a: Concetti topologici" aria-label="Torna a: Concetti topologici"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+            <a class="ct-freccia" href="../" title="Torna a: Tutte le Web App" aria-label="Torna a: Tutte le Web App"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></a>
+        </nav>
+        <a class="avvio-marchio" href="./" title="Torna alla scelta dell'area">
+            <span class="ct-logo" aria-hidden="true"></span>
+            <span><h1>Concetti topologici</h1><small>Area Educatore</small></span>
+        </a>
+        <div class="avvio-utente"><a class="btn btn-piccolo" href="./">Pagina iniziale</a></div>
+    </header>
+
+    <main class="avvio-corpo">
+        <div class="barra-utente barra-azioni">
+            <div class="azioni">
+                <span class="stato-salvataggio" id="statoSalvataggio" aria-live="polite"></span>
+                <a class="btn" id="btnProva" href="#"></a>
+                <a class="btn btn-primario" id="btnUtente" href="#"></a>
+            </div>
+        </div>
+
+        <div class="schede" role="tablist">
+            <button type="button" class="scheda" role="tab" data-scheda="scene" aria-selected="true"></button>
+            <button type="button" class="scheda" role="tab" data-scheda="impostazioni" aria-selected="false"></button>
+            <button type="button" class="scheda" role="tab" data-scheda="risultati" aria-selected="false"></button>
+        </div>
+
+        <section id="pannello" aria-live="polite">
+            <div class="vuoto-stato">Caricamento…</div>
+        </section>
+    </main>
+
+    <footer class="pie">
+        <span>Concetti topologici è una web app di <a href="https://assistivetech.it/">AssistiveTech.it</a> · Pittogrammi <a href="https://arasaac.org" target="_blank" rel="noopener">ARASAAC</a> (CC BY-NC-SA, autore Sergio Palao, Governo di Aragona)</span>
+    </footer>
+
+    <div id="toast" class="toast-contenitore" aria-live="polite"></div>
+
+    <script src="js/comune.js?v=1.1.2"></script>
+    <script src="js/concetti.js?v=1.1.2"></script>
+    <script src="js/archivio.js?v=1.1.2"></script>
+    <script src="js/gestione.js?v=1.1.2"></script>
+</body>
+</html>

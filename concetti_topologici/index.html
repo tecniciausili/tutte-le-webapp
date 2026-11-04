@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#F4F5FF">
+    <meta name="description" content="Concetti topologici - sopra/sotto, dentro/fuori, davanti/dietro: scene preparate dall'educatore, risposta con le tessere del libro di CAA. Pensato anche per utenti sordi che comunicano in LIS.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Concetti">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Concetti topologici - AssistiveTech</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    <link rel="stylesheet" href="css/styles.css?v=1.1.2">
+</head>
+<body class="avvio">
+
+    <header class="avvio-testata">
+        <nav class="ct-frecce" aria-label="Navigazione">
+            <a class="ct-freccia" href="../" title="Torna a: Tutte le Web App" aria-label="Torna a: Tutte le Web App"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+            <a class="ct-freccia" href="../" title="Torna a: Tutte le Web App" aria-label="Torna a: Tutte le Web App"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></a>
+        </nav>
+        <a class="avvio-marchio" href="../" title="Tutte le Web App di AssistiveTech">
+            <span class="ct-logo" aria-hidden="true"></span>
+            <span><h1>Concetti topologici</h1><small>Sopra, sotto, dentro, fuori… · AssistiveTech</small></span>
+        </a>
+    </header>
+
+    <main class="avvio-corpo">
+        <div class="avvio-tessere" id="avvioTessere" aria-hidden="true"></div>
+
+        <div class="scelta-aree">
+            <a href="gestione.html" class="area-card area-educatore" id="cardEducatore">
+                <span class="area-card-icona" aria-hidden="true"></span>
+                <span class="area-card-testo">
+                    <h2>Area Educatore</h2>
+                    <p>Prepara le scene dell'utente e scegli come proporle.</p>
+                    <ul>
+                        <li>Coppie di opposti: sopra/sotto, dentro/fuori, davanti/dietro, accanto/in mezzo e altre</li>
+                        <li>Simboli del libro, scatola e cesto, pittogrammi ARASAAC o foto tue</li>
+                        <li>Pause per la domanda e la conferma in LIS</li>
+                        <li>Risultati per concetto e per sessione</li>
+                    </ul>
+                </span>
+                <span class="area-card-freccia" aria-hidden="true"></span>
+            </a>
+            <a href="gioca.html" class="area-card area-utente" id="cardUtente">
+                <span class="area-card-icona" aria-hidden="true"></span>
+                <span class="area-card-testo">
+                    <h2>Area Utente</h2>
+                    <p>Le scene compaiono una alla volta. Nessuna parola e nessun suono: solo immagini.</p>
+                    <ul>
+                        <li>Riconosci: tocca la tessera giusta fra le due</li>
+                        <li>Esegui: porta l'oggetto nel posto giusto</li>
+                        <li>Rinforzo visivo; per uscire tieni premuto il lucchetto</li>
+                    </ul>
+                </span>
+                <span class="area-card-freccia" aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div class="installa-riquadro" id="installaRiquadro">
+            <img src="assets/icons/apple-touch-icon.png" alt="" class="installa-icona">
+            <div class="installa-testo">
+                <strong>Installa sul dispositivo</strong>
+                <p class="nota" id="installaNota">Si apre a tutto schermo come un'app, con la sua icona sulla schermata Home, e funziona anche senza connessione.</p>
+            </div>
+            <button type="button" class="btn btn-primario" id="btnInstalla"></button>
+        </div>
+
+        <div class="info-riquadro">
+            <span class="info-riquadro-icona" aria-hidden="true"></span>
+            <div>
+                <strong>Come funziona</strong>
+                <p>Tutto resta su questo dispositivo, senza account e anche senza connessione (serve solo per cercare i pittogrammi ARASAAC).
+                L'educatore prepara le scene qui oppure sul computer, e con la <strong>copia di sicurezza</strong> (Impostazioni) le porta sul tablet dell'utente.
+                Prima di ogni scena l'educatore fa la domanda in LIS («dov'è l'oggetto? dentro o fuori?») e tocca
+                <strong>Avanti</strong>; compaiono le due tessere e l'utente risponde. Dopo la risposta l'educatore conferma in LIS e tocca di nuovo Avanti.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="pie">
+        <span>Concetti topologici è una web app di <a href="https://assistivetech.it/">AssistiveTech.it</a> · Pittogrammi <a href="https://arasaac.org" target="_blank" rel="noopener">ARASAAC</a> (CC BY-NC-SA)</span>
+    </footer>
+
+    <div id="toast" class="toast-contenitore" aria-live="polite"></div>
+
+    <script src="js/comune.js?v=1.1.2"></script>
+    <script src="js/concetti.js?v=1.1.2"></script>
+    <script>
+        (function () {
+            const esc = CT.util.escapeHtml;
+            document.querySelector('.area-educatore .area-card-icona').innerHTML = CT.icona('modifica');
+            document.querySelector('.area-utente .area-card-icona').innerHTML = CT.icona('gioca');
+            document.querySelectorAll('.area-card-freccia').forEach(e => e.innerHTML = CT.icona('freccia'));
+            document.querySelector('.info-riquadro-icona').innerHTML = CT.icona('info');
+            document.getElementById('avvioTessere').innerHTML = ['sopra', 'sotto', 'dentro', 'fuori', 'davanti', 'dietro']
+                .map(k => `<span class="tessera">${CT.Concetti.tessera(k)}</span>`).join('');
+
+            CT.registraServiceWorker();
+
+            // ---------- Installazione come app (PWA), come in Griglia ----------
+            // Chrome, Edge e Android mandano "beforeinstallprompt": lo teniamo e lo mostriamo al tocco del pulsante.
+            // Safari su iPad/iPhone non lo manda: il pulsante spiega i passi (Condividi → Aggiungi alla schermata Home).
+            const btnInstalla = document.getElementById('btnInstalla');
+            const notaInstalla = document.getElementById('installaNota');
+            let promptInstallazione = null;
+            const giaInstallata = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+            const eIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            const segnaInstallata = (testo) => {
+                btnInstalla.innerHTML = `${CT.icona('spunta')} App installata`;
+                btnInstalla.disabled = true;
+                notaInstalla.textContent = testo;
+            };
+            btnInstalla.innerHTML = `${CT.icona('carica')} Installa sul dispositivo`;
+            if (giaInstallata) segnaInstallata('Stai già usando Concetti topologici come app installata su questo dispositivo.');
+            window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); promptInstallazione = e; });
+            window.addEventListener('appinstalled', () => {
+                promptInstallazione = null;
+                segnaInstallata('Installata: la trovi sulla schermata Home con l\'icona del quadrato e del pallino.');
+                CT.util.toast('Concetti topologici è installata sul dispositivo', 'ok');
+            });
+            btnInstalla.addEventListener('click', async () => {
+                if (promptInstallazione) {
+                    const richiesta = promptInstallazione;
+                    promptInstallazione = null;
+                    richiesta.prompt();
+                    const scelta = await richiesta.userChoice.catch(() => null);
+                    if (!scelta || scelta.outcome !== 'accepted') { promptInstallazione = richiesta; CT.util.toast('Installazione annullata: puoi riprovare quando vuoi', 'info'); }
+                    return;
+                }
+                const passi = eIOS
+                    ? ['Apri questa pagina in <strong>Safari</strong>', 'Tocca il pulsante <strong>Condividi</strong> (il quadrato con la freccia verso l\'alto)', 'Scegli <strong>Aggiungi alla schermata Home</strong>, poi <strong>Aggiungi</strong>']
+                    : /Android/i.test(navigator.userAgent)
+                        ? ['Apri questa pagina in <strong>Chrome</strong>', 'Tocca il menu <strong>⋮</strong> in alto a destra', 'Scegli <strong>Installa app</strong> oppure <strong>Aggiungi a schermata Home</strong>']
+                        : ['Apri questa pagina in <strong>Chrome</strong> o <strong>Edge</strong>', 'Clicca l\'icona di installazione a destra nella barra dell\'indirizzo, oppure menu <strong>⋮</strong> → <strong>Installa Concetti topologici</strong>', 'Conferma con <strong>Installa</strong>'];
+                const m = CT.util.apriModale(`
+                    <h2 class="modale-titolo">Installa Concetti topologici</h2>
+                    <p class="nota">Il browser non ha mostrato la richiesta automatica: si fa in tre passi.</p>
+                    <ol class="installa-passi">${passi.map(p => `<li>${p}</li>`).join('')}</ol>
+                    <div class="modale-azioni"><button type="button" class="btn btn-primario" id="installaOk">Ho capito</button></div>`, { piccola: true });
+                m.querySelector('#installaOk').addEventListener('click', () => CT.util.chiudiModale());
+            });
+        })();
+    </script>
+</body>
+</html>

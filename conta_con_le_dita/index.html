@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#673AB7">
+    <meta name="description" content="Conta con le Dita - Riconoscimento della quantità mostrata con le dita">
+
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Conta con le Dita">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Conta con le Dita - AssistiveTech</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+    <link rel="stylesheet" href="css/styles.css?v=1.0">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
+</head>
+<body class="selection-page">
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-buttons-left">
+                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                    <i class="bi bi-house-door-fill"></i>
+                </button>
+            </div>
+            <h1 class="app-title">
+                <i class="bi bi-hand-index-thumb"></i>
+                Conta con le Dita
+            </h1>
+            <div class="header-buttons-right">
+                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Cancella cache e ricarica" title="Cancella cache e ricarica">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div class="selection-container">
+            <div class="welcome-message">
+                <div class="welcome-icon">
+                    <i class="bi bi-hand-index-thumb"></i>
+                </div>
+                <h2>Benvenuto!</h2>
+                <p>Seleziona l'area in cui vuoi entrare</p>
+            </div>
+
+            <div class="area-cards">
+                <a href="gestione.html" class="area-card educatore-card" tabindex="0" aria-label="Entra nell'area educatore">
+                    <div class="card-icon">
+                        <i class="bi bi-person-gear"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Area Educatore</h3>
+                        <p>Configura gli esercizi dell'utente</p>
+                        <ul class="card-features">
+                            <li><i class="bi bi-check-circle"></i> Scegli l'immagine delle dita</li>
+                            <li><i class="bi bi-check-circle"></i> Scrivi i 3 numeri da mostrare</li>
+                            <li><i class="bi bi-check-circle"></i> Rivedi i risultati dell'utente</li>
+                        </ul>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="bi bi-arrow-right-circle-fill"></i>
+                    </div>
+                </a>
+
+                <a href="esercizio.html" class="area-card utente-card" tabindex="0" aria-label="Entra nell'area utente">
+                    <div class="card-icon">
+                        <i class="bi bi-controller"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Area Utente</h3>
+                        <p>Conta le dita e scegli il numero giusto</p>
+                        <ul class="card-features">
+                            <li><i class="bi bi-eye"></i> Guarda quante dita vedi</li>
+                            <li><i class="bi bi-hand-index"></i> Trascina il numero nel box</li>
+                            <li><i class="bi bi-volume-up"></i> Aiuto vocale</li>
+                            <li><i class="bi bi-trophy"></i> Bravo se indovini!</li>
+                        </ul>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="bi bi-arrow-right-circle-fill"></i>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Installazione come app: pulsante sempre visibile (js/installa.js) -->
+            <div data-installa data-nome="Conta con le dita"></div>
+
+            <div class="info-box">
+                <i class="bi bi-info-circle"></i>
+                <div>
+                    <strong>Come funziona?</strong>
+                    <p>L'educatore sceglie un'immagine di dita dalla galleria e scrive tre numeri: quello
+                    corrispondente alle dita mostrate e due distrattori. L'utente vede l'immagine in alto a
+                    sinistra e trascina nel box accanto il numero che ritiene corretto, scegliendolo fra i tre
+                    riquadri in basso.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <p>AssistiveTech.it © 2025 - Training Cognitivo</p>
+    </footer>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/installa.js?v=1.0"></script>
+    <script src="js/clear-cache.js?v=1.0"></script>
+    <script>
+        // Torna alla raccolta di app (un livello sopra). Se l'app è pubblicata
+        // da sola, questo è semplicemente il tasto "esci".
+        function goHome() {
+            window.location.href = '../';   // Tutte le Web App
+        }
+
+        function goBack() {
+            window.location.href = '../';   // Tutte le Web App
+        }
+
+        document.querySelectorAll('.area-card').forEach(card => {
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    card.click();
+                }
+            });
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js?v=1.0')
+                    .then(() => console.log('Service Worker registrato'))
+                    .catch(err => console.log('Service Worker errore:', err));
+            });
+        }
+    </script>
+</body>
+</html>

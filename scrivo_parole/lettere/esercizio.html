@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#E91E63">
+    <meta name="description" content="Esercizio - Scrivo Parole con le Lettere">
+
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Scrivo parole">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Esercizio - Scrivo Parole con le Lettere</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="../manifest.json">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="../assets/icons/icon-192.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css?v=7.0">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
+
+    <!-- Chart.js -->
+    <script src="assets/js/chart.min.js"></script>
+</head>
+<body class="exercise-page">
+    <!-- Menu Laterale Impostazioni -->
+    <div class="settings-overlay" id="settingsOverlay" onclick="toggleSettingsMenu()"></div>
+    <aside class="settings-menu" id="settingsMenu">
+        <div class="settings-header">
+            <h3><i class="bi bi-gear"></i> Impostazioni</h3>
+            <button class="btn-close-menu" onclick="toggleSettingsMenu()">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="settings-body">
+            <!-- Grandezza Font -->
+            <div class="setting-group">
+                <label class="setting-label">
+                    <i class="bi bi-fonts"></i> Grandezza Lettere
+                </label>
+                <div class="setting-control">
+                    <span class="size-label">A</span>
+                    <input type="range" id="fontSizeSlider" min="1" max="3" step="0.1" value="1"
+                           class="setting-slider" oninput="updateFontSize(this.value)">
+                    <span class="size-label size-large">A</span>
+                </div>
+            </div>
+
+            <!-- Colore Sfondo (Box Risposta + Box Lettere) -->
+            <div class="setting-group">
+                <label class="setting-label">
+                    <i class="bi bi-palette-fill"></i> Colore Sfondo
+                </label>
+                <div class="color-options" id="bgColors">
+                    <button class="color-btn active" data-color="#FFFFFF" style="background: #FFFFFF;" onclick="setBackgroundColor('#FFFFFF')"></button>
+                    <button class="color-btn" data-color="#000000" style="background: #000000;" onclick="setBackgroundColor('#000000')"></button>
+                    <button class="color-btn" data-color="#FFEB3B" style="background: #FFEB3B;" onclick="setBackgroundColor('#FFEB3B')"></button>
+                    <button class="color-btn" data-color="#2196F3" style="background: #2196F3;" onclick="setBackgroundColor('#2196F3')"></button>
+                    <button class="color-btn" data-color="#F44336" style="background: #F44336;" onclick="setBackgroundColor('#F44336')"></button>
+                    <button class="color-btn" data-color="#4CAF50" style="background: #4CAF50;" onclick="setBackgroundColor('#4CAF50')"></button>
+                    <button class="color-btn" data-color="#E91E63" style="background: #E91E63;" onclick="setBackgroundColor('#E91E63')"></button>
+                    <button class="color-btn" data-color="#E0E0E0" style="background: #E0E0E0;" onclick="setBackgroundColor('#E0E0E0')"></button>
+                </div>
+            </div>
+
+            <!-- Colore Testo -->
+            <div class="setting-group">
+                <label class="setting-label">
+                    <i class="bi bi-fonts"></i> Colore Testo
+                </label>
+                <div class="color-options" id="textColors">
+                    <button class="color-btn active" data-color="#000000" style="background: #000000;" onclick="setTextColor('#000000')"></button>
+                    <button class="color-btn" data-color="#FFFFFF" style="background: #FFFFFF;" onclick="setTextColor('#FFFFFF')"></button>
+                    <button class="color-btn" data-color="#FFEB3B" style="background: #FFEB3B;" onclick="setTextColor('#FFEB3B')"></button>
+                    <button class="color-btn" data-color="#2196F3" style="background: #2196F3;" onclick="setTextColor('#2196F3')"></button>
+                    <button class="color-btn" data-color="#F44336" style="background: #F44336;" onclick="setTextColor('#F44336')"></button>
+                    <button class="color-btn" data-color="#4CAF50" style="background: #4CAF50;" onclick="setTextColor('#4CAF50')"></button>
+                    <button class="color-btn" data-color="#E91E63" style="background: #E91E63;" onclick="setTextColor('#E91E63')"></button>
+                    <button class="color-btn" data-color="#FF9800" style="background: #FF9800;" onclick="setTextColor('#FF9800')"></button>
+                </div>
+            </div>
+
+            <!-- Cursore Tastiera -->
+            <div class="setting-group">
+                <label class="setting-label">
+                    <i class="bi bi-keyboard"></i> Cursore Tastiera
+                </label>
+                <div class="setting-control hint-setting">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="chkCursor" onchange="toggleCursor()" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">Scrivi con la tastiera</span>
+                </div>
+            </div>
+
+            <!-- Aiuto Lettere -->
+            <div class="setting-group">
+                <label class="setting-label">
+                    <i class="bi bi-lightbulb"></i> Aiuto Lettere
+                </label>
+                <div class="setting-control hint-setting">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="chkHint" onchange="toggleHint()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">Mostra suggerimenti</span>
+                </div>
+                <div class="hint-intensity-menu" id="hintIntensityMenu" style="display: none;">
+                    <span class="intensity-label">Visibilità:</span>
+                    <input type="range" id="hintSlider" min="0" max="100" value="50"
+                           class="setting-slider hint-slider-menu" oninput="updateHintIntensity(this.value)">
+                </div>
+            </div>
+
+            <!-- Avanzamento Automatico -->
+            <div class="setting-group">
+                <label class="setting-label">
+                    <i class="bi bi-stopwatch"></i> Avanzamento Automatico
+                </label>
+                <div class="setting-control hint-setting">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="chkAutoAdvance" onchange="toggleAutoAdvance()" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="toggle-label">Passa da solo al prossimo esercizio</span>
+                </div>
+                <div class="auto-advance-menu" id="autoAdvanceMenu">
+                    <div class="setting-control">
+                        <span class="size-label">2s</span>
+                        <input type="range" id="autoAdvanceSlider" min="2" max="10" step="1" value="3"
+                               class="setting-slider" oninput="updateAutoAdvance(this.value)">
+                        <span class="size-label">10s</span>
+                    </div>
+                    <div class="auto-advance-info">
+                        Tempo prima del prossimo esercizio:
+                        <strong id="autoAdvanceValue">3</strong> sec
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-buttons-left">
+                <button class="btn-menu" onclick="toggleSettingsMenu()" aria-label="Impostazioni">
+                    <i class="bi bi-list"></i>
+                </button>
+                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Scrivo parole con le lettere" title="Torna a: Scrivo parole con le lettere">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                    <i class="bi bi-house-door-fill"></i>
+                </button>
+            </div>
+            <h1 class="app-title">
+                <i class="bi bi-type"></i>
+                Scrivo Parole
+            </h1>
+            <div class="header-buttons-right">
+                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Cancella cache e ricarica" title="Cancella cache e ricarica">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main exercise-main">
+        <!-- Nessun esercizio ancora preparato -->
+        <section class="user-selection" id="noExercisesMessage" style="display: none;">
+            <div class="selection-card">
+                <div class="card-icon">
+                    <i class="bi bi-pencil-square"></i>
+                </div>
+                <h2>Nessun esercizio</h2>
+                <p>Prepara prima le parole nell'Area Educatore.</p>
+                <button class="btn-action btn-start" onclick="window.location.href='gestione.html'">
+                    <i class="bi bi-person-gear"></i> Vai all'Area Educatore
+                </button>
+            </div>
+        </section>
+
+        <!-- Toolbar Esercizio (nascosto inizialmente) -->
+        <div class="exercise-toolbar" id="exerciseToolbar" style="display: none;">
+            <div class="toolbar-info">
+                <span class="trial-counter">
+                    Prova <span id="currentTrial">0</span> / <span id="totalTrials">10</span>
+                </span>
+            </div>
+            <div class="toolbar-actions">
+                <button class="btn-action btn-start" id="btnStart" onclick="startExercise()">
+                    <i class="bi bi-play-circle"></i> Inizia
+                </button>
+                <button class="btn-action btn-next" id="btnNext" onclick="nextExercise()" disabled>
+                    <i class="bi bi-arrow-right-circle"></i> Avanti<span id="btnNextCountdown"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Placeholder Iniziale -->
+        <div class="exercise-placeholder" id="exercisePlaceholder" style="display: none;">
+            <div class="placeholder-content">
+                <i class="bi bi-type"></i>
+                <h3>Pronto a scrivere?</h3>
+                <p>Clicca "Inizia" per cominciare l'esercizio</p>
+            </div>
+        </div>
+
+        <!-- Area Esercizio -->
+        <div class="exercise-area" id="exerciseArea" style="display: none;">
+
+            <!-- BOX 1: Immagine o Parola (stimolo visivo) -->
+            <div class="stimulus-display" id="stimulusDisplay">
+                <div id="stimulusContent">
+                    <!-- Popolato da JS: immagine ARASAAC/upload OPPURE parola in maiuscolo -->
+                </div>
+                <button class="btn-speak" onclick="speakCurrentWord()" aria-label="Ascolta la parola">
+                    <i class="bi bi-volume-up-fill"></i>
+                </button>
+            </div>
+
+            <!-- BOX 2: Caselle risposta -->
+            <div class="answer-area">
+                <div class="answer-header">
+                    <div class="answer-label">Scrivi la parola:</div>
+                </div>
+                <div class="answer-boxes" id="answerBoxes">
+                    <!-- Box per le lettere della risposta -->
+                </div>
+                <button class="btn-backspace" id="btnBackspace" onclick="removeLetter()" style="display: none;">
+                    <i class="bi bi-backspace"></i>
+                </button>
+            </div>
+
+            <!-- BOX 3: Lettere disponibili -->
+            <div class="letters-area">
+                <div class="letters-label">Clicca le lettere:</div>
+                <div class="available-letters" id="availableLetters">
+                    <!-- Lettere disponibili -->
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal Celebrazione -->
+    <div class="modal celebration-modal" id="celebrationModal">
+        <div class="modal-content celebration-content">
+            <div class="fireworks-container">
+                <div class="firework"></div>
+                <div class="firework"></div>
+                <div class="firework"></div>
+            </div>
+            <div class="celebration-text">
+                <i class="bi bi-trophy-fill trophy-icon"></i>
+                <h2 id="celebrationTitle">BRAVO!</h2>
+                <p class="success-word" id="successWord"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Errore -->
+    <div class="modal error-modal" id="errorModal">
+        <div class="modal-content error-content">
+            <div class="error-icon">
+                <i class="bi bi-x-circle-fill"></i>
+            </div>
+            <div class="error-text">
+                <h2>Riprova!</h2>
+                <p>La risposta corretta era:</p>
+                <p class="correct-answer" id="correctAnswer"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Riepilogo Finale -->
+    <div class="modal" id="summaryModal">
+        <div class="modal-content summary-content">
+            <div class="modal-header">
+                <h3><i class="bi bi-bar-chart-fill"></i> Riepilogo Sessione</h3>
+            </div>
+            <div class="modal-body">
+                <!-- Statistiche generali -->
+                <div class="summary-stats">
+                    <div class="stat-card correct">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span class="stat-value" id="statCorrect">0</span>
+                        <span class="stat-label">Corrette</span>
+                    </div>
+                    <div class="stat-card wrong">
+                        <i class="bi bi-x-circle-fill"></i>
+                        <span class="stat-value" id="statWrong">0</span>
+                        <span class="stat-label">Errate</span>
+                    </div>
+                    <div class="stat-card percent">
+                        <i class="bi bi-percent"></i>
+                        <span class="stat-value" id="statPercent">0%</span>
+                        <span class="stat-label">Precisione</span>
+                    </div>
+                </div>
+                
+                <!-- Grafico -->
+                <div class="chart-container">
+                    <canvas id="resultsChart"></canvas>
+                </div>
+                
+                <!-- Tabella dettagli -->
+                <div class="results-table-container">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Parola</th>
+                                <th>Risposta</th>
+                                <th>Esito</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="closeSummary()">
+                    <i class="bi bi-house"></i> Fine
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/clear-cache.js?v=3.0"></script>
+    <script src="js/archivio.js?v=1.0"></script>
+    <script src="js/esercizio-app.js?v=20261104.2"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js?v=3.0')
+                    .then(reg => console.log('Service Worker registrato'))
+                    .catch(err => console.log('Service Worker errore:', err));
+            });
+        }
+    </script>
+
+    <!-- LIM-touch-guard: blocco menu contestuale e zoom a pizzico su LIM/touch -->
+    <script>
+    (function () {
+        // Viewport: niente zoom utente
+        var vp = document.querySelector('meta[name="viewport"]');
+        if (!vp) { vp = document.createElement('meta'); vp.setAttribute('name', 'viewport'); document.head.appendChild(vp); }
+        vp.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover');
+        // CSS: niente selezione, callout, zoom doppio-tap, scroll elastico
+        var st = document.createElement('style');
+        st.textContent = 'html,body{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;overscroll-behavior:none;}';
+        document.head.appendChild(st);
+        // Niente menu contestuale (tasto destro / pressione prolungata)
+        document.addEventListener('contextmenu', function (e) { e.preventDefault(); }, { passive: false });
+        // Niente gesti di zoom Safari/iOS
+        ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (ev) {
+            document.addEventListener(ev, function (e) { e.preventDefault(); }, { passive: false });
+        });
+        // Niente pizzico a due dita
+        document.addEventListener('touchmove', function (e) {
+            if (e.touches && e.touches.length > 1) { e.preventDefault(); }
+        }, { passive: false });
+        // Niente zoom da tastiera/trackpad
+        document.addEventListener('wheel', function (e) { if (e.ctrlKey) { e.preventDefault(); } }, { passive: false });
+        document.addEventListener('keydown', function (e) {
+            if ((e.ctrlKey || e.metaKey) && ['+', '-', '=', '0'].indexOf(e.key) !== -1) { e.preventDefault(); }
+        });
+    })();
+    </script>
+
+</body>
+</html>
+

@@ -1,0 +1,18 @@
+{
+    "cleanUrls": false,
+    "trailingSlash": true,
+    "rewrites": [
+        {
+            "source": "/:a([^./]+)/:b([^./]+)",
+            "destination": "/:a/:b/index.html"
+        },
+        {
+            "source": "/:a([^./]+)",
+            "destination": "/:a/index.html"
+        },
+        {
+            "source": "/",
+            "destination": "/index.html"
+        }
+    ]
+}

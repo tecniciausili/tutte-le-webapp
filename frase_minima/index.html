@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#673AB7">
+    <meta name="description" content="Frase Minima - Comporre frasi con soggetto, predicato e complemento">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Frase Minima">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Frase Minima - AssistiveTech</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+    <link rel="stylesheet" href="css/styles.css?v=2.0">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
+</head>
+<body class="selection-page">
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-buttons-left">
+                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                    <i class="bi bi-house-door-fill"></i>
+                </button>
+            </div>
+            <h1 class="app-title">
+                <i class="bi bi-chat-square-text"></i>
+                Frase Minima
+            </h1>
+            <div class="header-buttons-right">
+                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Cancella cache e ricarica" title="Cancella cache e ricarica">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div class="selection-container">
+            <div class="welcome-message">
+                <div class="welcome-icon">
+                    <i class="bi bi-chat-square-text"></i>
+                </div>
+                <h2>Benvenuto!</h2>
+                <p>Seleziona l'area in cui vuoi entrare</p>
+            </div>
+
+            <div class="area-cards">
+                <a href="gestione.html" class="area-card educatore-card" tabindex="0" aria-label="Entra nell'area educatore">
+                    <div class="card-icon">
+                        <i class="bi bi-person-gear"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Area Educatore</h3>
+                        <p>Componi le frasi dell'utente</p>
+                        <ul class="card-features">
+                            <li><i class="bi bi-check-circle"></i> Pittogrammi ARASAAC o immagini tue</li>
+                            <li><i class="bi bi-check-circle"></i> Soggetto, predicato, complemento</li>
+                            <li><i class="bi bi-check-circle"></i> Scrivi le parole da leggere</li>
+                        </ul>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="bi bi-arrow-right-circle-fill"></i>
+                    </div>
+                </a>
+
+                <a href="esercizio.html" class="area-card utente-card" tabindex="0" aria-label="Entra nell'area utente">
+                    <div class="card-icon">
+                        <i class="bi bi-controller"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Area Utente</h3>
+                        <p>Componi la frase trascinando le immagini</p>
+                        <ul class="card-features">
+                            <li><i class="bi bi-1-circle"></i> Prima il soggetto (blu)</li>
+                            <li><i class="bi bi-2-circle"></i> Poi il predicato (rosso)</li>
+                            <li><i class="bi bi-3-circle"></i> Infine il complemento (verde)</li>
+                            <li><i class="bi bi-volume-up"></i> La frase viene letta ad alta voce</li>
+                        </ul>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="bi bi-arrow-right-circle-fill"></i>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Installazione come app: pulsante sempre visibile (js/installa.js) -->
+            <div data-installa data-nome="Frase minima"></div>
+
+            <div class="info-box">
+                <i class="bi bi-info-circle"></i>
+                <div>
+                    <strong>Come funziona?</strong>
+                    <p>L'educatore compone una frase minima con tre pittogrammi — per esempio
+                    IO / MANGIO / IL PANE — scegliendoli da ARASAAC o dal proprio dispositivo, e scrive
+                    la parola di ciascuno. L'utente trova in alto tre box colorati (blu per il soggetto,
+                    rosso per il predicato, verde per il complemento) e in basso i tre pittogrammi
+                    mescolati: li trascina nell'ordine giusto per comporre la frase, che il sistema
+                    legge ad alta voce parola per parola e poi per intero.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <p>AssistiveTech.it © 2025 - Training Cognitivo</p>
+    </footer>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/installa.js?v=1.0"></script>
+    <script src="js/clear-cache.js?v=2.0"></script>
+    <script>
+        // Casetta e indietro: tornano all'elenco di tutte le Web App della raccolta
+        function goHome() {
+            window.location.href = '../';   // Tutte le Web App
+        }
+
+        function goBack() {
+            window.location.href = '../';   // Tutte le Web App
+        }
+
+        document.querySelectorAll('.area-card').forEach(card => {
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    card.click();
+                }
+            });
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js?v=2.0')
+                    .then(() => console.log('Service Worker registrato'))
+                    .catch(err => console.log('Service Worker errore:', err));
+            });
+        }
+    </script>
+</body>
+</html>

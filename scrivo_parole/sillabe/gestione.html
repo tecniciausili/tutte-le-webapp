@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#673AB7">
+    <meta name="description" content="Area Educatore - Scrivo Parole con le Sillabe">
+    
+    <title>Area Educatore - Scrivo Parole con le Sillabe</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/styles.css?v=5.0">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    
+    <!-- Chart.js 4.4.1 per le statistiche (copia locale: funziona offline) -->
+    <script src="assets/js/chart.min.js"></script>
+</head>
+<body class="educator-page">
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-buttons-left">
+                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Scrivo parole con le sillabe" title="Torna a: Scrivo parole con le sillabe">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                    <i class="bi bi-house-door-fill"></i>
+                </button>
+            </div>
+            <h1 class="app-title">
+                <i class="bi bi-person-gear"></i>
+                Area Educatore
+            </h1>
+            <div class="header-buttons-right">
+                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Aggiorna l'app" title="Aggiorna l'app (i dati restano)">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main educator-main">
+
+        <!-- Contenuto principale (app autonoma: nessuna scelta dell'utente) -->
+        <div id="mainContent">
+            
+            <!-- Creazione Esercizio -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-puzzle"></i>
+                    <h2>Crea Nuovo Esercizio</h2>
+                </div>
+                <div class="section-content">
+                    <!-- Sillabe Disponibili -->
+                    <div class="form-group">
+                        <label>Sillabe disponibili:</label>
+                        <div class="syllables-toolbar">
+                            <button class="btn-toolbar" onclick="addCommonSyllables()">
+                                <i class="bi bi-magic"></i> Sillabe comuni
+                            </button>
+                            <button class="btn-toolbar btn-danger" onclick="clearSyllables()">
+                                <i class="bi bi-trash"></i> Svuota
+                            </button>
+                        </div>
+                        
+                        <div class="syllables-input-area">
+                            <input type="text" id="syllableInput" class="form-input" 
+                                   placeholder="Digita una o più sillabe (es: CA, NE, MA)" 
+                                   onkeydown="onSyllableKeydown(event)"
+                                   oninput="this.value = this.value.toUpperCase()">
+                            <button class="btn-add-syllable" onclick="addSyllableFromInput()">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+                        
+                        <div id="selectedSyllables" class="selected-syllables">
+                            <!-- Sillabe selezionate appariranno qui -->
+                        </div>
+                    </div>
+                    
+                    <!-- Parole Target -->
+                    <div class="form-group">
+                        <label>Parole target da comporre:</label>
+                        <p class="helper-text">Inserisci le parole che l'utente dovrà comporre con le sillabe.</p>
+                        
+                        <div class="words-input-area">
+                            <input type="text" id="targetWordInput" class="form-input" 
+                                   placeholder="Digita una o più parole (es: CASA, CANE)" 
+                                   onkeydown="onWordKeydown(event)"
+                                   oninput="this.value = this.value.toUpperCase()">
+                            <button class="btn-add-word" onclick="addTargetWordFromInput()">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+                        
+                        <div id="selectedTargetWords" class="selected-target-words">
+                            <!-- Parole target appariranno qui -->
+                        </div>
+                    </div>
+                    
+                    <!-- Accessibilità -->
+                    <div class="accessibility-section">
+                        <h4><i class="bi bi-eye"></i> Accessibilità</h4>
+                        <div class="slider-group">
+                            <label>
+                                Dimensione Testo
+                                <span class="slider-value" id="fontSizeValue">2.5 rem (~30pt)</span>
+                            </label>
+                            <input type="range" id="fontSizeSlider" min="1.5" max="10" step="0.5" value="2.5" oninput="updateAccessibility()">
+                        </div>
+                        <div class="color-group">
+                            <div class="color-picker">
+                                <label for="bgColorPicker">Sfondo sillabe</label>
+                                <input type="color" id="bgColorPicker" value="#E3F2FD" onchange="updateAccessibility()">
+                            </div>
+                            <div class="color-picker">
+                                <label for="textColorPicker">Testo sillabe</label>
+                                <input type="color" id="textColorPicker" value="#1565C0" onchange="updateAccessibility()">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Anteprima -->
+                    <div class="preview-section">
+                        <h4><i class="bi bi-eye-fill"></i> Anteprima</h4>
+                        <div id="previewContainer" class="preview-container">
+                            <p class="preview-empty">Inserisci sillabe e parole target per vedere l'anteprima</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Pulsante Salva -->
+                    <div class="form-actions">
+                        <button class="btn-primary btn-large" onclick="saveExercise()" id="btnSaveExercise" disabled>
+                            <i class="bi bi-plus-circle"></i> Salva Esercizio
+                        </button>
+                        <button class="btn-secondary" onclick="resetForm()">
+                            <i class="bi bi-eraser"></i> Pulisci
+                        </button>
+                    </div>
+                    
+                    <div id="statusMessage" class="status-message"></div>
+                </div>
+            </section>
+
+            <!-- Lista Esercizi Creati -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-list-ul"></i>
+                    <h2>Esercizi Creati</h2>
+                    <span id="exerciseCount" class="badge">0</span>
+                </div>
+                <div class="section-content">
+                    <div id="exercisesList" class="exercises-list">
+                        <p class="empty-message">Nessun esercizio creato</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Statistiche -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-bar-chart"></i>
+                    <h2>Statistiche</h2>
+                </div>
+                <div class="section-content">
+                    <button class="btn-primary" onclick="showStatistics()">
+                        <i class="bi bi-graph-up"></i> Visualizza Statistiche
+                    </button>
+                </div>
+            </section>
+
+            <!-- Copia dei dati (esporta / importa) -->
+            <section class="config-section">
+                <div class="section-header">
+                    <i class="bi bi-hdd"></i>
+                    <h2>Copia dei dati</h2>
+                </div>
+                <div class="section-content">
+                    <p style="margin: 0 0 1rem;">
+                        Esercizi, impostazioni e risultati restano <strong>solo su questo dispositivo</strong>.
+                        Con <strong>Esporta dati</strong> ne salvi una copia in un file;
+                        con <strong>Importa dati</strong> la ricarichi qui o su un altro tablet
+                        (sostituisce i dati attuali).
+                    </p>
+                    <div class="syllables-toolbar">
+                        <button class="btn-toolbar" type="button" onclick="esportaBackup()">
+                            <i class="bi bi-box-arrow-up"></i> Esporta dati
+                        </button>
+                        <button class="btn-toolbar" type="button" onclick="importaBackup()">
+                            <i class="bi bi-box-arrow-in-down"></i> Importa dati
+                        </button>
+                    </div>
+                    <input type="file" id="fileImporta" accept="application/json,.json" hidden>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modal Statistiche -->
+    <div class="modal" id="statsModal">
+        <div class="modal-content modal-stats-xl">
+            <div class="modal-header">
+                <h3><i class="bi bi-bar-chart"></i> Statistiche Esercizi</h3>
+                <button class="btn-close-modal" onclick="closeModal('statsModal')">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                    <label for="statsWordFilter" style="font-weight: 600; font-size: 1.1rem;">
+                        <i class="bi bi-funnel"></i> Filtra per parola:
+                    </label>
+                    <select id="statsWordFilter" onchange="filterStatsByWord(this.value)" 
+                            style="padding: 0.6rem 1rem; font-size: 1rem; border: 2px solid var(--primary-color); border-radius: 8px; min-width: 200px;">
+                        <option value="tutti">📊 Tutti</option>
+                    </select>
+                </div>
+                
+                <div id="statsChartContainer" style="min-height: 450px; display: flex; align-items: center; justify-content: center;">
+                    <p>Caricamento statistiche...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="closeModal('statsModal')">Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/clear-cache.js?v=5.0"></script>
+    <script src="js/archivio.js?v=5.0"></script>
+    <script src="js/educatore-app.js?v=20261104.2"></script>
+</body>
+</html>

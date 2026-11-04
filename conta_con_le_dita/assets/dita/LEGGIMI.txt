@@ -1,0 +1,41 @@
+IMMAGINI DELLE DITA - Conta con le Dita
+=======================================
+
+Metti in QUESTA cartella le immagini delle mani che rappresentano le quantità.
+
+FORMATI ACCETTATI
+-----------------
+.png  .jpg  .jpeg  .webp  .gif  .svg
+
+COME NOMINARE I FILE (IMPORTANTE)
+---------------------------------
+Il nome del file deve contenere il numero di dita mostrate (da 0 a 10). Il
+sistema legge il primo gruppo di 1-2 cifre non attaccato ad altre cifre e sa
+così qual è la risposta corretta fra i tre numeri scritti dall'educatore.
+
+Esempi validi:
+    mano-00.png           ->  0     (nomi già in uso)
+    mano-01.png           ->  1
+    mano-10.png           ->  10
+    dita_5.png            ->  5
+    mano_destra_3.jpg     ->  3
+    due_mani_7.webp       ->  7
+    dita_4_variante_b.png ->  4
+    8.png                 ->  8
+
+Esempi NON validi:
+    quattro_dita.png      ->  non riconosciuto (nessuna cifra)
+    mano.png              ->  non riconosciuto (nessuna cifra)
+    mano_2024_3.png       ->  3, non 2024 (i gruppi di 3+ cifre sono ignorati)
+
+I file con nome non riconosciuto compaiono comunque nella galleria dell'area
+educatore, ma sono contrassegnati con "?" e non si possono selezionare finché
+non vengono rinominati.
+
+CONSIGLI
+--------
+- Immagini quadrate (es. 600x600 px), soggetto centrato, sfondo bianco o neutro.
+- Peso contenuto (< 300 KB) per il caricamento veloce anche da tablet.
+- Puoi mettere più varianti dello stesso numero (dita_3_a.png, dita_3_b.png):
+  l'educatore le vedrà come immagini distinte, entrambe valide per il 3.
+- Questo file LEGGIMI.txt viene ignorato dalla galleria: puoi lasciarlo qui.
