@@ -36,7 +36,8 @@ di localStorage (`cd_`, `spl_`, `ct_`…) e per le cache del service worker. Nes
 
 ## Pubblicazione
 
-Azure Static Web Apps, piano Gratuito, gruppo di risorse Ausili. Il repository è su GitHub,
+Azure Static Web Apps, piano Gratuito, gruppo di risorse Ausili. Il repository è su GitHub
+(github.com/tecniciausili/tutte-le-webapp),
 account tecniciausili, ramo `main`. Impostazioni dell'app su Azure: preset **Personalizzato**,
 percorso app `/`, percorso API e output vuoti. Procedura completa:
 `~/PROGETTTI_SINGOLI_AZURE/Guida_pubblicazione_App_Web_Azure.docx`.
