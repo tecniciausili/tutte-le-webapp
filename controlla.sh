@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
-# Aggiorna il repository della raccolta (webapp-github) partendo dalla libreria
-# ~/PROGETTTI_SINGOLI_AZURE/webapp, che resta la copia "master" di ogni app.
+# Controlla il repository della raccolta «tutte-le-webapp» (GitHub → Azure Static Web Apps)
+# prima di ogni commit. Le app si modificano direttamente qui, nelle loro cartelle:
+# questo repository è separato da qualsiasi altra copia delle app.
 #
 # L'elenco delle app è UNO solo: le righe «cartella: '...'» dell'elenco APP in index.html.
-# Per aggiungere un'app: scrivi la sua voce in index.html, poi lancia  bash aggiorna.sh
+# Per aggiungere un'app: metti qui la sua cartella, scrivi la sua voce in index.html,
+# poi lancia  bash controlla.sh
 #
 # Cosa fa:
-#   1. copia ogni app da webapp/<cartella>/ a qui, sostituendo la copia precedente
-#      (esclusi file di sistema, backup, configurazioni per app e qualsiasi backend);
+#   1. verifica che ogni app dell'elenco abbia la sua cartella con index.html;
 #   2. si ferma se trova file da server (.php, .sql, cartella api/, config.php):
-#      non devono MAI finire su GitHub (contengono le password del database);
-#   3. rigenera staticwebapp.config.json, l'unica configurazione Azure del sito;
-#   4. avvisa se qui ci sono cartelle che non stanno nell'elenco.
-# staticwebapp.config.json è generato da qui: non modificarlo a mano.
+#      non devono MAI finire su GitHub;
+#   3. avvisa se ci sono cartelle che non stanno nell'elenco;
+#   4. rigenera staticwebapp.config.json (l'unica configurazione Azure del sito) e serve.json
+#      (per la prova in locale con npx serve): non modificarli a mano.
 # Dopo: prova in locale, poi  git add -A && git commit -m "..." && git push
 set -euo pipefail
 QUI="$(cd "$(dirname "$0")" && pwd)"
-LIBRERIA="$(dirname "$QUI")/webapp"
 
 APP=()
 while IFS= read -r riga; do APP+=("$riga"); done < <(
@@ -27,17 +27,11 @@ if [ "${#APP[@]}" -eq 0 ]; then
 fi
 
 for nome in "${APP[@]}"; do
-  if [ ! -f "$LIBRERIA/$nome/index.html" ]; then
-    echo "✗ $nome: manca $LIBRERIA/$nome/index.html" >&2
+  if [ ! -f "$QUI/$nome/index.html" ]; then
+    echo "✗ $nome: manca $QUI/$nome/index.html" >&2
     exit 1
   fi
-  rsync -a --delete --delete-excluded \
-    --exclude '.DS_Store' --exclude 'Thumbs.db' --exclude '.git/' --exclude 'node_modules/' \
-    --exclude 'staticwebapp.config.json' --exclude 'serve.json' \
-    --exclude 'backup/' --exclude '*-copia-*.json' \
-    --exclude 'api/' --exclude '*.php' --exclude '*.sql' \
-    "$LIBRERIA/$nome/" "$QUI/$nome/"
-  echo "✓ $nome: $(find "$QUI/$nome" -type f | wc -l | tr -d ' ') file, $(du -sh "$QUI/$nome" | cut -f1)"
+  echo "✓ $nome: $(find "$QUI/$nome" -type f -not -name .DS_Store | wc -l | tr -d ' ') file, $(du -sh "$QUI/$nome" | cut -f1)"
 done
 
 # Controllo di sicurezza: niente backend né credenziali nel repository
@@ -73,7 +67,7 @@ config = {
         {"route": percorso, "headers": {"Cache-Control": "no-cache"}}
         for percorso in sw
     ] + [
-        {"route": "/aggiorna.sh", "statusCode": 404},
+        {"route": "/controlla.sh", "statusCode": 404},
         {"route": "/serve.json", "statusCode": 404},
     ],
     "responseOverrides": {"404": {"rewrite": "/404.html", "statusCode": 404}},

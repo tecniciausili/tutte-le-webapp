@@ -63,15 +63,16 @@
             color: #00796B;
         }
     </style>
+    <script src="js/raccolta.js?v=1.0"></script>
 </head>
 <body class="selection-page">
     <header class="app-header">
         <div class="header-content">
             <div class="header-buttons-left">
-                <button class="btn-back" onclick="tornaAllElenco()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                <button class="btn-back" data-senza-raccolta="nascondi" onclick="tornaAllElenco()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
                     <i class="bi bi-arrow-left"></i>
                 </button>
-                <button class="btn-home" onclick="tornaAllElenco()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
+                <button class="btn-home" data-senza-raccolta="nascondi" onclick="tornaAllElenco()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
                     <i class="bi bi-house-door-fill"></i>
                 </button>
             </div>
@@ -143,7 +144,7 @@
     <script src="js/installa.js?v=1.0"></script>
     <script>
         function tornaAllElenco() {
-            window.location.href = '../';
+            if (window.RACCOLTA) window.location.href = window.RACCOLTA.url;
         }
 
         if ('serviceWorker' in navigator) {

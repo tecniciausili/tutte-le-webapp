@@ -84,7 +84,7 @@ function goHome() {
     if (appState.isStarted && !confirm('Vuoi davvero uscire? I progressi saranno persi.')) {
         return;
     }
-    window.location.href = '../../';   // Tutte le Web App
+    window.location.href = window.RACCOLTA ? window.RACCOLTA.url : '../';   // Tutte le Web App (indice della raccolta)
 }
 
 function goBack() {

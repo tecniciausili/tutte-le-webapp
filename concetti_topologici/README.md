@@ -48,10 +48,8 @@ risposta e **dopo** (pulsante «Avanti» in alto a destra o Spazio, oppure a tem
 
 ## Pubblicazione
 
-Come Scegli tra due e Anticipo Attività, la cartella sta direttamente in `webapp/`: con FileZilla si
-carica `webapp/concetti_topologici/` in `assistivetech.it/webapp/` (README e `.gitignore` non servono
-sul server). La voce nel catalogo è in `webapp/index.html`. Per il portale Node la stessa cartella va
-in `assistivetech_js/public/webapp/` (`scripts/sync-webapp.sh` allinea tutto il catalogo).
+Fa parte della raccolta «tutte-le-webapp» (GitHub → Azure Static Web Apps): la cartella sta nella
+radice del repository e la voce è nell'elenco `APP` di `index.html`.
 
 Cambiando i file dell'app, aggiornare `CACHE_NAME` in `service-worker.js` e i `?v=` nelle pagine.
 

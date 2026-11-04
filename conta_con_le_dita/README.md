@@ -74,7 +74,5 @@ nei tag `<script>`/`<link>` delle pagine HTML.
 
 ## Pubblicazione
 
-- Statica: va bene su Azure Static Web Apps, come singola app o come cartella dentro una raccolta
+- Fa parte della raccolta «tutte-le-webapp» (GitHub → Azure Static Web Apps)
   (`/webapp/conta_con_le_dita/`).
-- Non serve pubblicare `README.md`, `serve.json`, `staticwebapp.config.json` quando si carica via FTP
-  in un portale esistente.

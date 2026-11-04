@@ -7,12 +7,13 @@
  * Strategia: prima la rete, la cache serve quando non c'è connessione.
  */
 const PREFISSO = 'scrivo_parole_scelta_';
-const CACHE_NAME = `${PREFISSO}v1.0.3`;
+const CACHE_NAME = `${PREFISSO}v1.0.4`;
 
 const FILE_PAGINA = [
     './',
     './index.html',
     './manifest.json',
+    './js/raccolta.js?v=1.0',
     './js/installa.js?v=1.0',
     './assets/icons/icon-192.png',
     './assets/icons/icon-512.png',

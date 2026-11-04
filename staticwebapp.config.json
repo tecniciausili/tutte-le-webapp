@@ -37,7 +37,7 @@
             }
         },
         {
-            "route": "/aggiorna.sh",
+            "route": "/controlla.sh",
             "statusCode": 404
         },
         {
