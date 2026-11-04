@@ -3,12 +3,10 @@
 Esercizio sui concetti topologici: sopra/sotto, dentro/fuori, davanti/dietro, accanto/in mezzo (le
 tessere del libro di CAA), più destra/sinistra, vicino/lontano, in alto/in basso.
 
-Questa è la versione **autonoma**, pubblicata in `assistivetech.it/webapp/concetti_topologici/` e
-scaricabile senza passare dal portale. La versione del portale, con login, assegnazione dell'esercizio
-e dati su MySQL, sta in `training_cognitivo/strumenti/concetti_topologici/` (esercizio 70) ed è un
-progetto separato: scene, tessere e logica dell'esercizio sono le stesse.
+Questa è la versione **autonoma** della raccolta «Web app Lega del Filo d'Oro»: si apre dall'indice
+della raccolta e si installa sul dispositivo, senza server e senza login.
 
-**Modello: UN DISPOSITIVO = UN UTENTE** (come Grid, Occhio, Scegli tra due). Nessun server, nessun login:
+**Modello: UN DISPOSITIVO = UN UTENTE** (come le altre app della raccolta). Nessun server, nessun login:
 - profilo (impostazioni e scene) → `localStorage` («ct_profilo»);
 - foto caricate dall'educatore → IndexedDB `concetti_topologici`, store `foto` (ridimensionate a 700 px);
 - risultati (una riga per risposta, anche i tentativi dopo un errore) → IndexedDB, store `risultati`.

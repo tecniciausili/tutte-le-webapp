@@ -78,5 +78,5 @@ nei tag `<script>`/`<link>` delle pagine HTML.
 
 ## Pubblicazione
 
-- Fa parte della raccolta «tutte-le-webapp» (GitHub → Azure Static Web Apps)
-  (`/webapp/conta_con_le_dita/`).
+- Fa parte della raccolta «tutte-le-webapp» (GitHub → Azure Static Web Apps),
+  nella cartella `conta_con_le_dita/`.
