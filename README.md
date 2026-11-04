@@ -36,10 +36,25 @@ di localStorage (`cd_`, `spl_`, `ct_`…) e per le cache del service worker. Nes
 
 ## Pubblicazione
 
-Azure Static Web Apps, piano Gratuito, gruppo di risorse Ausili. Il repository è su GitHub
-(github.com/tecniciausili/tutte-le-webapp),
-account tecniciausili, ramo `main`. Impostazioni dell'app su Azure: preset **Personalizzato**,
-percorso app `/`, percorso API e output vuoti. Procedura completa:
-`~/PROGETTTI_SINGOLI_AZURE/Guida_pubblicazione_App_Web_Azure.docx`.
+Il repository è su GitHub: **github.com/tecniciausili/tutte-le-webapp**, ramo `main`.
+L'App Web statica su Azure la crea il coordinatore, con le sue credenziali.
+
+### Impostazioni per creare l'App Web statica su Azure
+
+| Campo | Valore |
+|---|---|
+| Servizio | **App Web statiche** (Static Web Apps), non «App Web» |
+| Sottoscrizione / gruppo di risorse | Microsoft Azure Sponsorship / **Ausili** |
+| Piano | **Gratuito** (il modulo propone Standard, che è a pagamento) |
+| Origine della distribuzione | GitHub → organizzazione `tecniciausili`, repository `tutte-le-webapp`, ramo `main` |
+| Preset di compilazione | **Personalizzato** (Custom) |
+| Percorso app | `/` |
+| Percorso API / Percorso output | vuoti |
+
+Non serve nessuna compilazione: sono file statici. Il file `staticwebapp.config.json` è già nella
+radice. Dopo la creazione Azure aggiunge al repository il file `.github/workflows/…yml`: prima del
+push successivo bisogna fare `git pull`. Da quel momento ogni `git push` aggiorna il sito in 1-3 minuti.
+Procedura completa: `~/PROGETTTI_SINGOLI_AZURE/Guida_pubblicazione_App_Web_Azure.docx`
+(documento interno, non è nel repository).
 
 Pittogrammi ARASAAC (Sergio Palao, Governo di Aragona), licenza CC BY-NC-SA.
