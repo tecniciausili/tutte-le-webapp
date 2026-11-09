@@ -5,7 +5,7 @@
 // Tutte le cache dell'app iniziano con PREFISSO: sullo stesso dominio (assistivetech.it/webapp/)
 // ci sono altre app, e le loro cache non vanno toccate.
 const PREFISSO = 'scrittura_simboli_';
-const CACHE_NAME = `${PREFISSO}v1.5.1`;
+const CACHE_NAME = `${PREFISSO}v1.5.2`;
 // Pittogrammi ARASAAC (facoltativi, da static.arasaac.org): cache a parte, che resta tra le versioni
 const CACHE_ARASAAC = `${PREFISSO}arasaac`;
 const HOST_ARASAAC = 'static.arasaac.org';

@@ -29,6 +29,10 @@ const Editor = (() => {
   let timerRicerca = null;
   let ultimaRicerca = '';
   let ultimoFoglio = '';
+  // Riga in cui si sta scrivendo: la sua immagine compare solo quando la parola è finita
+  // (spazio o Invio), oppure quando si lascia la riga. Così chi scrive non vede l'immagine
+  // prima di aver finito la parola.
+  let rigaInCorso = null;
   const FOTO = new Map();
 
   // ---------- simboli ----------
@@ -170,7 +174,6 @@ const Editor = (() => {
   function disegna() {
     const testo = el.testo.value;
     cartellini = Simboli.cartellini(testo);
-    const staScrivendo = document.activeElement === el.testo && el.testo.selectionStart === testo.length;
     let html = '';
     let mancanti = 0;
     testo.split('\n').forEach((_, riga) => {
@@ -181,7 +184,7 @@ const Editor = (() => {
       const stile = nellaRiga.length > 1 ? ` style="--sym-r: calc(var(--sym) / ${Math.min(nellaRiga.length, 4)})"` : '';
       html += `<div class="riga-img"${stile}>`;
       nellaRiga.forEach(({ c, i }) => {
-        const inCorso = staScrivendo && c.fineParola === testo.length && c.tipo !== 'num';
+        const inCorso = c.riga === rigaInCorso;
         let simbolo = '';
         let classi = 'cartellino';
         if (inCorso) {
@@ -290,8 +293,21 @@ const Editor = (() => {
     allineaScorrimento();
   }
 
+  const rigaDelCursore = () => (el.testo.value.slice(0, el.testo.selectionStart).match(/\n/g) || []).length;
+
+  // Spostandosi su un'altra riga (frecce, clic) la parola lasciata è finita: compare la sua immagine
+  function lasciaRiga() {
+    if (rigaInCorso !== null && rigaDelCursore() !== rigaInCorso) {
+      rigaInCorso = null;
+    }
+    disegna();
+  }
+
   function alScrivere(e) {
     normalizzaSpazi();
+    // Si scrive (o si cancella) nella riga del cursore; andando a capo il cursore è già sulla
+    // riga nuova, vuota, e la parola appena finita mostra la sua immagine
+    rigaInCorso = rigaDelCursore();
     Archivio.salvaTesto(el.testo.value);
     disegna();
     mostraCursore();
@@ -684,7 +700,11 @@ const Editor = (() => {
       }
     });
     el.testo.addEventListener('input', alScrivere);
-    ['keyup', 'click', 'focus', 'blur'].forEach((ev) => el.testo.addEventListener(ev, disegna));
+    ['keyup', 'click', 'focus'].forEach((ev) => el.testo.addEventListener(ev, lasciaRiga));
+    el.testo.addEventListener('blur', () => {
+      rigaInCorso = null;   // uscendo dal testo la parola è finita
+      disegna();
+    });
     el.testo.addEventListener('scroll', () => allineaScorrimento(el.testo, el.foglio));
     el.foglio.addEventListener('scroll', () => allineaScorrimento(el.foglio, el.testo));
 
