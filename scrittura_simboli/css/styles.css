@@ -1,0 +1,1053 @@
+/* ==================== SCRITTURA CON SIMBOLI ====================
+   Stesso linguaggio visivo delle altre app di assistivetech.it/webapp (header,
+   menu laterale, finestre, pulsanti arrotondati), con il verde come colore.
+   Il foglio è bianco; il verde dei simboli è quello dei pittogrammi (#4F8A6B). */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #2E7D5B;
+    --primary-dark: #1B5E40;
+    --secondary-color: #43A070;
+    --primary-soft: rgba(46, 125, 91, 0.1);
+    --primary-border: rgba(46, 125, 91, 0.25);
+    --danger-color: #d32f2f;
+    --text-color: #263238;
+    --muted-color: #5f6b72;
+    --card-bg: #ffffff;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --header-h: 70px;
+    --simbolo: #4F8A6B;
+    --grammatica: #8aa497;
+    --letto: #ffe27a;
+    --mancante: #b0531d;
+    --focus: #1f5fbf;
+    --font-lettura: 'Atkinson Hyperlegible', Verdana, 'Segoe UI', sans-serif;
+    --font-emoji: 'Noto Color Emoji', 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
+    --sym: 72px;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #43A070 0%, #1B5E40 100%);
+    background-attachment: fixed;
+    color: var(--text-color);
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+}
+
+/* ==================== ICONE ==================== */
+
+.ms {
+    font-family: 'Material Symbols Outlined';
+    font-weight: 500;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    direction: ltr;
+    display: inline-block;
+    font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    font-variation-settings: 'FILL' 1, 'wght' 500;
+    font-size: 1.3em;
+    vertical-align: middle;
+}
+
+html:not(.icone-pronte) .ms {
+    visibility: hidden;
+}
+
+.emo {
+    font-family: var(--font-emoji);
+    line-height: 1;
+    display: inline-block;
+}
+
+/* ==================== HEADER ==================== */
+
+.app-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 0 1.5rem;
+    padding-top: env(safe-area-inset-top);
+    padding-left: max(1.5rem, env(safe-area-inset-left));
+    padding-right: max(1.5rem, env(safe-area-inset-right));
+    height: calc(var(--header-h) + env(safe-area-inset-top));
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    gap: 1rem;
+}
+
+.app-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+}
+
+.header-actions-left {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    min-width: 45px;
+}
+
+.btn-menu {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.btn-menu:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.05);
+}
+
+/* ==================== CONTENUTO ==================== */
+
+.app-main {
+    max-width: 1400px;
+    width: 100%;
+    margin: 1.25rem auto 2rem;
+    padding: 0 max(1rem, env(safe-area-inset-right)) 0 max(1rem, env(safe-area-inset-left));
+    display: grid;
+    gap: 1rem;
+}
+
+/* Barra dei comandi */
+.barra {
+    background: var(--card-bg);
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    padding: 0.8rem 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.7rem 1.1rem;
+}
+
+.controllo {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: var(--muted-color);
+    font-size: 0.9rem;
+}
+
+.controllo select {
+    min-height: 40px;
+    border-radius: 10px;
+    border: 1px solid var(--primary-border);
+    background: white;
+    padding: 0 0.5rem;
+    max-width: 230px;
+    font: inherit;
+    color: var(--text-color);
+}
+
+.controllo input[type=range] {
+    width: 110px;
+    accent-color: var(--primary-color);
+}
+
+.spunta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    cursor: pointer;
+}
+
+.spunta input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+}
+
+/* ==================== FRASI: TESTO A SINISTRA, IMMAGINI A DESTRA ====================
+   Una parola per riga. --riga è l'altezza di ogni riga, la stessa per il testo e per la
+   colonna delle immagini: così ogni immagine sta accanto alla sua parola. Le due colonne
+   hanno lo stesso bordo e lo stesso spazio sopra e sotto, e scorrono insieme (js/editor.js). */
+.lavoro {
+    display: grid;
+    gap: 0.8rem;
+    --riga: 112px;
+    --testo: 40px;
+    --colore-testo: #1f2933;
+    --peso-testo: 400;
+    --alto-colonne: clamp(320px, calc(100vh - 380px), 1400px);
+}
+
+/* Barra degli strumenti: grandezza, grassetto e colore del testo, grandezza delle immagini */
+.strumenti {
+    background: var(--card-bg);
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    padding: 0.6rem 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 1.4rem;
+}
+
+.gruppo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--muted-color);
+    font-size: 0.9rem;
+}
+
+.tasto {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 0.6rem;
+    border: 1px solid var(--primary-border);
+    border-radius: 10px;
+    background: white;
+    color: var(--text-color);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.tasto:hover {
+    background: var(--primary-soft);
+}
+
+.tasto:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.tasto[aria-pressed="true"] {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.tasto .ms {
+    font-size: 1.2rem;
+}
+
+.misura {
+    min-width: 3.2ch;
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-color);
+    font-variant-numeric: tabular-nums;
+}
+
+.colori {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.colore {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 0 0 1px var(--primary-border);
+    cursor: pointer;
+    padding: 0;
+}
+
+.colore[aria-pressed="true"] {
+    box-shadow: 0 0 0 3px var(--primary-color);
+}
+
+.colore-libero {
+    width: 40px;
+    height: 36px;
+    border: 0;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+}
+
+.due-colonne {
+    display: grid;
+    /* la colonna delle immagini è larga quanto le immagini: il testo prende il resto */
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.8rem;
+    align-items: start;
+}
+
+.colonna-testo {
+    min-width: 0;
+}
+
+.colonna-testo textarea,
+.colonna-immagini {
+    height: var(--alto-colonne);
+    border: 2px solid transparent;
+    border-radius: 15px;
+    background: var(--card-bg);
+    box-shadow: var(--shadow), 0 18px 40px -28px rgba(0, 0, 0, 0.45);
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.colonna-testo textarea {
+    display: block;
+    width: 100%;
+    resize: none;
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
+    font-family: var(--font-lettura);
+    font-size: var(--testo);
+    font-weight: var(--peso-testo);
+    line-height: var(--riga);
+    color: var(--colore-testo);
+    text-transform: uppercase;
+    white-space: pre;
+    overflow-wrap: normal;
+    overflow: auto;
+}
+
+.colonna-testo textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.colonna-testo textarea::placeholder {
+    color: #9aa5ab;
+    font-size: min(var(--testo), 28px);
+    font-weight: 400;
+}
+
+.colonna-immagini {
+    width: calc(var(--sym) + 48px);
+    padding-left: 6px;
+    padding-right: 6px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.colonna-immagini::-webkit-scrollbar {
+    display: none;
+}
+
+.riga-img {
+    height: var(--riga);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    overflow: hidden;
+}
+
+.cartellino {
+    height: calc(var(--riga) - 2px);
+    max-width: 100%;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    transition: background-color 0.15s;
+}
+
+.cartellino:hover {
+    background: var(--primary-soft);
+}
+
+.cartellino.scelto {
+    border-color: var(--primary-color);
+    background: var(--primary-soft);
+}
+
+.cartellino.letto {
+    background: var(--letto);
+}
+
+/* --sym-r: grandezza nella riga (più piccola se in una riga ci sono più parole) */
+.simbolo {
+    height: var(--sym-r, var(--sym));
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.simbolo .ms {
+    font-size: var(--sym-r, var(--sym));
+    color: var(--simbolo);
+}
+
+.simbolo .emo {
+    font-size: calc(var(--sym-r, var(--sym)) * 0.8);
+}
+
+.simbolo .num {
+    font-family: var(--font-lettura);
+    font-weight: 700;
+    font-size: calc(var(--sym-r, var(--sym)) * 0.7);
+    line-height: 1;
+}
+
+.simbolo img.foto {
+    height: var(--sym-r, var(--sym));
+    width: auto;
+    max-width: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+/* Pittogrammi ARASAAC e Mulberry */
+.simbolo img.pitto {
+    height: var(--sym-r, var(--sym));
+    width: var(--sym-r, var(--sym));
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.cartellino.piccolo .simbolo img.pitto,
+.cartellino.piccolo .simbolo img.foto {
+    height: calc(var(--sym-r, var(--sym)) * 0.5);
+    width: auto;
+}
+
+.cartellino.piccolo .simbolo .ms {
+    font-size: calc(var(--sym-r, var(--sym)) * 0.5);
+    color: var(--grammatica);
+}
+
+.cartellino.piccolo .simbolo .emo {
+    font-size: calc(var(--sym-r, var(--sym)) * 0.45);
+}
+
+.simbolo .buco {
+    width: calc(var(--sym-r, var(--sym)) * 0.75);
+    height: calc(var(--sym-r, var(--sym)) * 0.75);
+    border: 2px dashed var(--mancante);
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    color: var(--mancante);
+    font-size: calc(var(--sym-r, var(--sym)) * 0.35);
+    font-weight: 700;
+}
+
+.simbolo .attesa {
+    width: calc(var(--sym-r, var(--sym)) * 0.5);
+    height: calc(var(--sym-r, var(--sym)) * 0.5);
+    border-radius: 50%;
+    border: 3px dotted var(--primary-border);
+}
+
+.stato {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.95);
+    min-height: 1.2em;
+}
+
+/* Pannello del simbolo: si apre sopra la pagina, a destra (in basso sui tablet stretti) */
+.pannello {
+    position: fixed;
+    top: calc(var(--header-h) + env(safe-area-inset-top));
+    right: 0;
+    bottom: 0;
+    width: min(380px, 100vw);
+    background: var(--card-bg);
+    border-radius: 15px 0 0 15px;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+    padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+    display: grid;
+    align-content: start;
+    gap: 0.8rem;
+    overflow-y: auto;
+    z-index: 500;
+}
+
+.pannello:not(.aperto) {
+    display: none;
+}
+
+.pannello-testa {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pannello h2 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.btn-chiudi-pannello {
+    display: inline-flex;
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+#corpoPannello {
+    display: grid;
+    gap: 0.8rem;
+    min-width: 0;
+}
+
+#corpoPannello > * {
+    min-width: 0;
+}
+
+.pannello-parola {
+    font-family: var(--font-lettura);
+    font-size: 1.5rem;
+    font-weight: 700;
+    word-break: break-word;
+}
+
+.hint {
+    color: var(--muted-color);
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.sottotitolo {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted-color);
+}
+
+.opzioni {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+    gap: 8px;
+}
+
+.opz {
+    aspect-ratio: 1;
+    max-width: 100%;
+    border: 2px solid var(--primary-border);
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    position: relative;
+    padding: 4px;
+    overflow: hidden;
+}
+
+.opz:hover {
+    background: var(--primary-soft);
+}
+
+.opz .ms {
+    font-size: 46px;
+    color: var(--simbolo);
+}
+
+.opz .emo {
+    font-size: 38px;
+}
+
+.opz .num {
+    font-family: var(--font-lettura);
+    font-weight: 700;
+    font-size: 36px;
+}
+
+.opz img {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.opz img.pitto {
+    object-fit: contain;
+    border-radius: 0;
+}
+
+.opz .buco {
+    color: var(--mancante);
+    font-weight: 700;
+    font-size: 28px;
+}
+
+.attesa-aac {
+    grid-column: 1 / -1;
+}
+
+.opz small {
+    position: absolute;
+    bottom: 2px;
+    left: 4px;
+    right: 4px;
+    font-size: 10px;
+    color: var(--muted-color);
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.opz.attiva {
+    border-color: var(--primary-color);
+    box-shadow: inset 0 0 0 2px var(--primary-color);
+}
+
+.opz.nessuno .ms {
+    color: var(--muted-color);
+    font-size: 34px;
+}
+
+.cerca {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid var(--primary-border);
+    border-radius: 12px;
+    padding: 0 0.6rem;
+}
+
+.cerca .ms {
+    color: var(--muted-color);
+}
+
+.cerca input {
+    border: 0;
+    background: transparent;
+    min-height: 42px;
+    flex: 1;
+    min-width: 0;
+    outline: none;
+    font: inherit;
+}
+
+.nascosto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.btn-foto {
+    justify-self: start;
+    cursor: pointer;
+}
+
+.btn-foto:focus-within {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+}
+
+/* Foto personale di una parola, nel pannello */
+.foto-parola {
+    display: grid;
+    gap: 0.6rem;
+}
+
+.spunta-foto {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--primary-border);
+    border-radius: 12px;
+    font-size: 0.92rem;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.spunta-foto:has(input:checked) {
+    background: var(--primary-soft);
+    border-color: var(--primary-color);
+}
+
+.spunta-foto input {
+    width: 22px;
+    height: 22px;
+    flex: none;
+    accent-color: var(--primary-color);
+}
+
+.mini-foto {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex: none;
+}
+
+/* Crediti ARASAAC (obbligatori quando i pittogrammi sono attivi) */
+.crediti {
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.crediti a {
+    color: white;
+}
+
+/* ==================== INSTALLAZIONE (in fondo alla pagina) ==================== */
+
+.piede {
+    display: grid;
+    justify-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem calc(1.5rem + env(safe-area-inset-bottom));
+    margin-top: auto;
+    text-align: center;
+}
+
+.piede p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.85rem;
+}
+
+.btn-installa {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 0 1.6rem;
+    border: 0;
+    border-radius: 30px;
+    background: white;
+    color: var(--primary-dark);
+    font: inherit;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s;
+}
+
+.btn-installa:hover {
+    transform: translateY(-2px);
+}
+
+/* ==================== PULSANTI ==================== */
+
+.btn-primary,
+.btn-secondary {
+    padding: 10px 22px;
+    min-height: 44px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    font-family: inherit;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(46, 125, 91, 0.3);
+}
+
+.btn-secondary {
+    background: #e7f3ec;
+    color: var(--text-color);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #d3eadc;
+    transform: translateY(-2px);
+}
+
+.btn-primary:disabled,
+.btn-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.link {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--primary-color);
+    text-decoration: underline;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+}
+
+/* ==================== MENU LATERALE, OVERLAY, FINESTRE ==================== */
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    right: -310px;
+    width: 300px;
+    height: 100vh;
+    background: white;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease;
+    z-index: 1001;
+    overflow-y: auto;
+}
+
+.side-menu.active {
+    right: 0;
+}
+
+.menu-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 1.5rem;
+    padding-top: calc(1.5rem + env(safe-area-inset-top));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-close-menu {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.menu-list {
+    list-style: none;
+    padding: 1rem 0;
+}
+
+.menu-list button {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--text-color);
+}
+
+.menu-list button:hover {
+    background: #eef7f1;
+}
+
+.menu-list .menu-aggiorna {
+    color: #e65100;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    z-index: 1000;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    z-index: 2000;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 15px;
+    max-width: 560px;
+    width: 92%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-close-modal {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #999;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    line-height: 1.6;
+}
+
+.modal-body h4 {
+    color: var(--primary-color);
+    margin: 1rem 0 0.5rem;
+}
+
+.modal-body h4:first-child {
+    margin-top: 0;
+}
+
+.modal-body ul {
+    padding-left: 1.3rem;
+}
+
+.modal-body a {
+    color: var(--primary-color);
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #eee;
+    text-align: right;
+}
+
+.info-box {
+    background: #eef7f1;
+    border-left: 4px solid var(--primary-color);
+    padding: 1rem;
+    margin-top: 1rem;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    border-radius: 0 8px 8px 0;
+}
+
+.info-box .ms {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+/* ==================== TABLET E TELEFONO ==================== */
+
+@media (max-width: 900px) {
+    .pannello {
+        left: 0;
+        top: auto;
+        width: auto;
+        border-radius: 18px 18px 0 0;
+        max-height: 62vh;
+        padding: 1rem max(1rem, env(safe-area-inset-right)) calc(1rem + env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
+    }
+}
+
+@media (max-width: 520px) {
+    :root {
+        --header-h: 60px;
+    }
+
+
+    .app-title {
+        font-size: 1.2rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
+}

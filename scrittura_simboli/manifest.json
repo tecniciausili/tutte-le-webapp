@@ -1,0 +1,24 @@
+{
+    "name": "Scrittura con Simboli",
+    "short_name": "Simboli",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "background_color": "#2E7D5B",
+    "theme_color": "#2E7D5B",
+    "description": "Scrivi in italiano: il simbolo compare sopra ogni parola e la frase viene letta ad alta voce. Foto proprie, dati sul dispositivo.",
+    "orientation": "any",
+    "prefer_related_applications": false,
+    "categories": [
+        "education",
+        "health"
+    ],
+    "lang": "it",
+    "dir": "ltr",
+    "icons": [
+        { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+        { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+        { "src": "assets/icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+        { "src": "assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    ]
+}

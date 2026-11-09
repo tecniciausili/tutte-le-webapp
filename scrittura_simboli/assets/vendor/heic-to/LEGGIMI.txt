@@ -1,0 +1,3 @@
+heic-to 1.6.5 (https://github.com/hoppergee/heic-to), con libheif 1.23.5.
+Licenza LGPL-3.0: file non modificato, vedi LICENSE.
+Usato da js/editor.js solo per convertire in PNG le foto HEIC/HEIF (iPhone) quando il browser non le sa aprire.

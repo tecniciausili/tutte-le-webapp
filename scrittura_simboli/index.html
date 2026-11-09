@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#2E7D5B">
+    <meta name="description" content="Scrittura con Simboli - scrivi in italiano una parola per riga: accanto a ogni parola compare la sua immagine e viene letta ad alta voce">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Simboli">
+
+    <title>Scrittura con Simboli</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="assets/fonts/simboli/simboli.css?v=1.5.1">
+    <link rel="stylesheet" href="css/styles.css?v=1.5.1">
+    <!-- Raccolta di app: su GitHub/Azure ← e 🏠 tornano all'indice; qui (Aruba) RACCOLTA è null e spariscono -->
+    <script src="js/raccolta.js?v=1.5.1"></script>
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-actions-left">
+                <button type="button" class="btn-menu" data-app="indietro" data-senza-raccolta="nascondi" title="Torna a: Tutte le Web App" aria-label="Torna a: Tutte le Web App">
+                    <span class="ms" aria-hidden="true">west</span>
+                </button>
+                <button type="button" class="btn-menu" data-app="casa" data-senza-raccolta="nascondi" title="Torna a: Tutte le Web App" aria-label="Torna a: Tutte le Web App">
+                    <span class="ms" aria-hidden="true">home</span>
+                </button>
+                <button type="button" class="btn-menu" id="btnSchermoIntero" data-app="schermo-intero" title="Schermo intero" aria-label="Schermo intero" hidden>
+                    <span class="ms" aria-hidden="true">fullscreen</span>
+                </button>
+            </div>
+            <h1 class="app-title">Scrittura con Simboli</h1>
+            <button type="button" class="btn-menu" data-app="menu" title="Menu" aria-label="Menu">
+                <span class="ms" aria-hidden="true">more_vert</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div class="barra">
+            <button type="button" class="btn-primary" id="btnLeggi"><span class="ms" aria-hidden="true">volume_up</span> Leggi tutto</button>
+            <button type="button" class="btn-secondary" id="btnStop" disabled><span class="ms" aria-hidden="true">stop</span> Stop</button>
+            <label class="controllo">Voce
+                <select id="sceltaVoce"><option value="">Voce italiana del dispositivo</option></select>
+            </label>
+            <label class="controllo">Velocità
+                <input id="velocita" type="range" min="0.6" max="1.4" step="0.1" value="0.9">
+            </label>
+            <label class="spunta"><input id="leggiAuto" type="checkbox" checked> Leggi ogni parola quando vai a capo</label>
+            <label class="spunta" title="Pittogrammi per la CAA di arasaac.org. Servono internet: le parole vengono cercate sul sito di ARASAAC."><input id="usaArasaac" class="usa-arasaac" type="checkbox"> Pittogrammi ARASAAC</label>
+            <label class="spunta" title="Simboli per la CAA di mulberrysymbols.org. Sono inclusi nell'app: funzionano anche senza internet."><input id="usaMulberry" class="usa-mulberry" type="checkbox"> Simboli Mulberry</label>
+        </div>
+
+        <div class="lavoro" id="paginaFrasi">
+            <div class="strumenti" role="toolbar" aria-label="Testo e immagini">
+                <div class="gruppo">Testo
+                    <button type="button" class="tasto" data-testo="-1" aria-label="Testo più piccolo"><span class="ms" aria-hidden="true">remove</span></button>
+                    <span class="misura" id="misuraTesto" aria-live="polite">40</span>
+                    <button type="button" class="tasto" data-testo="1" aria-label="Testo più grande"><span class="ms" aria-hidden="true">add</span></button>
+                </div>
+                <button type="button" class="tasto" id="btnGrassetto" aria-pressed="false" title="Grassetto"><strong>G</strong>&nbsp;Grassetto</button>
+                <div class="gruppo">Colore
+                    <div class="colori" role="group" aria-label="Colore del testo">
+                        <button type="button" class="colore" data-colore="#1f2933" style="background:#1f2933" aria-label="Nero" aria-pressed="true"></button>
+                        <button type="button" class="colore" data-colore="#1565c0" style="background:#1565c0" aria-label="Blu" aria-pressed="false"></button>
+                        <button type="button" class="colore" data-colore="#c62828" style="background:#c62828" aria-label="Rosso" aria-pressed="false"></button>
+                        <button type="button" class="colore" data-colore="#2e7d32" style="background:#2e7d32" aria-label="Verde" aria-pressed="false"></button>
+                        <button type="button" class="colore" data-colore="#6a1b9a" style="background:#6a1b9a" aria-label="Viola" aria-pressed="false"></button>
+                        <button type="button" class="colore" data-colore="#ef6c00" style="background:#ef6c00" aria-label="Arancione" aria-pressed="false"></button>
+                        <input type="color" class="colore-libero" id="coloreLibero" value="#1f2933" aria-label="Scegli un altro colore" title="Altro colore">
+                    </div>
+                </div>
+                <div class="gruppo">Immagini
+                    <button type="button" class="tasto" data-immagini="-1" aria-label="Immagini più piccole"><span class="ms" aria-hidden="true">remove</span></button>
+                    <span class="misura" id="misuraImmagini" aria-live="polite">120</span>
+                    <button type="button" class="tasto" data-immagini="1" aria-label="Immagini più grandi"><span class="ms" aria-hidden="true">add</span></button>
+                </div>
+            </div>
+
+            <div class="due-colonne">
+                <div class="colonna-testo">
+                    <label for="testo" class="nascosto">Scrivi una parola per riga</label>
+                    <textarea id="testo" wrap="off" spellcheck="true" lang="it" autocomplete="off" autocapitalize="characters" placeholder="Scrivi una parola e premi spazio"></textarea>
+                </div>
+                <section class="colonna-immagini" id="foglio" aria-live="polite" aria-label="Immagini delle parole: tocca un'immagine per cambiarla"></section>
+            </div>
+            <p class="stato" id="stato" aria-live="polite"></p>
+
+            <aside class="pannello" id="pannello" aria-label="Simbolo della parola">
+                <div class="pannello-testa">
+                    <h2>Simbolo della parola</h2>
+                    <button type="button" class="btn-chiudi-pannello" id="chiudiPannello" aria-label="Chiudi"><span class="ms" aria-hidden="true">close</span></button>
+                </div>
+                <div id="corpoPannello"></div>
+            </aside>
+        </div>
+
+        <p class="crediti" id="statoScarico" aria-live="polite" hidden></p>
+        <p class="crediti" id="creditiArasaac" hidden>Pittogrammi: autore Sergio Palao. Origine: <a href="https://arasaac.org" target="_blank" rel="noopener">ARASAAC</a>. Licenza: <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.it" target="_blank" rel="noopener">CC BY-NC-SA</a>. Proprietà: Governo d'Aragona (Spagna).</p>
+        <p class="crediti" id="creditiMulberry" hidden>Simboli <a href="https://mulberrysymbols.org" target="_blank" rel="noopener">Mulberry</a> di Steve Lee, licenza <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.it" target="_blank" rel="noopener">CC BY-SA 4.0</a>.</p>
+    </main>
+
+    <footer class="piede" id="piedeInstalla">
+        <button type="button" class="btn-installa" data-app="installa"><span class="ms" aria-hidden="true">install_mobile</span> Installa l'app su questo dispositivo</button>
+        <p>Una volta installata si apre come un'app e funziona anche senza internet.</p>
+    </footer>
+
+    <nav class="side-menu" id="sideMenu" aria-label="Menu">
+        <div class="menu-header">
+            <h3>Menu</h3>
+            <button type="button" class="btn-close-menu" data-app="chiudi-menu" aria-label="Chiudi menu">
+                <span class="ms" aria-hidden="true">close</span>
+            </button>
+        </div>
+        <ul class="menu-list">
+            <li><button type="button" data-app="nuovo"><span class="ms" aria-hidden="true">note_add</span> Nuovo foglio</button></li>
+            <li><button type="button" data-app="esporta"><span class="ms" aria-hidden="true">upload</span> Esporta dati</button></li>
+            <li><button type="button" data-app="importa"><span class="ms" aria-hidden="true">download</span> Importa dati</button></li>
+            <li><button type="button" data-app="installa"><span class="ms" aria-hidden="true">install_mobile</span> Installa l'app</button></li>
+            <li><button type="button" data-app="istruzioni"><span class="ms" aria-hidden="true">help</span> Come funziona</button></li>
+            <li><button type="button" data-app="informazioni"><span class="ms" aria-hidden="true">info</span> Informazioni</button></li>
+            <li><button type="button" data-app="aggiorna" class="menu-aggiorna"><span class="ms" aria-hidden="true">sync</span> Aggiorna App</button></li>
+        </ul>
+        <input type="file" id="fileImporta" accept="application/json,.json" hidden>
+    </nav>
+    <div class="overlay" id="overlay" data-app="chiudi-menu"></div>
+
+    <div class="modal" id="instructionsModal" role="dialog" aria-modal="true" aria-labelledby="titoloIstruzioni">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="titoloIstruzioni"><span class="ms" aria-hidden="true">help</span> Come funziona</h3>
+                <button type="button" class="btn-close-modal" data-app="chiudi-finestra" data-finestra="instructionsModal" aria-label="Chiudi">
+                    <span class="ms" aria-hidden="true">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>Scrivere</h4>
+                <ul>
+                    <li>Si scrive <strong>una parola per riga</strong>, sempre in maiuscolo: premendo <strong>spazio</strong> si va a capo, pronti per la parola dopo.</li>
+                    <li>Accanto a ogni parola, nella colonna di destra, compare la sua <strong>immagine</strong>.</li>
+                    <li>Con i pulsanti in alto si cambiano grandezza, grassetto e colore del testo e la grandezza delle immagini.</li>
+                    <li>Riconosce plurali, femminili e verbi coniugati (<em>mangio, giochiamo, andremo</em>). Le parole che non conosce hanno un riquadro tratteggiato con il <strong>?</strong>.</li>
+                </ul>
+                <h4>Cambiare un simbolo</h4>
+                <ul>
+                    <li>Tocca un'immagine nella colonna di destra: nel pannello trovi le <strong>alternative</strong>, <strong>nessun simbolo</strong> e la <strong>ricerca</strong>.</li>
+                    <li><strong>Usa una mia foto</strong>: scegli o scatta una foto (la mamma, la maestra, il cane). Da quel momento ogni volta che scrivi quella parola compare la tua foto. Con la spunta <strong>Usa la mia foto</strong> decidi, parola per parola, se mostrare la foto o il pittogramma.</li>
+                    <li>Le foto (anche quelle dell'iPhone, in formato HEIC) vengono convertite in PNG e restano su questo dispositivo.</li>
+                </ul>
+                <h4>Pittogrammi ARASAAC e simboli Mulberry</h4>
+                <ul>
+                    <li>Con la spunta <strong>Pittogrammi ARASAAC</strong> il simbolo proposto è il pittogramma di <a href="https://arasaac.org" target="_blank" rel="noopener">ARASAAC</a>, se c'è. Servono internet; i pittogrammi già visti restano su questo dispositivo.</li>
+                    <li>Con la spunta <strong>Simboli Mulberry</strong> si usano i simboli di <a href="https://mulberrysymbols.org" target="_blank" rel="noopener">Mulberry</a>: sono dentro l'app e funzionano anche senza internet.</li>
+                    <li>Con tutte e due attive viene proposto prima ARASAAC, poi Mulberry. I simboli dell'app restano sempre tra le alternative.</li>
+                </ul>
+                <h4>Leggere</h4>
+                <ul>
+                    <li>Quando vai a capo la parola viene letta; con il punto, il punto esclamativo o interrogativo viene letta la frase intera (si può disattivare). <strong>Leggi tutto</strong> legge tutto il testo.</li>
+                    <li>Mentre la voce legge, la parola si illumina (con le voci che lo permettono; altrimenti si illumina la frase).</li>
+                </ul>
+                <div class="info-box">
+                    <span class="ms" aria-hidden="true">lightbulb</span>
+                    <p>Testo, scelte e foto restano su questo dispositivo. Con <strong>Esporta dati</strong> e <strong>Importa dati</strong> si passano su un altro tablet e si tiene una copia di sicurezza.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-primary" data-app="chiudi-finestra" data-finestra="instructionsModal">Ho capito</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="titoloInfo">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="titoloInfo"><span class="ms" aria-hidden="true">info</span> Informazioni</h3>
+                <button type="button" class="btn-close-modal" data-app="chiudi-finestra" data-finestra="infoModal" aria-label="Chiudi">
+                    <span class="ms" aria-hidden="true">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>Scrittura con Simboli</h4>
+                <p>Scrittura con il supporto dei simboli e lettura ad alta voce, in italiano. Funziona anche senza internet: nessun dato esce da questo dispositivo, tranne le parole da cercare tra i pittogrammi ARASAAC quando li attivi.</p>
+                <p><strong>Versione:</strong> <span id="infoVersione">-</span> · <strong>Parole nel vocabolario:</strong> <span id="infoParole">-</span></p>
+                <p id="infoStorage"><strong>Spazio dati:</strong> calcolo in corso…</p>
+                <h4>Simboli e caratteri</h4>
+                <p>Icone <a href="https://fonts.google.com/icons" target="_blank" rel="noopener">Material Symbols</a> (Google, Apache 2.0), emoji <a href="https://github.com/googlefonts/noto-emoji" target="_blank" rel="noopener">Noto Color Emoji</a> (Google, OFL), nomi italiani delle emoji da <a href="https://cldr.unicode.org" target="_blank" rel="noopener">Unicode CLDR</a>, carattere Atkinson Hyperlegible (Braille Institute, OFL). Tutti inclusi nell'app.</p>
+                <p>Facoltativi: simboli <a href="https://mulberrysymbols.org" target="_blank" rel="noopener">Mulberry</a> di Steve Lee, licenza <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.it" target="_blank" rel="noopener">CC BY-SA 4.0</a>, inclusi nell'app (nomi italiani ricavati da quelli inglesi).</p>
+                <p>Facoltativi: pittogrammi di Sergio Palao, origine <a href="https://arasaac.org" target="_blank" rel="noopener">ARASAAC</a>, licenza <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.it" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>, proprietà del Governo d'Aragona (Spagna). Solo uso non commerciale; arrivano da internet.</p>
+                <div class="info-box">
+                    <span class="ms" aria-hidden="true">info</span>
+                    <p>La voce è quella del dispositivo (Web Speech API): su Windows, Mac, Android e iPad c'è una voce italiana.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-primary" data-app="chiudi-finestra" data-finestra="infoModal">Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/lessico.js?v=1.5.1"></script>
+    <script src="js/util.js?v=1.5.1"></script>
+    <script src="js/archivio.js?v=1.5.1"></script>
+    <script src="js/voce.js?v=1.5.1"></script>
+    <script src="js/simboli.js?v=1.5.1"></script>
+    <script src="js/arasaac.js?v=1.5.1"></script>
+    <script src="js/mulberry-dati.js?v=1.5.1"></script>
+    <script src="js/mulberry.js?v=1.5.1"></script>
+    <script src="js/editor.js?v=1.5.1"></script>
+    <script src="js/app.js?v=1.5.1"></script>
+
+    <script>
+        if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js?v=1.5.1')
+                    .then((registrazione) => {
+                        setInterval(() => registrazione.update().catch(() => {}), 60000);
+                    })
+                    .catch((errore) => console.error('Service worker non registrato:', errore));
+            });
+        }
+    </script>
+</body>
+</html>
