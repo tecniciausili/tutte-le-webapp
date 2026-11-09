@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#2E7D32">
+    <meta name="description" content="Parola-Immagine - Area Educatore: coppie target-distrattore">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Parola-Immagine">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Area Educatore - Parola-Immagine</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+    <link rel="stylesheet" href="css/styles.css?v=3.0.0">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
+    <script src="js/raccolta.js?v=1.0"></script>
+</head>
+<body class="gestione-page">
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-buttons-left">
+                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Parola-Immagine" title="Torna a: Parola-Immagine">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App" data-casa="./" data-casa-nome="Parola-Immagine">
+                    <i class="bi bi-house-door-fill"></i>
+                </button>
+            </div>
+            <h1 class="app-title">
+                <i class="bi bi-person-gear"></i>
+                Area Educatore
+            </h1>
+            <div class="header-buttons-right">
+                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Aggiorna l'app" title="Aggiorna l'app (i dati restano)">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div class="gestione-container">
+
+            <!-- Impostazioni della sessione -->
+            <section class="settings-section">
+                <h2 class="section-title">
+                    <i class="bi bi-gear"></i>
+                    Impostazioni Sessione
+                </h2>
+                <div class="settings-row">
+                    <label for="numProve">Numero prove per sessione:</label>
+                    <input type="number" id="numProve" value="10" min="1" max="50" inputmode="numeric">
+                    <button class="btn-settings" type="button" onclick="saveSettings()">
+                        <i class="bi bi-check-lg"></i> Salva
+                    </button>
+                </div>
+                <p class="form-hint">Le coppie escono a caso senza ripetersi finché non sono uscite tutte. Alla fine
+                    della sessione compare il riepilogo. Valgono per entrambi gli esercizi.</p>
+            </section>
+
+            <!-- Aspetto delle parole (prende il posto della «taratura font» del portale) -->
+            <section class="settings-section">
+                <h2 class="section-title">
+                    <i class="bi bi-type"></i>
+                    Testo delle parole
+                </h2>
+                <div class="testo-grid">
+                    <div class="form-group">
+                        <label for="testoCarattere">Carattere</label>
+                        <select id="testoCarattere" class="form-select" onchange="salvaTesto()">
+                            <option value="Arial, sans-serif">Arial</option>
+                            <option value="Verdana, Geneva, sans-serif">Verdana</option>
+                            <option value="Tahoma, Geneva, sans-serif">Tahoma</option>
+                            <option value="'Trebuchet MS', sans-serif">Trebuchet</option>
+                            <option value="'Comic Sans MS', 'Comic Sans', 'Chalkboard SE', cursive">Comic Sans</option>
+                            <option value="Georgia, 'Times New Roman', serif">Georgia (con grazie)</option>
+                            <option value="'Courier New', monospace">Courier (macchina da scrivere)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="testoColore">Colore del testo</label>
+                        <input type="color" id="testoColore" class="form-color" value="#000000" onchange="salvaTesto()">
+                    </div>
+                    <div class="form-group">
+                        <label for="testoSfondo">Colore dello sfondo</label>
+                        <input type="color" id="testoSfondo" class="form-color" value="#FFFFFF" onchange="salvaTesto()">
+                    </div>
+                    <div class="form-group">
+                        <label for="testoSpaziatura">Spazio tra le lettere</label>
+                        <select id="testoSpaziatura" class="form-select" onchange="salvaTesto()">
+                            <option value="0">Normale</option>
+                            <option value="0.05">Poco</option>
+                            <option value="0.1">Medio</option>
+                            <option value="0.2">Molto</option>
+                            <option value="0.3">Moltissimo</option>
+                        </select>
+                    </div>
+                    <label class="check-row"><input type="checkbox" id="testoMaiuscolo" checked onchange="salvaTesto()"> Tutto MAIUSCOLO</label>
+                    <label class="check-row"><input type="checkbox" id="testoGrassetto" checked onchange="salvaTesto()"> <strong>Grassetto</strong></label>
+                </div>
+                <div class="testo-anteprima-riga">
+                    <span class="testo-etichetta">Anteprima:</span>
+                    <span id="testoAnteprima" class="testo-anteprima">Casa</span>
+                    <button type="button" class="btn-secondary btn-piccolo" onclick="ripristinaTesto()">
+                        <i class="bi bi-arrow-counterclockwise"></i> Predefinito
+                    </button>
+                </div>
+                <p class="form-hint">La grandezza delle parole e delle immagini si regola dentro ogni esercizio, con il menu <i class="bi bi-list"></i>.</p>
+            </section>
+
+            <!-- Crea nuova coppia -->
+            <section class="create-section">
+                <h2 class="section-title">
+                    <i class="bi bi-plus-circle"></i>
+                    Crea Nuova Coppia
+                </h2>
+
+                <div class="create-grid">
+                    <!-- Target -->
+                    <div class="target-section">
+                        <div class="section-label">
+                            <i class="bi bi-check-circle-fill"></i>
+                            TARGET (Immagine Corretta)
+                        </div>
+
+                        <div class="search-container">
+                            <i class="bi bi-search search-icon"></i>
+                            <input type="search" id="searchTarget" class="search-input"
+                                   placeholder="Cerca pittogramma target..." autocomplete="off"
+                                   oninput="debounceSearch('target')">
+                        </div>
+
+                        <div class="upload-row">
+                            <span class="upload-oppure">oppure</span>
+                            <button type="button" class="btn-upload" onclick="chooseFile('target')">
+                                <i class="bi bi-image"></i> Carica un'immagine dal dispositivo
+                            </button>
+                            <input type="file" id="fileTarget" accept="image/*" hidden onchange="onFileChosen('target', this)">
+                        </div>
+
+                        <div id="gridTarget" class="pictogram-grid">
+                            <div class="loading"><span>Inserisci una parola per cercare...</span></div>
+                        </div>
+
+                        <div id="previewTarget" class="selection-preview">
+                            <i class="bi bi-image" style="font-size: 2rem; color: #ccc;"></i>
+                            <span style="color: #999;">Nessuna selezione</span>
+                        </div>
+                    </div>
+
+                    <!-- Distrattore -->
+                    <div class="distractor-section">
+                        <div class="section-label">
+                            <i class="bi bi-x-circle-fill"></i>
+                            DISTRATTORE (Immagine Sbagliata)
+                        </div>
+
+                        <div class="search-container">
+                            <i class="bi bi-search search-icon"></i>
+                            <input type="search" id="searchDistractor" class="search-input"
+                                   placeholder="Cerca pittogramma distrattore..." autocomplete="off"
+                                   oninput="debounceSearch('distractor')">
+                        </div>
+
+                        <div class="upload-row">
+                            <span class="upload-oppure">oppure</span>
+                            <button type="button" class="btn-upload" onclick="chooseFile('distractor')">
+                                <i class="bi bi-image"></i> Carica un'immagine dal dispositivo
+                            </button>
+                            <input type="file" id="fileDistractor" accept="image/*" hidden onchange="onFileChosen('distractor', this)">
+                        </div>
+
+                        <div id="gridDistractor" class="pictogram-grid">
+                            <div class="loading"><span>Inserisci una parola per cercare...</span></div>
+                        </div>
+
+                        <div id="previewDistractor" class="selection-preview">
+                            <i class="bi bi-image" style="font-size: 2rem; color: #ccc;"></i>
+                            <span style="color: #999;">Nessuna selezione</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="save-section">
+                    <button id="btnSavePair" class="btn-save" type="button" onclick="savePair()" disabled>
+                        <i class="bi bi-plus-lg"></i>
+                        Aggiungi Coppia
+                    </button>
+                </div>
+                <p class="form-hint centrato">La ricerca ARASAAC richiede la connessione. Al salvataggio le immagini
+                    vengono copiate nella coppia: gli esercizi funzionano anche senza rete.</p>
+            </section>
+
+            <!-- Lista coppie -->
+            <section class="pairs-list-section">
+                <div class="pairs-header">
+                    <h2 class="section-title">
+                        <i class="bi bi-collection"></i>
+                        Coppie Create
+                    </h2>
+                    <span id="pairsCount" class="pairs-count">0 coppie</span>
+                </div>
+                <div id="pairsGrid" class="pairs-grid">
+                    <div class="loading"><div class="spinner"></div><span>Caricamento coppie...</span></div>
+                </div>
+            </section>
+
+            <!-- Risultati -->
+            <section class="pairs-list-section">
+                <div class="pairs-header">
+                    <h2 class="section-title">
+                        <i class="bi bi-graph-up"></i>
+                        Ultime Sessioni
+                    </h2>
+                    <button type="button" class="btn-secondary btn-piccolo" id="btnSvuotaRisultati" onclick="svuotaRisultati()" hidden>
+                        <i class="bi bi-trash3"></i> Svuota
+                    </button>
+                </div>
+                <div id="risultatiWrap" class="risultati-wrap">
+                    <p class="empty-message">Nessuna sessione svolta</p>
+                </div>
+            </section>
+
+            <!-- Copia dei dati -->
+            <section class="settings-section">
+                <h2 class="section-title">
+                    <i class="bi bi-hdd"></i>
+                    Copia dei dati
+                </h2>
+                <p class="testo-sezione">
+                    Coppie, risultati e impostazioni restano <strong>solo su questo dispositivo</strong>.
+                    Con <strong>Esporta dati</strong> ne salvi una copia in un file (immagini comprese);
+                    con <strong>Importa dati</strong> la ricarichi qui o su un altro tablet
+                    (sostituisce i dati attuali).
+                </p>
+                <div class="form-actions">
+                    <button class="btn-secondary" type="button" onclick="esportaBackup()">
+                        <i class="bi bi-box-arrow-up"></i> Esporta dati
+                    </button>
+                    <button class="btn-secondary" type="button" onclick="importaBackup()">
+                        <i class="bi bi-box-arrow-in-down"></i> Importa dati
+                    </button>
+                </div>
+                <input type="file" id="fileImporta" accept="application/json,.json" hidden>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <p>Pittogrammi ARASAAC (Sergio Palao, Governo di Aragona), CC BY-NC-SA</p>
+    </footer>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/comune.js?v=3.0.0"></script>
+    <script src="js/archivio.js?v=3.0.0"></script>
+    <script src="js/educatore.js?v=3.0.0"></script>
+</body>
+</html>

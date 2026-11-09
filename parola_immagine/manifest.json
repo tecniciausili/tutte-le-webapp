@@ -1,0 +1,50 @@
+{
+    "name": "Parola-Immagine - AssistiveTech",
+    "short_name": "Parola-Immagine",
+    "description": "Associazione parola-pittogramma: dalla parola all'immagine e dall'immagine alla parola. Web app autonoma: i dati restano sul dispositivo.",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "any",
+    "background_color": "#2E7D32",
+    "theme_color": "#2E7D32",
+    "lang": "it-IT",
+    "categories": [
+        "education",
+        "health"
+    ],
+    "prefer_related_applications": false,
+    "icons": [
+        { "src": "assets/icons/icon-72.png", "sizes": "72x72", "type": "image/png", "purpose": "any maskable" },
+        { "src": "assets/icons/icon-96.png", "sizes": "96x96", "type": "image/png", "purpose": "any maskable" },
+        { "src": "assets/icons/icon-128.png", "sizes": "128x128", "type": "image/png", "purpose": "any maskable" },
+        { "src": "assets/icons/icon-144.png", "sizes": "144x144", "type": "image/png", "purpose": "any maskable" },
+        { "src": "assets/icons/icon-152.png", "sizes": "152x152", "type": "image/png", "purpose": "any maskable" },
+        { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+        { "src": "assets/icons/icon-384.png", "sizes": "384x384", "type": "image/png", "purpose": "any maskable" },
+        { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    ],
+    "shortcuts": [
+        {
+            "name": "Area Educatore",
+            "short_name": "Educatore",
+            "description": "Crea le coppie parola-immagine",
+            "url": "./gestione.html",
+            "icons": [{ "src": "assets/icons/icon-96.png", "sizes": "96x96" }]
+        },
+        {
+            "name": "Parola → Immagine",
+            "short_name": "Parola→Immagine",
+            "description": "Leggi la parola e trova l'immagine",
+            "url": "./esercizio.html",
+            "icons": [{ "src": "assets/icons/icon-96.png", "sizes": "96x96" }]
+        },
+        {
+            "name": "Immagine → Parola",
+            "short_name": "Immagine→Parola",
+            "description": "Guarda l'immagine e trova la parola",
+            "url": "./esercizio-immagine-parola.html",
+            "icons": [{ "src": "assets/icons/icon-96.png", "sizes": "96x96" }]
+        }
+    ]
+}

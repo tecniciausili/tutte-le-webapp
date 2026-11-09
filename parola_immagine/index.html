@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#2E7D32">
+    <meta name="description" content="Parola-Immagine - Esercizi di associazione parola-pittogramma per training cognitivo">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Parola-Immagine">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Parola-Immagine - AssistiveTech</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+    <link rel="stylesheet" href="css/styles.css?v=3.0.0">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
+    <script src="js/raccolta.js?v=1.0"></script>
+</head>
+<body class="selection-page">
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-buttons-left">
+                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App" data-senza-raccolta="nascondi">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App" data-senza-raccolta="nascondi">
+                    <i class="bi bi-house-door-fill"></i>
+                </button>
+            </div>
+            <h1 class="app-title">
+                <i class="bi bi-image"></i>
+                Parola-Immagine
+            </h1>
+            <div class="header-buttons-right">
+                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Aggiorna l'app" title="Aggiorna l'app (i dati restano)">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div class="selection-container">
+            <div class="welcome-message">
+                <div class="welcome-icon">
+                    <i class="bi bi-puzzle-fill"></i>
+                </div>
+                <h2>Benvenuto!</h2>
+                <p>Seleziona l'area in cui vuoi entrare</p>
+            </div>
+
+            <div class="area-cards three-columns">
+                <a href="gestione.html" class="area-card educatore-card" aria-label="Entra nell'area educatore">
+                    <div class="card-icon">
+                        <i class="bi bi-person-gear"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Area Educatore</h3>
+                        <p>Prepara gli esercizi per l'utente</p>
+                        <ul class="card-features">
+                            <li><i class="bi bi-check-circle"></i> Crea coppie target-distrattore</li>
+                            <li><i class="bi bi-check-circle"></i> Pittogrammi ARASAAC o foto tue</li>
+                            <li><i class="bi bi-check-circle"></i> Prove per sessione e risultati</li>
+                        </ul>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="bi bi-arrow-right-circle-fill"></i>
+                    </div>
+                </a>
+
+                <a href="esercizio.html" class="area-card esercizio1-card" aria-label="Esercizio Parola verso Immagine">
+                    <div class="card-icon">
+                        <i class="bi bi-fonts"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Parola → Immagine</h3>
+                        <p>Leggi la parola e trova l'immagine giusta</p>
+                        <ul class="card-features">
+                            <li><i class="bi bi-eye"></i> Vedi la parola</li>
+                            <li><i class="bi bi-hand-index"></i> Scegli l'immagine</li>
+                            <li><i class="bi bi-volume-up"></i> Ascolto con la voce</li>
+                        </ul>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="bi bi-arrow-right-circle-fill"></i>
+                    </div>
+                    <div class="card-badge">
+                        <span>ABC → 🖼️</span>
+                    </div>
+                </a>
+
+                <a href="esercizio-immagine-parola.html" class="area-card esercizio2-card" aria-label="Esercizio Immagine verso Parola">
+                    <div class="card-icon">
+                        <i class="bi bi-image-fill"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Immagine → Parola</h3>
+                        <p>Guarda l'immagine e trova la parola giusta</p>
+                        <ul class="card-features">
+                            <li><i class="bi bi-eye"></i> Vedi l'immagine</li>
+                            <li><i class="bi bi-hand-index"></i> Scegli la parola</li>
+                            <li><i class="bi bi-volume-up"></i> Ascolto con la voce</li>
+                        </ul>
+                    </div>
+                    <div class="card-arrow">
+                        <i class="bi bi-arrow-right-circle-fill"></i>
+                    </div>
+                    <div class="card-badge">
+                        <span>🖼️ → ABC</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Installazione come app: pulsante sempre visibile (js/installa.js) -->
+            <div data-installa data-nome="Parola-Immagine"></div>
+
+            <div class="info-box">
+                <i class="bi bi-info-circle"></i>
+                <div>
+                    <strong>Come funziona?</strong>
+                    <p>L'educatore crea le coppie parola-immagine: un <strong>target</strong> (l'immagine giusta)
+                    e un <strong>distrattore</strong> (quella sbagliata), scegliendo i pittogrammi ARASAAC o
+                    caricando foto dal dispositivo. L'utente sceglie poi tra due esercizi: dalla parola
+                    all'immagine o dall'immagine alla parola. Coppie, impostazioni e risultati restano
+                    <strong>su questo dispositivo</strong>: nell'Area Educatore si possono esportare e importare.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <p>AssistiveTech.it © 2025 - Training Cognitivo · Pittogrammi ARASAAC (Sergio Palao, Governo di Aragona), CC BY-NC-SA</p>
+    </footer>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/installa.js?v=1.0"></script>
+    <script src="js/comune.js?v=3.0.0"></script>
+    <script>
+        // ← e 🏠 tornano all'elenco di tutte le Web App della raccolta (nascosti se non c'è)
+        function goHome() {
+            if (window.RACCOLTA) window.location.href = window.RACCOLTA.url;
+        }
+        function goBack() {
+            if (window.RACCOLTA) window.location.href = window.RACCOLTA.url;
+        }
+        document.querySelectorAll('.area-card').forEach((card) => {
+            card.addEventListener('keydown', (e) => {
+                if (e.key === ' ') {
+                    e.preventDefault();
+                    card.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

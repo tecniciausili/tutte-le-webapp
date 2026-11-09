@@ -19,6 +19,12 @@
             }
         },
         {
+            "route": "/parola_immagine/service-worker.js",
+            "headers": {
+                "Cache-Control": "no-cache"
+            }
+        },
+        {
             "route": "/scrittura_simboli/service-worker.js",
             "headers": {
                 "Cache-Control": "no-cache"

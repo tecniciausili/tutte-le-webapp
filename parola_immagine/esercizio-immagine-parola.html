@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#7B1FA2">
+    <meta name="description" content="Parola-Immagine - Esercizio: dall'immagine alla parola">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Parola-Immagine">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <title>Immagine → Parola - Parola-Immagine</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+    <link rel="stylesheet" href="css/styles.css?v=3.0.0">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
+    <script src="js/raccolta.js?v=1.0"></script>
+</head>
+<body class="exercise-page exercise-page-purple" data-modo="immagine-parola">
+    <!-- Menu laterale: dimensioni dell'esercizio -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    <aside class="sidebar sidebar-purple" id="sidebar" aria-label="Impostazioni display">
+        <div class="sidebar-header">
+            <h3><i class="bi bi-sliders"></i> Impostazioni</h3>
+            <button class="sidebar-close" onclick="closeSidebar()" aria-label="Chiudi menu">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="sidebar-content">
+            <div class="slider-group">
+                <label for="fontSlider"><i class="bi bi-fonts"></i> Dimensione Parole</label>
+                <input type="range" id="fontSlider" min="24" max="96" value="36" oninput="updateFontSize(this.value)">
+                <div class="slider-value"><span id="fontValue">36</span>px</div>
+            </div>
+            <div class="slider-group">
+                <label for="imageSlider"><i class="bi bi-image"></i> Dimensione Immagine</label>
+                <input type="range" id="imageSlider" min="150" max="450" value="240" oninput="updateImageSize(this.value)">
+                <div class="slider-value"><span id="imageValue">240</span>px</div>
+            </div>
+            <div class="slider-group">
+                <label for="gapSlider"><i class="bi bi-arrows-expand"></i> Spazio tra le Parole</label>
+                <input type="range" id="gapSlider" min="10" max="100" value="24" oninput="updateGap(this.value)">
+                <div class="slider-value"><span id="gapValue">24</span>px</div>
+            </div>
+            <div class="slider-group">
+                <label for="colGapSlider"><i class="bi bi-distribute-horizontal"></i> Spazio tra le Colonne</label>
+                <input type="range" id="colGapSlider" min="0" max="120" value="16" oninput="updateColumnGap(this.value)">
+                <div class="slider-value"><span id="colGapValue">16</span>px</div>
+            </div>
+            <p class="sidebar-nota">Le modifiche si salvano da sole su questo dispositivo.</p>
+            <button class="btn-reset-sliders" onclick="resetSliders()">
+                <i class="bi bi-arrow-counterclockwise"></i> Ripristina Default
+            </button>
+        </div>
+    </aside>
+
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-buttons-left">
+                <button class="btn-menu-hamburger" onclick="toggleSidebar()" aria-label="Apri impostazioni" title="Impostazioni display">
+                    <i class="bi bi-list"></i>
+                </button>
+                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Parola-Immagine" title="Torna a: Parola-Immagine">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App" data-casa="./" data-casa-nome="Parola-Immagine">
+                    <i class="bi bi-house-door-fill"></i>
+                </button>
+            </div>
+            <h1 class="app-title">
+                <i class="bi bi-image-fill"></i>
+                Immagine → Parola
+            </h1>
+            <div class="header-buttons-right">
+                <button class="btn-refresh" id="btnVoce" onclick="toggleVoice()" aria-label="Attiva o disattiva la voce" title="Voce">
+                    <i class="bi bi-volume-up-fill"></i>
+                </button>
+                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Aggiorna l'app" title="Aggiorna l'app (i dati restano)">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div class="exercise-container">
+
+            <div class="exercise-toolbar" id="exerciseToolbar">
+                <div class="toolbar-left">
+                    <div class="trial-counter">
+                        Prova <span class="current" id="currentTrial">0</span> / <span id="totalTrials">10</span>
+                    </div>
+                </div>
+                <div class="toolbar-right">
+                    <button id="btnStart" class="btn-action btn-start" onclick="startExercise()" disabled>
+                        <i class="bi bi-play-fill"></i> Inizia
+                    </button>
+                    <button id="btnRepeat" class="btn-action btn-repeat" onclick="ascoltaDiNuovo()" disabled title="Ascolta di nuovo le parole">
+                        <i class="bi bi-volume-up-fill"></i> Ascolta
+                    </button>
+                    <button id="btnNext" class="btn-action btn-next" onclick="saltaProva()" disabled title="Passa alla prova successiva senza rispondere">
+                        <i class="bi bi-skip-forward-fill"></i> Avanti
+                    </button>
+                </div>
+            </div>
+
+            <!-- Area esercizio: l'immagine a sinistra, le due parole a destra -->
+            <div class="exercise-area" id="exerciseArea" style="display: none;">
+                <div class="image-column">
+                    <div class="image-display" id="imageDisplay" tabindex="-1">
+                        <img id="targetImage" alt="">
+                    </div>
+                </div>
+                <div class="words-column">
+                    <div class="word-box" id="wordTop" data-posizione="top" role="button" tabindex="0">
+                        <span class="word-option" id="wordTextTop">-</span>
+                    </div>
+                    <div class="word-box" id="wordBottom" data-posizione="bottom" role="button" tabindex="0">
+                        <span class="word-option" id="wordTextBottom">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-placeholder" id="exercisePlaceholder">
+                <i class="bi bi-hand-index-thumb"></i>
+                <p id="placeholderTesto">Caricamento...</p>
+                <a href="gestione.html" class="btn-action btn-start link-educatore" id="linkEducatore" hidden>
+                    <i class="bi bi-person-gear"></i> Vai all'Area Educatore
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Celebrazione -->
+    <div class="modal-overlay celebration-modal" id="celebrationModal" aria-live="assertive">
+        <div class="modal-content">
+            <div class="festa" id="festa" aria-hidden="true"></div>
+            <h2><i class="bi bi-star-fill"></i> BRAVO! <i class="bi bi-star-fill"></i></h2>
+            <p class="celebration-message">Ottimo lavoro!</p>
+        </div>
+    </div>
+
+    <!-- Errore -->
+    <div class="modal-overlay error-modal" id="errorModal" aria-live="assertive">
+        <div class="modal-content">
+            <h2><i class="bi bi-x-circle-fill"></i> Riprova!</h2>
+            <p class="error-message">Questa non è la parola giusta.</p>
+        </div>
+    </div>
+
+    <!-- Riepilogo finale -->
+    <div class="modal-overlay summary-modal" id="summaryModal">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="titoloRiepilogo">
+            <h2 id="titoloRiepilogo"><i class="bi bi-bar-chart-fill"></i> Riepilogo Sessione</h2>
+            <div class="summary-stats">
+                <div class="stat-box correct">
+                    <div class="stat-value" id="statCorrect">0</div>
+                    <div class="stat-label">Risposte Corrette</div>
+                </div>
+                <div class="stat-box wrong">
+                    <div class="stat-value" id="statWrong">0</div>
+                    <div class="stat-label">Risposte Errate</div>
+                </div>
+                <div class="stat-box percent">
+                    <div class="stat-value" id="statPercent">0%</div>
+                    <div class="stat-label">Percentuale</div>
+                </div>
+            </div>
+            <table class="results-table">
+                <thead>
+                    <tr><th>Parola</th><th>Esito</th><th>% Corrette</th></tr>
+                </thead>
+                <tbody id="resultsTableBody"></tbody>
+            </table>
+            <div class="modal-actions">
+                <button class="btn-close-modal btn-close-secondario" onclick="closeSummary()">
+                    <i class="bi bi-check-lg"></i> Chiudi
+                </button>
+                <button class="btn-close-modal" onclick="closeSummary(); startExercise();">
+                    <i class="bi bi-arrow-repeat"></i> Nuova sessione
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/blocco-tocco.js?v=3.0.0"></script>
+    <script src="js/comune.js?v=3.0.0"></script>
+    <script src="js/archivio.js?v=3.0.0"></script>
+    <script src="js/esercizio.js?v=3.0.0"></script>
+</body>
+</html>
