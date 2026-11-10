@@ -10,7 +10,7 @@ const CACHE_MULBERRY = `${PREFISSO_CACHE}mulberry`;
 
 const APP_CONFIG = {
   nome: 'Scrittura con Simboli',
-  versione: '1.5.2',
+  versione: '1.5.3',
 };
 window.APP_CONFIG = APP_CONFIG;
 
@@ -149,12 +149,28 @@ const App = (() => {
     }
   }
 
+  // Chiede alla rete la pagina dell'app. La richiesta HEAD non passa dalla cache del
+  // service worker (che gestisce solo le GET): senza connessione fallisce davvero.
+  async function reteDisponibile() {
+    try {
+      const risposta = await fetch(`./?rete=${Date.now()}`, { method: 'HEAD', cache: 'no-store' });
+      return risposta.ok;
+    } catch (e) {
+      return false;
+    }
+  }
+
   // Svuota solo la cache dei file di questa app: testo, simboli scelti e foto restano.
   // Sullo stesso dominio ci sono altre app (assistivetech.it/webapp/): i loro
   // service worker e le loro cache non vanno toccati.
   async function aggiorna() {
     alternaMenu(false);
     if (!confirm('🔄 AGGIORNA APP\n\nScarica l\'ultima versione dell\'applicazione.\n\nTesto, simboli scelti e foto NON vengono toccati.\n\nContinuare?')) {
+      return;
+    }
+    // Senza connessione non si cancella nulla: l'app deve continuare a funzionare offline.
+    if (!(await reteDisponibile())) {
+      alert('📡 Per aggiornare serve la connessione a internet.\n\nNon è stato cambiato nulla: riprova quando c\'è la connessione.');
       return;
     }
     try {

@@ -7,7 +7,7 @@
 // cache non vanno toccate.
 // Quando si modifica l'app: aumentare la versione qui (e i ?v= nelle pagine).
 const PREFISSO = 'parola_immagine_';
-const CACHE_NAME = `${PREFISSO}v3.0.0`;
+const CACHE_NAME = `${PREFISSO}v3.0.1`;
 
 const URLS_TO_CACHE = [
   './',
@@ -16,14 +16,14 @@ const URLS_TO_CACHE = [
   './esercizio.html',
   './esercizio-immagine-parola.html',
   './manifest.json',
-  './css/styles.css?v=3.0.0',
+  './css/styles.css?v=3.0.1',
   './js/raccolta.js?v=1.0',
   './js/installa.js?v=1.0',
-  './js/comune.js?v=3.0.0',
-  './js/archivio.js?v=3.0.0',
-  './js/educatore.js?v=3.0.0',
-  './js/esercizio.js?v=3.0.0',
-  './js/blocco-tocco.js?v=3.0.0',
+  './js/comune.js?v=3.0.1',
+  './js/archivio.js?v=3.0.1',
+  './js/educatore.js?v=3.0.1',
+  './js/esercizio.js?v=3.0.1',
+  './js/blocco-tocco.js?v=3.0.1',
   './assets/fonts/bootstrap-icons/bootstrap-icons.css',
   './assets/fonts/bootstrap-icons/bootstrap-icons.woff',
   './assets/fonts/bootstrap-icons/bootstrap-icons.woff2',

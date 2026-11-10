@@ -7,10 +7,17 @@
  *   - NON si cancella localStorage: contiene gli esercizi e i risultati dell'utente.
  *   - Si cancellano solo le cache che iniziano con "frase_minima_".
  *   - Si disattiva solo il service worker di questa app (per scope).
+ * Senza connessione non si cancella nulla: l'app deve continuare a funzionare offline.
  */
 
 async function clearCacheAndReload() {
     if (!confirm('Vuoi ricaricare l\'app con i file aggiornati?\n\nFrasi, impostazioni e risultati salvati restano al loro posto.')) {
+        return;
+    }
+
+    // Senza connessione non si cancella nulla: l'app deve continuare a funzionare offline.
+    if (!(await reteDisponibile())) {
+        alert('Per aggiornare serve la connessione a internet.\n\nNon è stato cambiato nulla: riprova quando c\'è la connessione.');
         return;
     }
 
@@ -40,5 +47,16 @@ async function clearCacheAndReload() {
     } catch (error) {
         console.error('Errore durante l\'aggiornamento:', error);
         window.location.reload();
+    }
+}
+
+// Chiede alla rete la pagina dell'app. La richiesta HEAD non passa dalla cache del
+// service worker (che gestisce solo le GET): senza connessione fallisce davvero.
+async function reteDisponibile() {
+    try {
+        const risposta = await fetch(`./?rete=${Date.now()}`, { method: 'HEAD', cache: 'no-store' });
+        return risposta.ok;
+    } catch (e) {
+        return false;
     }
 }

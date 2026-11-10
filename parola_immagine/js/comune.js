@@ -7,12 +7,18 @@
  *   - NON si cancella localStorage né IndexedDB: contengono coppie, risultati e impostazioni.
  *   - Si cancellano solo le cache che iniziano con "parola_immagine_".
  *   - Si disattiva solo il service worker di questa cartella (per scope).
+ * Senza connessione non si cancella nulla: l'app deve continuare a funzionare offline.
  */
 
 const PREFISSO_CACHE = 'parola_immagine_';
 
 async function clearCacheAndReload() {
     if (!confirm('Vuoi ricaricare l\'app con i file aggiornati?\n\nCoppie, impostazioni e risultati salvati restano al loro posto.')) {
+        return;
+    }
+    // Senza connessione non si cancella nulla: l'app deve continuare a funzionare offline.
+    if (!(await reteDisponibile())) {
+        alert('Per aggiornare serve la connessione a internet.\n\nNon è stato cambiato nulla: riprova quando c\'è la connessione.');
         return;
     }
     try {
@@ -31,6 +37,17 @@ async function clearCacheAndReload() {
         console.error('Errore durante l\'aggiornamento:', e);
     }
     window.location.reload();
+}
+
+// Chiede alla rete la pagina dell'app. La richiesta HEAD non passa dalla cache del
+// service worker (che gestisce solo le GET): senza connessione fallisce davvero.
+async function reteDisponibile() {
+    try {
+        const risposta = await fetch(`./?rete=${Date.now()}`, { method: 'HEAD', cache: 'no-store' });
+        return risposta.ok;
+    } catch (e) {
+        return false;
+    }
 }
 
 function escapeHtml(testo) {

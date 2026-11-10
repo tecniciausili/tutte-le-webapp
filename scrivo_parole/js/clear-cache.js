@@ -21,18 +21,9 @@ async function clearCacheAndReload() {
 
     const PREFISSI = ['scrivo_parole_scelta_', 'scrivo_parole_con_le_lettere_', 'scrivo_parole_sillabe_'];
     const base = new URL('.', window.location.href).href;
-    let registrazioni = [];
 
-    try {
-        if ('serviceWorker' in navigator) {
-            registrazioni = (await navigator.serviceWorker.getRegistrations())
-                .filter((reg) => (reg.scope || '').startsWith(base));
-        }
-        // update() interroga la rete senza passare dalla cache: se non c'è connessione fallisce qui
-        const diQuestaPagina = registrazioni.find((reg) => reg.scope === base);
-        if (diQuestaPagina) await diQuestaPagina.update();
-        else if (!navigator.onLine) throw new Error('senza connessione');
-    } catch (e) {
+    // Senza connessione non si cancella nulla: l'app deve continuare a funzionare offline.
+    if (!(await reteDisponibile())) {
         alert('Per aggiornare serve la connessione a internet.\n\nNon è stato cambiato nulla: riprova quando c\'è la connessione.');
         return;
     }
@@ -41,6 +32,11 @@ async function clearCacheAndReload() {
     if (pulsante) pulsante.disabled = true;   // l'aggiornamento dura qualche secondo: niente doppi tocchi
 
     try {
+        let registrazioni = [];
+        if ('serviceWorker' in navigator) {
+            registrazioni = (await navigator.serviceWorker.getRegistrations())
+                .filter((reg) => (reg.scope || '').startsWith(base));
+        }
         // Le parti già in uso su questo dispositivo vanno riscaricate subito (vedi sotto)
         const daRiscaricare = PARTI.filter((parte) => registrazioni.some((reg) => reg.scope === base + parte.cartella));
 
@@ -80,4 +76,15 @@ async function riscaricaParte(parte) {
         });
         setTimeout(fatto, 20000);
     });
+}
+
+// Chiede alla rete la pagina dell'app. La richiesta HEAD non passa dalla cache del
+// service worker (che gestisce solo le GET): senza connessione fallisce davvero.
+async function reteDisponibile() {
+    try {
+        const risposta = await fetch(`./?rete=${Date.now()}`, { method: 'HEAD', cache: 'no-store' });
+        return risposta.ok;
+    } catch (e) {
+        return false;
+    }
 }

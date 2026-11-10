@@ -4,7 +4,7 @@
  */
 window.CT = window.CT || {};
 
-CT.VERSIONE = '1.1.4';
+CT.VERSIONE = '1.1.5';
 CT.APP_NAME = 'concetti_topologici';
 
 /* ---------- Icone SVG inline (tratti a 2px su griglia 24x24) ---------- */
@@ -158,20 +158,19 @@ CT.aggiornaApp = async function () {
 
     const PREFISSO = 'concetti_topologici_';
     const DA_TENERE = [`${PREFISSO}arasaac`, `${PREFISSO}modelli`];
-    let registrazione = null;
-    try {
-        if ('serviceWorker' in navigator) {
-            const cartella = new URL('./', location.href).href;
-            registrazione = (await navigator.serviceWorker.getRegistrations()).find(r => r.scope === cartella) || null;
-        }
-        // update() interroga la rete senza passare dalla cache: se non c'è connessione fallisce qui
-        if (registrazione) await registrazione.update();
-        else if (!navigator.onLine) throw new Error('senza connessione');
-    } catch (e) {
+    // La richiesta HEAD non passa dalla cache del service worker (che gestisce solo le GET):
+    // senza connessione fallisce davvero, e allora non si tocca nulla.
+    const rete = await fetch(`./?rete=${Date.now()}`, { method: 'HEAD', cache: 'no-store' }).then(r => r.ok, () => false);
+    if (!rete) {
         CT.util.toast('Per aggiornare serve la connessione a internet: riprova quando c\'è', 'errore', 5000);
         return;
     }
     try {
+        let registrazione = null;
+        if ('serviceWorker' in navigator) {
+            const cartella = new URL('./', location.href).href;
+            registrazione = (await navigator.serviceWorker.getRegistrations()).find(r => r.scope === cartella) || null;
+        }
         if ('caches' in window) {
             const nomi = await caches.keys();
             await Promise.all(nomi.filter(n => n.startsWith(PREFISSO) && !DA_TENERE.includes(n)).map(n => caches.delete(n)));

@@ -168,7 +168,7 @@
     <div id="toastContainer" class="toast-container"></div>
 
     <!-- Scripts -->
-    <script src="js/clear-cache.js?v=5.0"></script>
+    <script src="js/clear-cache.js?v=5.1"></script>
     <script src="js/archivio.js?v=5.0"></script>
     <script src="js/esercizio-app.js?v=20261104.2"></script>
 
@@ -200,6 +200,14 @@
         });
     })();
     </script>
-
+    <script>
+        // Service worker: registrato anche da questa pagina (come nelle lettere), così dopo
+        // «Aggiorna l'app» l'app torna subito utilizzabile senza connessione.
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js?v=5.0').catch(() => {});
+            });
+        }
+    </script>
 </body>
 </html>
