@@ -8,6 +8,8 @@
 //  - spl_config        → esercizi (parola + lettere disponibili + immagine)
 //  - spl_impostazioni  → numero prove, tasto cancella, BRAVO/BRAVA
 //  - spl_risultati     → storico delle prove svolte
+//  - scrivo_*          → preferenze del menu dell'Area Utente (testo, colori, aiuto,
+//                        avanzamento automatico, cursore): vedi PREFERENZE
 //
 // Prende il posto della vecchia API PHP (api_scrivo_parole_lettere.php) e
 // restituisce gli stessi campi che l'interfaccia si aspetta.
@@ -20,6 +22,19 @@ const Archivio = (() => {
   };
   const APP = 'scrivo-parole-con-le-lettere';
   const MAX_RISULTATI = 2000;
+
+  // Preferenze del menu dell'Area Utente (le scrive esercizio-app.js): viaggiano
+  // con Esporta/Importa insieme a esercizi, impostazioni e risultati.
+  const PREFERENZE = [
+    'scrivo_font_scale',            // grandezza del testo
+    'scrivo_bg_color',              // colore di sfondo
+    'scrivo_text_color',            // colore del testo
+    'scrivo_hint_enabled',          // aiuto attivo ('1' / '0')
+    'scrivo_hint_intensity',        // intensità dell'aiuto
+    'scrivo_auto_advance_enabled',  // avanzamento automatico ('1' / '0')
+    'scrivo_auto_advance',          // secondi prima di avanzare
+    'scrivo_cursor_enabled',        // cursore ('1' / '0')
+  ];
 
   const IMPOSTAZIONI_DEFAULT = {
     numero_prove: 10,
@@ -188,13 +203,21 @@ const Archivio = (() => {
   // ==================== ESPORTA / IMPORTA ====================
 
   function esportaDati() {
+    const preferenze = {};
+    PREFERENZE.forEach((k) => {
+      try {
+        const v = localStorage.getItem(k);
+        if (v !== null) preferenze[k] = v;
+      } catch (e) { /* ignora */ }
+    });
     return {
       app: APP,
-      versione: 1,
+      versione: 2,
       esportato: Date.now(),
       config: lista(CHIAVI.config),
       impostazioni: getImpostazioni(),
       risultati: lista(CHIAVI.risultati),
+      preferenze,
     };
   }
 
@@ -206,6 +229,18 @@ const Archivio = (() => {
     scriviJSON(CHIAVI.risultati, Array.isArray(file.risultati) ? file.risultati : []);
     if (file.impostazioni && typeof file.impostazioni === 'object') {
       salvaImpostazioni(file.impostazioni);
+    }
+    // Preferenze dell'Area Utente: solo le chiavi di questa app, mai altre.
+    // I file esportati prima della versione 2 non le contengono: in quel caso
+    // quelle di questo dispositivo restano come sono.
+    if (file.preferenze && typeof file.preferenze === 'object') {
+      PREFERENZE.forEach((k) => {
+        const v = file.preferenze[k];
+        try {
+          if (typeof v === 'string' && v.length <= 40) localStorage.setItem(k, v);
+          else localStorage.removeItem(k);   // nel file non c'è: torna al valore predefinito
+        } catch (e) { /* preferenza non essenziale */ }
+      });
     }
     return { config: file.config.filter((c) => c && c.stato !== 'archiviata').length };
   }

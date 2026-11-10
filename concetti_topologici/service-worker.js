@@ -8,7 +8,7 @@
 // Tutte le cache dell'app iniziano con PREFISSO: sullo stesso dominio (assistivetech.it/webapp/)
 // ci sono altre app, e le loro cache non vanno toccate.
 const PREFISSO = 'concetti_topologici_';
-const CACHE_NAME = `${PREFISSO}v1.1.3`;
+const CACHE_NAME = `${PREFISSO}v1.1.4`;
 const CACHE_ARASAAC = `${PREFISSO}arasaac`;
 const CACHE_MODELLI = `${PREFISSO}modelli`;
 const LIMITE_ARASAAC = 800;
@@ -19,13 +19,13 @@ const URLS_TO_CACHE = [
   './gioca.html',
   './manifest.json',
   './js/raccolta.js?v=1.0',
-  './css/styles.css?v=1.1.2',
-  './css/gioco.css?v=1.1.2',
-  './js/comune.js?v=1.1.2',
-  './js/concetti.js?v=1.1.2',
-  './js/archivio.js?v=1.1.2',
-  './js/gestione.js?v=1.1.2',
-  './js/gioca.js?v=1.1.2',
+  './css/styles.css?v=1.1.4',
+  './css/gioco.css?v=1.1.4',
+  './js/comune.js?v=1.1.4',
+  './js/concetti.js?v=1.1.4',
+  './js/archivio.js?v=1.1.4',
+  './js/gestione.js?v=1.1.4',
+  './js/gioca.js?v=1.1.4',
   './assets/fonts/fonts.css',
   './assets/fonts/atkinson-hyperlegible-400-latin.woff2',
   './assets/fonts/atkinson-hyperlegible-400-latin-ext.woff2',

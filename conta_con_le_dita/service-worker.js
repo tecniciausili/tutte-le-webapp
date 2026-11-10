@@ -5,7 +5,7 @@
 // Tutte le cache iniziano con PREFISSO: sullo stesso dominio (per esempio
 // assistivetech.it/webapp/) ci sono altre app, e le loro cache non vanno toccate.
 const PREFISSO = 'conta_con_le_dita_';
-const CACHE_NAME = `${PREFISSO}v1.1.5`;
+const CACHE_NAME = `${PREFISSO}v1.1.6`;
 
 const URLS_TO_CACHE = [
   './',

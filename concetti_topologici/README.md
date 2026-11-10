@@ -51,5 +51,9 @@ radice del repository e la voce è nell'elenco `APP` di `index.html`.
 
 Cambiando i file dell'app, aggiornare `CACHE_NAME` in `service-worker.js` e i `?v=` nelle pagine.
 
+Il pulsante ⟳ «Aggiorna l'app» (pagina iniziale e Area Educatore, `CT.aggiornaApp` in `js/comune.js`)
+scarica di nuovo i file dell'app: non tocca scene, foto, risultati, pittogrammi già scaricati e modello di
+scontorno, e senza connessione non fa nulla.
+
 Modello di scontorno U²-Net (u2netp), licenza Apache-2.0; onnxruntime-web, licenza MIT.
 Pittogrammi ARASAAC (arasaac.org), autore Sergio Palao, proprietà del Governo di Aragona, licenza CC BY-NC-SA.

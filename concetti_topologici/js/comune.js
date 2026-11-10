@@ -4,7 +4,7 @@
  */
 window.CT = window.CT || {};
 
-CT.VERSIONE = '1.1.2';
+CT.VERSIONE = '1.1.4';
 CT.APP_NAME = 'concetti_topologici';
 
 /* ---------- Icone SVG inline (tratti a 2px su griglia 24x24) ---------- */
@@ -41,7 +41,8 @@ CT.APP_NAME = 'concetti_topologici';
         grafico:  P('M4 20V4') + P('M4 20h16') + P('M8 16v-4M12 16V8M16 16v-6'),
         scene:    P('M3 5h18v14H3z') + P('M7 15h4v-4H7z') + P('M16 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z'),
         mescola:  P('M4 7h3c4 0 6 10 10 10h3') + P('M4 17h3c1.5 0 2.6-1.4 3.6-3.2M13.4 10.2C14.4 8.4 15.5 7 17 7h3') + P('M18 4l3 3-3 3M18 14l3 3-3 3'),
-        sposta:   P('M12 3v18M3 12h18') + P('M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3')
+        sposta:   P('M12 3v18M3 12h18') + P('M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3'),
+        aggiorna: P('M21 4v6h-6') + P('M19.5 15a8 8 0 1 1-1.9-8.3L21 10')
     };
     CT.icona = function (nome, classe = '') {
         const d = tracciati[nome] || tracciati.info;
@@ -141,6 +142,54 @@ CT.util = {
     },
     modaleAperta() { return !!document.getElementById('modaleAttiva'); }
 };
+
+/* ---------- Aggiorna l'app (pulsante ⟳ nella testata) ----------
+   Scarica di nuovo i file dell'app dalla rete. Sullo stesso dominio convivono più app: qui si tocca SOLO questa.
+   - NON si toccano localStorage né IndexedDB: profilo, scene, foto e risultati restano dove sono.
+   - Si cancella solo la cache dei file dell'app: i pittogrammi ARASAAC già scaricati e il modello
+     per lo scontorno restano (servono senza connessione e non cambiano con le versioni).
+   - Si disattiva solo il service worker di questa cartella.
+   Senza connessione non si cancella nulla: l'app deve continuare a funzionare offline. */
+CT.aggiornaApp = async function () {
+    const ok = await CT.util.conferma('Aggiornare l\'app?',
+        'Scarica l\'ultima versione di Concetti topologici. Scene, foto, impostazioni e risultati restano al loro posto.',
+        { ok: 'Aggiorna' });
+    if (!ok) return;
+
+    const PREFISSO = 'concetti_topologici_';
+    const DA_TENERE = [`${PREFISSO}arasaac`, `${PREFISSO}modelli`];
+    let registrazione = null;
+    try {
+        if ('serviceWorker' in navigator) {
+            const cartella = new URL('./', location.href).href;
+            registrazione = (await navigator.serviceWorker.getRegistrations()).find(r => r.scope === cartella) || null;
+        }
+        // update() interroga la rete senza passare dalla cache: se non c'è connessione fallisce qui
+        if (registrazione) await registrazione.update();
+        else if (!navigator.onLine) throw new Error('senza connessione');
+    } catch (e) {
+        CT.util.toast('Per aggiornare serve la connessione a internet: riprova quando c\'è', 'errore', 5000);
+        return;
+    }
+    try {
+        if ('caches' in window) {
+            const nomi = await caches.keys();
+            await Promise.all(nomi.filter(n => n.startsWith(PREFISSO) && !DA_TENERE.includes(n)).map(n => caches.delete(n)));
+        }
+        if (registrazione) await registrazione.unregister();
+    } catch (e) {
+        console.warn('[Concetti topologici] Aggiornamento:', e);
+    }
+    location.reload();
+};
+
+// Ogni pulsante con data-aggiorna-app (pagina iniziale e Area Educatore) riceve icona e azione
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-aggiorna-app]').forEach(b => {
+        b.innerHTML = CT.icona('aggiorna');
+        b.addEventListener('click', CT.aggiornaApp);
+    });
+});
 
 CT.registraServiceWorker = function () {
     if (!('serviceWorker' in navigator)) return;

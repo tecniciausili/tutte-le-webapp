@@ -35,6 +35,9 @@ computer. **Un dispositivo = un utente**: non c'è registrazione né login, i da
 | Storico delle prove | `localStorage` | `spl_risultati` |
 | Preferenze di visualizzazione | `localStorage` | `scrivo_*` (già presenti nella versione originale) |
 
+**Esporta dati / Importa dati** (Area Educatore) portano su un altro dispositivo tutte e quattro
+le righe della tabella: esercizi, impostazioni, storico e preferenze di visualizzazione.
+
 Le chiavi hanno prefissi propri e la cache del service worker il prefisso
 `scrivo_parole_con_le_lettere_`: non toccano le altre app sullo stesso dominio. Il pulsante
 "aggiorna" (`js/clear-cache.js`) svuota solo la cache di questa app e **non** cancella i dati.

@@ -466,4 +466,6 @@ body.con-modale { overflow: hidden; }
 .ct-freccia:hover { background: var(--giallo); transform: translateY(-2px); }
 .ct-freccia:focus-visible { outline: 3px solid var(--azzurro); outline-offset: 2px; }
 .ct-freccia svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+/* Pulsante «Aggiorna l'app»: stesso cerchio delle frecce, ma è un <button> */
+button.ct-freccia { padding: 0; font: inherit; cursor: pointer; }
 .barra-azioni { justify-content: flex-end; }
