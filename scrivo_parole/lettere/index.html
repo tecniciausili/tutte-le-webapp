@@ -24,7 +24,7 @@
     <!-- Styles -->
     <link rel="stylesheet" href="css/styles.css?v=3.0">
     <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
-    <script src="js/raccolta.js?v=1.0"></script>
+    <script src="js/raccolta.js?v=1.1"></script>
 </head>
 <body class="selection-page">
     <!-- Header -->
@@ -34,17 +34,16 @@
                 <button class="btn-back" onclick="goBack()" aria-label="Torna a: Scrivo parole (scelta lettere o sillabe)" title="Torna a: Scrivo parole (scelta lettere o sillabe)">
                     <i class="bi bi-arrow-left"></i>
                 </button>
-                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App" data-casa="../" data-casa-nome="Scrivo parole (scelta lettere o sillabe)">
-                    <i class="bi bi-house-door-fill"></i>
-                </button>
             </div>
             <h1 class="app-title">
                 <i class="bi bi-type"></i>
                 Scrivo Parole con le Lettere
             </h1>
             <div class="header-buttons-right">
-                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Aggiorna l'app" title="Aggiorna l'app (i dati restano)">
-                    <i class="bi bi-arrow-clockwise"></i>
+                <!-- Menu ☰: Esporta dati, Importa dati, Installa l'app, Aggiorna App -->
+                <button class="btn-menu" data-menu-app data-nome="Scrivo parole con le lettere" data-file="scrivo-parole-con-le-lettere"
+                        data-cosa="Esercizi, impostazioni e risultati" aria-label="Menu" title="Menu">
+                    <i class="bi bi-list"></i>
                 </button>
             </div>
         </div>
@@ -125,12 +124,10 @@
 
     <script src="js/installa.js?v=1.0"></script>
     <script src="js/clear-cache.js?v=3.1"></script>
+    <script src="js/archivio.js?v=1.1"></script>
+    <script src="js/menu.js?v=1.0"></script>
     <script>
-        // App autonoma: nessun login. "Home" e "Indietro" portano all'elenco delle app.
-        function goHome() {
-            window.location.href = window.RACCOLTA ? window.RACCOLTA.url : '../';   // Tutte le Web App (indice della raccolta)
-        }
-
+        // ← porta alla pagina di scelta di «Scrivo parole» (lettere o sillabe)
         function goBack() {
             window.location.href = '../';   // Scrivo parole (scelta lettere o sillabe)
         }

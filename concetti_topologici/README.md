@@ -27,8 +27,8 @@ visti restano in cache) e per il primo scontorno di una foto (poi il modello è 
   al primo scontorno e poi restano in cache (anche offline); la foto non esce dal dispositivo. Se non
   riesce (es. senza rete la prima volta) si salva la foto intera. Non si applica all'«immagine pronta».
 
-**Copia di sicurezza** (Area Educatore → Impostazioni): «Scarica la copia» salva un file JSON con
-scene, foto (base64), impostazioni e risultati; «Ripristina una copia» sostituisce scene e impostazioni
+**Esporta dati / Importa dati** (menu ☰ della pagina iniziale): «Esporta dati» salva un file JSON con
+scene, foto (base64), impostazioni e risultati; «Importa dati» sostituisce scene e impostazioni
 e somma i risultati, senza doppioni. Così l'educatore prepara al computer e ritrova tutto sul tablet.
 
 ## Pensata per un utente sordo che comunica in LIS
@@ -41,7 +41,7 @@ risposta e **dopo** (pulsante «Avanti» in alto a destra o Spazio, oppure a tem
 
 - `index.html`: scelta fra Area Educatore e Area Utente, installazione come app.
 - `gestione.html`: scene per coppia (simboli del libro, scatola e cesto disegnati, ARASAAC, foto,
-  immagine pronta), impostazioni, risultati, copia di sicurezza. «Prova» = esercizio senza salvare.
+  immagine pronta), impostazioni, risultati. «Prova» = esercizio senza salvare.
 - `gioca.html`: esercizio (Riconosci, Esegui o alternati). Per uscire: lucchetto premuto 2 secondi, o Esc.
 
 ## Pubblicazione
@@ -51,7 +51,7 @@ radice del repository e la voce è nell'elenco `APP` di `index.html`.
 
 Cambiando i file dell'app, aggiornare `CACHE_NAME` in `service-worker.js` e i `?v=` nelle pagine.
 
-Il pulsante ⟳ «Aggiorna l'app» (pagina iniziale e Area Educatore, `CT.aggiornaApp` in `js/comune.js`)
+«Aggiorna App» (menu ☰ della pagina iniziale e pulsante ⟳ dell'Area Educatore, `CT.aggiornaApp` in `js/comune.js`)
 scarica di nuovo i file dell'app: non tocca scene, foto, risultati, pittogrammi già scaricati e modello di
 scontorno, e senza connessione non fa nulla.
 

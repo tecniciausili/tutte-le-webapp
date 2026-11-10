@@ -20,7 +20,8 @@ computer. **Un dispositivo = un utente**: non c'è registrazione né login, i da
   fino a 99) e si sceglie se **mescolare** la posizione dei box.
 - **Sessione di lavoro**: quanti esercizi fa l'utente in una sessione (oppure «Libera»).
 - Elenco degli **esercizi creati** (con eliminazione) e tabella degli **ultimi risultati**.
-- **Copia dei dati**: Esporta / Importa in un file JSON (backup o travaso su un altro dispositivo).
+- **Esporta dati / Importa dati** (menu ☰ della pagina iniziale): file JSON per un backup o per
+  passare tutto su un altro dispositivo.
 
 ### Area Utente (`esercizio.html`)
 - Sceglie un esercizio dalla griglia, poi **trascina** (mouse, dito o tap) o usa la **tastiera** il
@@ -39,8 +40,8 @@ computer. **Un dispositivo = un utente**: non c'è registrazione né login, i da
 | Esercizi per sessione | `localStorage` | `cd_impostazioni` |
 
 Le chiavi hanno il prefisso `cd_` e la cache del service worker il prefisso `conta_con_le_dita_`:
-non toccano le altre app sullo stesso dominio. Nell'Area Educatore i pulsanti **Esporta dati** /
-**Importa dati** (sezione "Copia dei dati") salvano/rileggono tutto come file JSON, utili per una
+non toccano le altre app sullo stesso dominio. Nel menu ☰ della pagina iniziale **Esporta dati** /
+**Importa dati** salvano/rileggono tutto come file JSON, utili per una
 copia di sicurezza o per spostare gli esercizi su un altro dispositivo (l'import sostituisce i dati
 attuali).
 

@@ -20,7 +20,7 @@
     <!--
         PAGINA DI SCELTA di «Scrivo parole»: l'educatore sceglie su quale delle due app lavorare.
         Le due app (lettere/ e sillabe/) sono autonome: ognuna ha i suoi dati, il suo service worker
-        e il suo Esporta/Importa. Il loro tasto Home (../index.html) riporta qui.
+        e il suo Esporta/Importa (menu ☰ della sua pagina iniziale). La loro freccia ← riporta qui.
         Grafica: riusa il foglio di stile e le icone dell'app lettere.
     -->
     <link rel="stylesheet" href="lettere/css/styles.css?v=3.0">
@@ -63,18 +63,12 @@
             color: #00796B;
         }
     </style>
-    <script src="js/raccolta.js?v=1.0"></script>
+    <script src="js/raccolta.js?v=1.1"></script>
 </head>
 <body class="selection-page">
     <header class="app-header">
         <div class="header-content">
             <div class="header-buttons-left">
-                <button class="btn-back" data-senza-raccolta="nascondi" onclick="tornaAllElenco()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
-                    <i class="bi bi-arrow-left"></i>
-                </button>
-                <button class="btn-home" data-senza-raccolta="nascondi" onclick="tornaAllElenco()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App">
-                    <i class="bi bi-house-door-fill"></i>
-                </button>
             </div>
             <h1 class="app-title">
                 <i class="bi bi-pencil-square"></i>
@@ -135,7 +129,7 @@
                 <i class="bi bi-info-circle"></i>
                 <div>
                     <strong>Due esercizi separati</strong>
-                    <p>Ognuno ha i suoi esercizi, i suoi risultati e la sua «Copia dei dati» nell'Area Educatore. Il tasto Home di ciascuno riporta a questa pagina.</p>
+                    <p>Ognuno ha i suoi esercizi e i suoi risultati; «Esporta dati» e «Importa dati» stanno nel menu ☰ della pagina iniziale di ciascuno. La freccia ← di ciascuno riporta a questa pagina.</p>
                 </div>
             </div>
         </div>
@@ -148,10 +142,6 @@
     <script src="js/installa.js?v=1.0"></script>
     <script src="js/clear-cache.js?v=1.1"></script>
     <script>
-        function tornaAllElenco() {
-            if (window.RACCOLTA) window.location.href = window.RACCOLTA.url;
-        }
-
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('service-worker.js?v=1.0.0').catch(() => {});

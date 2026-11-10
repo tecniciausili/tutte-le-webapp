@@ -41,8 +41,9 @@ sbagliata), ciascuno con la sua parola. L'utente sceglie tra due esercizi:
   (data URL, pittogrammi 500 px, foto ridotte a 800 px): gli esercizi funzionano anche offline.
 - **Coppie Create**, con eliminazione.
 - **Ultime Sessioni**: data, esercizio, prove, risposte, percentuale e parole sbagliate.
-- **Copia dei dati**: **Esporta** salva tutto (immagini comprese) in un file `.json`;
-  **Importa** lo ricarica qui o su un altro dispositivo, sostituendo i dati attuali.
+
+Nel menu ☰ della pagina iniziale: **Esporta dati** salva tutto (immagini comprese) in un file `.json`;
+**Importa dati** lo ricarica qui o su un altro dispositivo, sostituendo i dati attuali.
 
 ## Dove stanno i dati
 
@@ -76,7 +77,7 @@ parola_immagine/
 │   ├── comune.js         # Aggiorna l'app, avvisi, registrazione del service worker
 │   ├── blocco-tocco.js   # Negli esercizi: niente zoom/menu con tocchi involontari (LIM, tablet)
 │   ├── installa.js       # Riquadro «Installa sul dispositivo» (uguale in tutte le app)
-│   └── raccolta.js       # Dove portano ← e 🏠 (indice della raccolta)
+│   └── raccolta.js       # L'app non torna all'indice della raccolta (RACCOLTA = null)
 └── assets/
     ├── icons/            # Icone PWA
     └── fonts/            # Bootstrap Icons (offline)
@@ -84,8 +85,8 @@ parola_immagine/
 
 ## Navigazione
 
-**←** porta al livello sopra (dagli esercizi e dall'Area Educatore alla pagina iniziale dell'app,
-dalla pagina iniziale all'indice della raccolta); **🏠** porta all'indice della raccolta.
+**←** porta al livello sopra (dagli esercizi e dall'Area Educatore alla pagina iniziale dell'app).
+L'app non torna all'indice della raccolta: niente icona della casa, niente ← nella pagina iniziale.
 Con una sessione in corso viene chiesta conferma prima di uscire.
 
 ## Aggiornare l'app

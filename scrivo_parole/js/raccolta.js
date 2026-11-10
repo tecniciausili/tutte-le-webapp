@@ -1,11 +1,15 @@
 /**
- * Versione GitHub / Azure (raccolta «tutte-le-webapp»): le frecce 🏠 portano all'indice della raccolta.
+ * Le app NON tornano all'elenco di tutte le Web App.
  *
- * Nelle pagine:
- *   data-senza-raccolta="nascondi"            → l'elemento sparisce solo se RACCOLTA fosse null
- *   data-casa="./" data-casa-nome="Nome app"   → 🏠 porta a RACCOLTA.url e lo dice nel suggerimento
+ * L'elenco (indice della raccolta) serve al tecnico: da lì sceglie quali app installare sul
+ * dispositivo di ogni utente. L'utente deve restare dentro la sua app: per questo RACCOLTA è null
+ * e nelle pagine non ci sono né l'icona della casa né frecce che portano all'elenco.
+ *
+ * Rete di sicurezza per eventuali elementi rimasti nelle pagine:
+ *   data-senza-raccolta="nascondi"            → l'elemento viene nascosto
+ *   data-casa="./" data-casa-nome="Nome app"   → porta alla pagina indicata (dentro l'app), mai all'elenco
  */
-window.RACCOLTA = { url: '../', nome: 'Tutte le Web App' };
+window.RACCOLTA = null;
 
 (function () {
     'use strict';

@@ -9,8 +9,8 @@
  * Nelle scene una foto è { tipo: 'foto', id }: prima di disegnare si precaricano gli object URL
  * (precaricaFoto), così il disegno delle scene resta sincrono.
  *
- * Copia di sicurezza: un file JSON con profilo, foto (in base64) e risultati. Serve anche a
- * preparare le scene sul computer e ritrovarle sul tablet dell'utente («Ripristina una copia»).
+ * Esporta dati / Importa dati (menu ☰ della pagina iniziale): un file JSON con profilo, foto
+ * (in base64) e risultati. Serve anche a preparare le scene sul computer e ritrovarle sul tablet dell'utente.
  */
 window.CT = window.CT || {};
 
@@ -358,7 +358,7 @@ CT.Archivio = (function () {
         await transazione('risultati', 'readwrite', s => s.clear());
     }
 
-    /* ---------- Copia di sicurezza ---------- */
+    /* ---------- Esporta dati / Importa dati ---------- */
 
     const blobInDataUrl = (blob) => new Promise((risolvi, rifiuta) => {
         const r = new FileReader();
@@ -380,7 +380,7 @@ CT.Archivio = (function () {
     }
 
     /**
-     * Ripristina una copia: sostituisce profilo e foto; i risultati della copia si aggiungono a quelli
+     * Importa dati: sostituisce profilo e foto; i risultati della copia si aggiungono a quelli
      * già sul dispositivo (senza doppioni), così non si perde lo storico del tablet.
      */
     async function importaDati(dati) {

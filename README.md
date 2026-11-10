@@ -29,9 +29,20 @@ deve chiamare `localStorage.clear()`: cancellerebbe i dati di tutte le altre.
 ## Frecce di navigazione
 
 In tutte le app: **←** porta al livello sopra (da Area Educatore o Area Utente alla pagina iniziale
-dell'app; dalla pagina iniziale all'indice; con un esercizio aperto alla scelta dell'esercizio),
-**🏠** porta sempre all'indice della raccolta. L'indirizzo dell'indice è in `js/raccolta.js` di
-ogni app (`'../'`, oppure `'../../'` per `scrivo_parole/lettere` e `scrivo_parole/sillabe`).
+dell'app; con un esercizio aperto alla scelta dell'esercizio).
+
+**Le app non tornano all'indice.** L'indice della raccolta serve al tecnico, che da lì sceglie quali
+app installare sul dispositivo di ogni utente; l'utente deve restare dentro la sua app. Per questo
+nelle app non c'è l'icona della casa e nella pagina iniziale non c'è la freccia ←
+(`window.RACCOLTA = null` in `js/raccolta.js` di ogni app).
+
+## Menu ☰ della pagina iniziale
+
+Nella pagina iniziale di ogni app (quella con i box Area Educatore / Area Utente) il menu ☰ ha:
+**Esporta dati** e **Importa dati** (per portare esercizi, impostazioni e risultati su un altro
+dispositivo), **Installa l'app** e **Aggiorna App** (scarica l'ultima versione; i dati restano e
+senza connessione non cancella nulla). Nelle app con le icone Bootstrap il menu è `js/menu.js`,
+uguale in tutte.
 
 ## Aggiungere o aggiornare un'app
 

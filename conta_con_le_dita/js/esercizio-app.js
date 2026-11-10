@@ -46,10 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ===== NAVIGAZIONE =====
-function goHome() {
-    window.location.href = window.RACCOLTA ? window.RACCOLTA.url : './';   // Tutte le Web App (indice della raccolta)
-}
-
 function goBack() {
     // Un livello sopra: dall'esercizio aperto alla scelta dell'esercizio, altrimenti alla pagina iniziale
     if (state.currentConfig) {

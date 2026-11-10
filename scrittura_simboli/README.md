@@ -88,7 +88,7 @@ anche commerciale, citando l'autore: i crediti compaiono quando la spunta è att
 ├── css/styles.css          Stili (stesso linguaggio visivo delle altre app, colore verde)
 ├── js/
 │   ├── lessico.js          Vocabolario (generato)
-│   ├── raccolta.js         Frecce ← e 🏠 verso l'indice della raccolta (qui RACCOLTA = null: nascoste)
+│   ├── raccolta.js         L'app non torna all'indice della raccolta (RACCOLTA = null)
 │   ├── util.js             Utilità comuni, schermo intero
 │   ├── archivio.js         localStorage + IndexedDB, esporta/importa
 │   ├── voce.js             Sintesi vocale del dispositivo, avviso parola per parola

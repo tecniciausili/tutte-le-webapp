@@ -95,10 +95,6 @@ function goBack() {
     window.location.href = './';
 }
 
-function goHome() {
-    window.location.href = window.RACCOLTA ? window.RACCOLTA.url : '../';   // Tutte le Web App (indice della raccolta)
-}
-
 // ============================================
 // UTILITÀ
 // ============================================
@@ -773,7 +769,6 @@ function showToast(message, type = 'info') {
 // ============================================
 
 window.goBack = goBack;
-window.goHome = goHome;
 window.startExercise = startExercise;
 window.selectSyllable = selectSyllable;
 window.verifyWord = verifyWord;

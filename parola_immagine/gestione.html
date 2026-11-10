@@ -17,9 +17,9 @@
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 
-    <link rel="stylesheet" href="css/styles.css?v=3.0.1">
+    <link rel="stylesheet" href="css/styles.css?v=3.0.2">
     <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
-    <script src="js/raccolta.js?v=1.0"></script>
+    <script src="js/raccolta.js?v=1.1"></script>
 </head>
 <body class="gestione-page">
     <header class="app-header">
@@ -27,9 +27,6 @@
             <div class="header-buttons-left">
                 <button class="btn-back" onclick="goBack()" aria-label="Torna a: Parola-Immagine" title="Torna a: Parola-Immagine">
                     <i class="bi bi-arrow-left"></i>
-                </button>
-                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App" data-casa="./" data-casa-nome="Parola-Immagine">
-                    <i class="bi bi-house-door-fill"></i>
                 </button>
             </div>
             <h1 class="app-title">
@@ -227,28 +224,6 @@
                 </div>
             </section>
 
-            <!-- Copia dei dati -->
-            <section class="settings-section">
-                <h2 class="section-title">
-                    <i class="bi bi-hdd"></i>
-                    Copia dei dati
-                </h2>
-                <p class="testo-sezione">
-                    Coppie, risultati e impostazioni restano <strong>solo su questo dispositivo</strong>.
-                    Con <strong>Esporta dati</strong> ne salvi una copia in un file (immagini comprese);
-                    con <strong>Importa dati</strong> la ricarichi qui o su un altro tablet
-                    (sostituisce i dati attuali).
-                </p>
-                <div class="form-actions">
-                    <button class="btn-secondary" type="button" onclick="esportaBackup()">
-                        <i class="bi bi-box-arrow-up"></i> Esporta dati
-                    </button>
-                    <button class="btn-secondary" type="button" onclick="importaBackup()">
-                        <i class="bi bi-box-arrow-in-down"></i> Importa dati
-                    </button>
-                </div>
-                <input type="file" id="fileImporta" accept="application/json,.json" hidden>
-            </section>
 
         </div>
     </main>
@@ -259,8 +234,8 @@
 
     <div id="toastContainer" class="toast-container"></div>
 
-    <script src="js/comune.js?v=3.0.1"></script>
-    <script src="js/archivio.js?v=3.0.1"></script>
-    <script src="js/educatore.js?v=3.0.1"></script>
+    <script src="js/comune.js?v=3.0.2"></script>
+    <script src="js/archivio.js?v=3.0.2"></script>
+    <script src="js/educatore.js?v=3.0.2"></script>
 </body>
 </html>

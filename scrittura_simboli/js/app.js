@@ -10,7 +10,7 @@ const CACHE_MULBERRY = `${PREFISSO_CACHE}mulberry`;
 
 const APP_CONFIG = {
   nome: 'Scrittura con Simboli',
-  versione: '1.5.3',
+  versione: '1.5.4',
 };
 window.APP_CONFIG = APP_CONFIG;
 
@@ -189,11 +189,6 @@ const App = (() => {
     }
   }
 
-  function tornaAllaRaccolta() {
-    Editor.ferma();
-    window.location.href = window.RACCOLTA ? window.RACCOLTA.url : './';
-  }
-
   // ==================== AVVIO ====================
 
   function avvia() {
@@ -224,9 +219,6 @@ const App = (() => {
         installa,
         aggiorna,
         'schermo-intero': () => Schermo.alternaSchermoIntero(),
-        // Pagina unica: «indietro» e «casa» portano entrambe all'indice della raccolta (js/raccolta.js)
-        indietro: tornaAllaRaccolta,
-        casa: tornaAllaRaccolta,
         'chiudi-finestra': () => chiudiFinestra(el.dataset.finestra),
       };
       azioni[el.dataset.app]?.();

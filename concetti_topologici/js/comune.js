@@ -4,7 +4,7 @@
  */
 window.CT = window.CT || {};
 
-CT.VERSIONE = '1.1.5';
+CT.VERSIONE = '1.1.6';
 CT.APP_NAME = 'concetti_topologici';
 
 /* ---------- Icone SVG inline (tratti a 2px su griglia 24x24) ---------- */
@@ -42,7 +42,9 @@ CT.APP_NAME = 'concetti_topologici';
         scene:    P('M3 5h18v14H3z') + P('M7 15h4v-4H7z') + P('M16 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z'),
         mescola:  P('M4 7h3c4 0 6 10 10 10h3') + P('M4 17h3c1.5 0 2.6-1.4 3.6-3.2M13.4 10.2C14.4 8.4 15.5 7 17 7h3') + P('M18 4l3 3-3 3M18 14l3 3-3 3'),
         sposta:   P('M12 3v18M3 12h18') + P('M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3'),
-        aggiorna: P('M21 4v6h-6') + P('M19.5 15a8 8 0 1 1-1.9-8.3L21 10')
+        aggiorna: P('M21 4v6h-6') + P('M19.5 15a8 8 0 1 1-1.9-8.3L21 10'),
+        menu:     P('M4 6h16M4 12h16M4 18h16'),
+        installa: P('M7 3h10a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z') + P('M12 8v6') + P('M9.5 11.5L12 14l2.5-2.5')
     };
     CT.icona = function (nome, classe = '') {
         const d = tracciati[nome] || tracciati.info;
@@ -143,7 +145,7 @@ CT.util = {
     modaleAperta() { return !!document.getElementById('modaleAttiva'); }
 };
 
-/* ---------- Aggiorna l'app (pulsante ⟳ nella testata) ----------
+/* ---------- Aggiorna l'app (voce del menu ☰ nella pagina iniziale, pulsante ⟳ nell'Area Educatore) ----------
    Scarica di nuovo i file dell'app dalla rete. Sullo stesso dominio convivono più app: qui si tocca SOLO questa.
    - NON si toccano localStorage né IndexedDB: profilo, scene, foto e risultati restano dove sono.
    - Si cancella solo la cache dei file dell'app: i pittogrammi ARASAAC già scaricati e il modello
@@ -182,7 +184,7 @@ CT.aggiornaApp = async function () {
     location.reload();
 };
 
-// Ogni pulsante con data-aggiorna-app (pagina iniziale e Area Educatore) riceve icona e azione
+// Ogni pulsante con data-aggiorna-app (Area Educatore) riceve icona e azione
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-aggiorna-app]').forEach(b => {
         b.innerHTML = CT.icona('aggiorna');

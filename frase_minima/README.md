@@ -54,7 +54,7 @@ Modalità di risposta: **drag & drop col mouse**, **trascinamento col dito**,
 ```
 frase_minima/
 ├── index.html              # Scelta area (educatore / utente)
-├── gestione.html           # Area educatore: compone le frasi, risultati, copia dei dati
+├── gestione.html           # Area educatore: compone le frasi, risultati
 ├── esercizio.html          # Area utente: svolge l'esercizio
 ├── manifest.json           # Configurazione PWA
 ├── service-worker.js       # Funzionamento offline (cache con prefisso frase_minima_)
@@ -79,7 +79,7 @@ frase_minima/
    - **Dal PC**: carica un'immagine propria dal dispositivo.
    Al salvataggio ogni immagine viene **incorporata** nella frase (ridimensionata a 600 px,
    PNG se ha trasparenza, altrimenti JPEG): l'esercizio funziona anche senza rete e
-   le immagini finiscono nella copia dei dati. Se il pittogramma ARASAAC non si
+   le immagini finiscono nel file esportato. Se il pittogramma ARASAAC non si
    riesce a scaricare resta il suo link (in quel caso serve la rete anche nell'esercizio).
 3. Scrive la parola di ogni box (es. `MAMMA` · `CUCINA` · `LA PASTA`).
    Scegliendo un pittogramma ARASAAC la parola viene precompilata con la
@@ -91,7 +91,7 @@ frase_minima/
 5. Decide se mostrare le parole scritte sotto i pittogrammi durante l'esercizio.
 6. Salva. La frase compare subito nell'area dell'utente.
 7. Nella sezione "Ultimi Risultati" vede data, frase, esito e tempo.
-8. **Copia dei dati**: Esporta / Importa in un file JSON (`frase-minima-AAAA-MM-GG.json`)
+8. **Esporta dati / Importa dati** (menu ☰ della pagina iniziale): file JSON (`frase-minima-AAAA-MM-GG.json`) con
    frasi, risultati e impostazioni, per un backup o per passarli su un altro tablet
    (l'import sostituisce i dati attuali).
 

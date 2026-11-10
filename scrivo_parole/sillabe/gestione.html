@@ -16,7 +16,7 @@
     
     <!-- Chart.js 4.4.1 per le statistiche (copia locale: funziona offline) -->
     <script src="assets/js/chart.min.js"></script>
-    <script src="js/raccolta.js?v=1.0"></script>
+    <script src="js/raccolta.js?v=1.1"></script>
 </head>
 <body class="educator-page">
     <!-- Header -->
@@ -25,9 +25,6 @@
             <div class="header-buttons-left">
                 <button class="btn-back" onclick="goBack()" aria-label="Torna a: Scrivo parole con le sillabe" title="Torna a: Scrivo parole con le sillabe">
                     <i class="bi bi-arrow-left"></i>
-                </button>
-                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App" data-casa="../" data-casa-nome="Scrivo parole (scelta lettere o sillabe)">
-                    <i class="bi bi-house-door-fill"></i>
                 </button>
             </div>
             <h1 class="app-title">
@@ -173,30 +170,6 @@
                 </div>
             </section>
 
-            <!-- Copia dei dati (esporta / importa) -->
-            <section class="config-section">
-                <div class="section-header">
-                    <i class="bi bi-hdd"></i>
-                    <h2>Copia dei dati</h2>
-                </div>
-                <div class="section-content">
-                    <p style="margin: 0 0 1rem;">
-                        Esercizi, impostazioni e risultati restano <strong>solo su questo dispositivo</strong>.
-                        Con <strong>Esporta dati</strong> ne salvi una copia in un file;
-                        con <strong>Importa dati</strong> la ricarichi qui o su un altro tablet
-                        (sostituisce i dati attuali).
-                    </p>
-                    <div class="syllables-toolbar">
-                        <button class="btn-toolbar" type="button" onclick="esportaBackup()">
-                            <i class="bi bi-box-arrow-up"></i> Esporta dati
-                        </button>
-                        <button class="btn-toolbar" type="button" onclick="importaBackup()">
-                            <i class="bi bi-box-arrow-in-down"></i> Importa dati
-                        </button>
-                    </div>
-                    <input type="file" id="fileImporta" accept="application/json,.json" hidden>
-                </div>
-            </section>
         </div>
     </main>
 
@@ -236,7 +209,7 @@
     <!-- Scripts -->
     <script src="js/clear-cache.js?v=5.1"></script>
     <script src="js/archivio.js?v=5.0"></script>
-    <script src="js/educatore-app.js?v=20261104.2"></script>
+    <script src="js/educatore-app.js?v=20261110.1"></script>
     <script>
         // Service worker: registrato anche da questa pagina (come nelle lettere), così dopo
         // «Aggiorna l'app» l'app torna subito utilizzabile senza connessione.

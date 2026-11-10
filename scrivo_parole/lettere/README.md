@@ -17,7 +17,7 @@ computer. **Un dispositivo = un utente**: non c'è registrazione né login, i da
 - **Crea esercizio**: parola, immagine (ricerca ARASAAC, foto dal dispositivo o solo testo) e lettere
   disponibili (tutto l'alfabeto, solo quelle della parola, o scelte a mano).
 - Elenco degli **esercizi creati** con eliminazione.
-- **Copia dei dati**: Esporta / Importa in un file JSON (backup o travaso su un altro dispositivo;
+- **Esporta dati / Importa dati** (menu ☰ della pagina iniziale): file JSON (backup o travaso su un altro dispositivo;
   l'import sostituisce i dati attuali).
 
 ### Area Utente (`esercizio.html`)
@@ -35,7 +35,7 @@ computer. **Un dispositivo = un utente**: non c'è registrazione né login, i da
 | Storico delle prove | `localStorage` | `spl_risultati` |
 | Preferenze di visualizzazione | `localStorage` | `scrivo_*` (già presenti nella versione originale) |
 
-**Esporta dati / Importa dati** (Area Educatore) portano su un altro dispositivo tutte e quattro
+**Esporta dati / Importa dati** (menu ☰ della pagina iniziale) portano su un altro dispositivo tutte e quattro
 le righe della tabella: esercizi, impostazioni, storico e preferenze di visualizzazione.
 
 Le chiavi hanno prefissi propri e la cache del service worker il prefisso

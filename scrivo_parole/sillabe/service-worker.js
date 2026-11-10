@@ -6,7 +6,7 @@
 // Tutte le cache iniziano con PREFISSO: sullo stesso dominio ci sono altre app,
 // e le loro cache non vanno toccate.
 const PREFISSO = 'scrivo_parole_sillabe_';
-const CACHE_NAME = `${PREFISSO}v5.0.5`;
+const CACHE_NAME = `${PREFISSO}v5.0.6`;
 
 const URLS_TO_CACHE = [
   './',
@@ -19,8 +19,9 @@ const URLS_TO_CACHE = [
   './js/esercizio-app.js',
   './js/educatore-app.js',
   '../manifest.json',
-  './js/raccolta.js?v=1.0',
+  './js/raccolta.js?v=1.1',
   './js/installa.js?v=1.0',
+  './js/menu.js?v=1.0',
   './assets/js/chart.min.js',
   './assets/fonts/bootstrap-icons/bootstrap-icons.css',
   './assets/fonts/bootstrap-icons/bootstrap-icons.woff',

@@ -77,11 +77,6 @@ function showToast(message, type = 'info') {
     }, 2800);
 }
 
-// Indirizzo dell'indice della raccolta (js/raccolta.js), oppure la pagina iniziale dell'app
-function indirizzoCasa() {
-    return window.RACCOLTA ? window.RACCOLTA.url : './';
-}
-
 // Service worker: rende l'app installabile e utilizzabile senza rete
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {

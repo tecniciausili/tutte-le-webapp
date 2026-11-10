@@ -31,17 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
     caricaImpostazioni();
     loadPairs();
     renderRisultati();
-    document.getElementById('fileImporta').addEventListener('change', alFileImporta);
     document.getElementById('numProve').addEventListener('keydown', (e) => {
         if (e.key === 'Enter') saveSettings();
     });
 });
 
 // ===== NAVIGAZIONE =====
-function goHome() {
-    window.location.href = indirizzoCasa();   // indice della raccolta, oppure pagina iniziale dell'app
-}
-
 function goBack() {
     window.location.href = './';              // pagina iniziale di Parola-Immagine
 }
@@ -538,59 +533,4 @@ function svuotaRisultati() {
     Archivio.svuotaRisultati();
     renderRisultati();
     showToast('Risultati cancellati', 'success');
-}
-
-// =====================================================
-// COPIA DEI DATI (ESPORTA / IMPORTA)
-// =====================================================
-function dataPerNomeFile() {
-    const d = new Date();
-    const due = (n) => String(n).padStart(2, '0');
-    return `${d.getFullYear()}-${due(d.getMonth() + 1)}-${due(d.getDate())}`;
-}
-
-async function esportaBackup() {
-    try {
-        const dati = await Archivio.esportaDati();
-        const blob = new Blob([JSON.stringify(dati)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `parola-immagine-${dataPerNomeFile()}.json`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 2000);
-        showToast(`Dati esportati (${dati.coppie.length} coppie)`, 'success');
-    } catch (e) {
-        showToast('Esportazione non riuscita: ' + e.message, 'error');
-    }
-}
-
-function importaBackup() {
-    if (!confirm('IMPORTA DATI\n\nCoppie, risultati e impostazioni di questo dispositivo verranno '
-        + 'sostituiti con quelli del file.\n\nContinuare?')) {
-        return;
-    }
-    const campo = document.getElementById('fileImporta');
-    campo.value = '';
-    campo.click();
-}
-
-async function alFileImporta(e) {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    try {
-        let oggetto;
-        try {
-            oggetto = JSON.parse(await file.text());
-        } catch (err) {
-            throw new Error('il file non è leggibile (serve il .json esportato da Parola-Immagine)');
-        }
-        const esito = await Archivio.importaDati(oggetto);
-        showToast(`Importate ${esito.coppie} coppie. Ricarico...`, 'success');
-        setTimeout(() => window.location.reload(), 900);
-    } catch (err) {
-        showToast('Importazione non riuscita: ' + err.message, 'error');
-    }
 }

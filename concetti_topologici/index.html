@@ -16,21 +16,19 @@
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
     <link rel="stylesheet" href="assets/fonts/fonts.css">
-    <link rel="stylesheet" href="css/styles.css?v=1.1.5">
-    <script src="js/raccolta.js?v=1.0"></script>
+    <link rel="stylesheet" href="css/styles.css?v=1.1.6">
+    <script src="js/raccolta.js?v=1.1"></script>
 </head>
 <body class="avvio">
 
     <header class="avvio-testata">
-        <nav class="ct-frecce" aria-label="Navigazione" data-senza-raccolta="nascondi">
-            <a class="ct-freccia" href="../" title="Torna a: Tutte le Web App" aria-label="Torna a: Tutte le Web App"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
-            <a class="ct-freccia" href="../" title="Torna a: Tutte le Web App" aria-label="Torna a: Tutte le Web App"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></a>
-        </nav>
-        <a class="avvio-marchio" href="../" title="Tutte le Web App" data-casa="./" data-casa-nome="Concetti topologici">
+        <a class="avvio-marchio" href="./" title="Concetti topologici">
             <span class="ct-logo" aria-hidden="true"></span>
             <span><h1>Concetti topologici</h1><small>Sopra, sotto, dentro, fuori… · AssistiveTech</small></span>
         </a>
-        <button type="button" class="ct-freccia ct-aggiorna" data-aggiorna-app title="Aggiorna l'app (i dati restano)" aria-label="Aggiorna l'app"></button>
+        <!-- Menu ☰: Esporta dati, Importa dati, Installa l'app, Aggiorna App -->
+        <button type="button" class="ct-freccia" id="btnMenu" title="Menu" aria-label="Menu" aria-haspopup="dialog"></button>
+        <input type="file" id="fileImporta" accept=".json,application/json" hidden>
     </header>
 
     <main class="avvio-corpo">
@@ -80,7 +78,7 @@
             <div>
                 <strong>Come funziona</strong>
                 <p>Tutto resta su questo dispositivo, senza account e anche senza connessione (serve solo per cercare i pittogrammi ARASAAC).
-                L'educatore prepara le scene qui oppure sul computer, e con la <strong>copia di sicurezza</strong> (Impostazioni) le porta sul tablet dell'utente.
+                L'educatore prepara le scene qui oppure sul computer, e con <strong>Esporta dati</strong> e <strong>Importa dati</strong> (menu ☰ qui in alto) le porta sul tablet dell'utente.
                 Prima di ogni scena l'educatore fa la domanda in LIS («dov'è l'oggetto? dentro o fuori?») e tocca
                 <strong>Avanti</strong>; compaiono le due tessere e l'utente risponde. Dopo la risposta l'educatore conferma in LIS e tocca di nuovo Avanti.</p>
             </div>
@@ -93,8 +91,9 @@
 
     <div id="toast" class="toast-contenitore" aria-live="polite"></div>
 
-    <script src="js/comune.js?v=1.1.5"></script>
-    <script src="js/concetti.js?v=1.1.5"></script>
+    <script src="js/comune.js?v=1.1.6"></script>
+    <script src="js/concetti.js?v=1.1.6"></script>
+    <script src="js/archivio.js?v=1.1.6"></script>
     <script>
         (function () {
             const esc = CT.util.escapeHtml;
@@ -148,6 +147,69 @@
                     <ol class="installa-passi">${passi.map(p => `<li>${p}</li>`).join('')}</ol>
                     <div class="modale-azioni"><button type="button" class="btn btn-primario" id="installaOk">Ho capito</button></div>`, { piccola: true });
                 m.querySelector('#installaOk').addEventListener('click', () => CT.util.chiudiModale());
+            });
+
+            // ---------- Menu ☰: Esporta dati, Importa dati, Installa l'app, Aggiorna App ----------
+            // Esporta/Importa portano scene, foto, impostazioni e risultati su un altro dispositivo:
+            // stanno qui, prima di entrare nelle aree, e non più nell'Area Educatore.
+            const campoFile = document.getElementById('fileImporta');
+
+            async function esportaDati() {
+                try {
+                    const dati = await CT.Archivio.esportaDati();
+                    const d = new Date(), p = n => String(n).padStart(2, '0');
+                    const url = URL.createObjectURL(new Blob([JSON.stringify(dati)], { type: 'application/json' }));
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `concetti-topologici-copia-${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}.json`;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    setTimeout(() => URL.revokeObjectURL(url), 4000);
+                    CT.util.toast(`Dati esportati: ${dati.profilo.scene.length} scene, ${Object.keys(dati.foto).length} foto, ${dati.risultati.length} risposte`, 'ok', 5000);
+                } catch (e) { CT.util.toast(`Esportazione non riuscita: ${e.message}`, 'errore', 5000); }
+            }
+
+            async function importaDati(file) {
+                let dati;
+                try { dati = JSON.parse(await file.text()); } catch (e) { CT.util.toast('Il file non è leggibile', 'errore'); return; }
+                if (!dati || dati.formato !== 'concetti_topologici-copia') { CT.util.toast('Il file non è un\'esportazione di Concetti topologici', 'errore', 5000); return; }
+                const n = Array.isArray(dati.profilo?.scene) ? dati.profilo.scene.length : 0;
+                const ok = await CT.util.conferma('Importare i dati?', `Il file ha ${n} scene. Scene e impostazioni di questo dispositivo verranno sostituite; i risultati si sommano a quelli già presenti.`, { ok: 'Importa' });
+                if (!ok) return;
+                try {
+                    const esito = await CT.Archivio.importaDati(dati);
+                    CT.util.toast(`Dati importati: ${esito.scene} scene, ${esito.foto} foto, ${esito.risultati} risposte aggiunte${esito.fotoMancanti ? ` (${esito.fotoMancanti} foto mancanti nel file)` : ''}`, 'ok', 6000);
+                } catch (e) { CT.util.toast(`Importazione non riuscita: ${e.message}`, 'errore', 6000); }
+            }
+
+            campoFile.addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) importaDati(f); });
+
+            const vociMenu = {
+                esporta: esportaDati,
+                importa: () => campoFile.click(),
+                installa: () => {
+                    if (btnInstalla.disabled) CT.util.toast('Concetti topologici è già installata su questo dispositivo', 'info', 4000);
+                    else btnInstalla.click();
+                },
+                aggiorna: CT.aggiornaApp
+            };
+            const btnMenu = document.getElementById('btnMenu');
+            btnMenu.innerHTML = CT.icona('menu');
+            btnMenu.addEventListener('click', () => {
+                const m = CT.util.apriModale(`
+                    <h2 class="modale-titolo">Menu</h2>
+                    <div class="menu-app">
+                        <button type="button" class="btn" data-voce="esporta">${CT.icona('carica')} Esporta dati</button>
+                        <button type="button" class="btn" data-voce="importa">${CT.icona('scarica')} Importa dati</button>
+                        <button type="button" class="btn" data-voce="installa">${CT.icona('installa')} Installa l'app</button>
+                        <button type="button" class="btn menu-app-aggiorna" data-voce="aggiorna">${CT.icona('aggiorna')} Aggiorna App</button>
+                    </div>
+                    <p class="nota nota-piccola">Scene, foto, impostazioni e risultati restano solo su questo dispositivo. Con «Esporta dati» ne salvi una copia in un file; con «Importa dati» la ricarichi qui o sul tablet dell'utente.</p>`, { piccola: true });
+                m.querySelectorAll('[data-voce]').forEach(b => b.addEventListener('click', () => {
+                    CT.util.chiudiModale();
+                    vociMenu[b.dataset.voce]();
+                }));
             });
         })();
     </script>

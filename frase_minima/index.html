@@ -19,26 +19,22 @@
 
     <link rel="stylesheet" href="css/styles.css?v=20261104.3">
     <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
-    <script src="js/raccolta.js?v=1.0"></script>
+    <script src="js/raccolta.js?v=1.1"></script>
 </head>
 <body class="selection-page">
     <header class="app-header">
         <div class="header-content">
             <div class="header-buttons-left">
-                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App" data-senza-raccolta="nascondi">
-                    <i class="bi bi-arrow-left"></i>
-                </button>
-                <button class="btn-home" onclick="goHome()" aria-label="Torna a: Tutte le Web App" title="Torna a: Tutte le Web App" data-senza-raccolta="nascondi">
-                    <i class="bi bi-house-door-fill"></i>
-                </button>
             </div>
             <h1 class="app-title">
                 <i class="bi bi-chat-square-text"></i>
                 Frase Minima
             </h1>
             <div class="header-buttons-right">
-                <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Aggiorna l'app" title="Aggiorna l'app (i dati restano)">
-                    <i class="bi bi-arrow-clockwise"></i>
+                <!-- Menu ☰: Esporta dati, Importa dati, Installa l'app, Aggiorna App -->
+                <button class="btn-menu" data-menu-app data-nome="Frase minima" data-file="frase-minima"
+                        data-cosa="Frasi, impostazioni e risultati" aria-label="Menu" title="Menu">
+                    <i class="bi bi-list"></i>
                 </button>
             </div>
         </div>
@@ -120,16 +116,9 @@
 
     <script src="js/installa.js?v=1.0"></script>
     <script src="js/clear-cache.js?v=2.1"></script>
+    <script src="js/archivio.js?v=20261104.3"></script>
+    <script src="js/menu.js?v=1.0"></script>
     <script>
-        // Casetta e indietro: tornano all'elenco di tutte le Web App della raccolta
-        function goHome() {
-            if (window.RACCOLTA) window.location.href = window.RACCOLTA.url;   // Tutte le Web App
-        }
-
-        function goBack() {
-            if (window.RACCOLTA) window.location.href = window.RACCOLTA.url;   // Tutte le Web App
-        }
-
         document.querySelectorAll('.area-card').forEach(card => {
             card.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {

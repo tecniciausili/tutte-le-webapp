@@ -21,14 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
     loadExercises();
     loadRisultati();
     caricaPerSessione();
-    document.getElementById('fileImporta')?.addEventListener('change', alFileImporta);
 });
 
 // ===== NAVIGAZIONE =====
-function goHome() {
-    window.location.href = window.RACCOLTA ? window.RACCOLTA.url : './';   // Tutte le Web App (indice della raccolta)
-}
-
 function goBack() {
     window.location.href = './';   // pagina iniziale di Conta con le dita
 }
@@ -324,58 +319,6 @@ function salvaPerSessione() {
             : `Sessione di lavoro: ${imp.per_sessione} esercizi`, 'success');
     } catch (e) {
         showToast('Impostazione non salvata: ' + e.message, 'error');
-    }
-}
-
-// ===== COPIA DEI DATI: ESPORTA / IMPORTA =====
-// I dati stanno solo in questo browser: l'esportazione ne salva una copia in un
-// file JSON; l'importazione la rimette qui (o su un altro dispositivo).
-function dataPerNomeFile() {
-    const d = new Date();
-    const due = (n) => String(n).padStart(2, '0');
-    return `${d.getFullYear()}-${due(d.getMonth() + 1)}-${due(d.getDate())}`;
-}
-
-function esportaBackup() {
-    try {
-        const dati = Archivio.esportaDati();
-        const blob = new Blob([JSON.stringify(dati, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `conta-con-le-dita-${dataPerNomeFile()}.json`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-        const n = (dati.config || []).length;
-        showToast(`Dati esportati (${n} esercizi${(dati.risultati || []).length ? ' + risultati' : ''})`, 'success');
-    } catch (e) {
-        showToast('Esportazione non riuscita: ' + e.message, 'error');
-    }
-}
-
-function importaBackup() {
-    if (!confirm('IMPORTA DATI\n\nGli esercizi e i risultati di questo dispositivo verranno '
-        + 'sostituiti con quelli del file.\n\nContinuare?')) {
-        return;
-    }
-    const campo = document.getElementById('fileImporta');
-    if (!campo) return;
-    campo.value = '';
-    campo.click();
-}
-
-async function alFileImporta(e) {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    try {
-        const oggetto = JSON.parse(await file.text());
-        const esito = Archivio.importaDati(oggetto);
-        showToast(`Importati ${esito.config} esercizi. Ricarico...`, 'success');
-        setTimeout(() => window.location.reload(), 900);
-    } catch (err) {
-        showToast('Importazione non riuscita: ' + err.message, 'error');
     }
 }
 

@@ -27,7 +27,7 @@ computer. **Un dispositivo = un utente**: non c'è registrazione né login, i da
   salvataggio l'esercizio si salva lo stesso e mostra la parola scritta.
 - Elenco degli **esercizi creati** con eliminazione; **statistiche** per parola (grafico Chart.js
   in locale, oppure tabella se il grafico non si può disegnare).
-- **Copia dei dati**: Esporta / Importa in un file JSON (`scrivo-parole-sillabe-AAAA-MM-GG.json`).
+- **Esporta dati / Importa dati** (menu ☰ della pagina iniziale): file JSON (`scrivo-parole-sillabe-AAAA-MM-GG.json`).
   L'importazione sostituisce i dati attuali.
 
 ### Area Utente (`esercizio.html`)

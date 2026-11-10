@@ -117,11 +117,6 @@ function confermaUscita() {
     return !appState.isStarted || confirm('Vuoi davvero uscire? La sessione in corso si interrompe.');
 }
 
-function goHome() {
-    if (!confermaUscita()) return;
-    window.location.href = indirizzoCasa();   // indice della raccolta, oppure pagina iniziale dell'app
-}
-
 function goBack() {
     if (!confermaUscita()) return;
     window.location.href = './';              // pagina iniziale di Parola-Immagine

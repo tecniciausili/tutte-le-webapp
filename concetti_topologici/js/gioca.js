@@ -85,7 +85,7 @@
             <h2 class="modale-titolo">Menu dell'educatore</h2>
             <div class="scelte-esporta">
                 <button type="button" class="scelta" data-a="continua">${CT.icona('gioca')}<span><strong>Continua</strong><small>Torna all'esercizio</small></span></button>
-                <a class="scelta" href="./" style="text-decoration:none;color:inherit">${CT.icona('home')}<span><strong>Pagina iniziale</strong><small>Scelta fra Area Educatore e Area Utente</small></span></a>
+                <a class="scelta" href="./" style="text-decoration:none;color:inherit">${CT.icona('esci')}<span><strong>Pagina iniziale</strong><small>Scelta fra Area Educatore e Area Utente</small></span></a>
                 <button type="button" class="scelta" data-a="ricomincia">${CT.icona('indietro')}<span><strong>Ricomincia</strong><small>Nuova sessione dall'inizio</small></span></button>
                 <a class="scelta" href="gestione.html" style="text-decoration:none;color:inherit">${CT.icona('modifica')}<span><strong>Area Educatore</strong><small>Scene, impostazioni e risultati</small></span></a>
             </div>`, { piccola: true });

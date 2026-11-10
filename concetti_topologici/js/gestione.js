@@ -7,8 +7,8 @@
  *   - le scene, raggruppate per coppia di opposti (sopra/sotto, dentro/fuori…): simboli del libro,
  *     scatola o cesto disegnati, pittogrammi ARASAAC o foto proprie; oppure un'immagine pronta;
  *   - le impostazioni dell'esercizio (coppie, modalità, pause per la LIS, parola scritta…);
- * e consulta i risultati. Tutto si salva da solo sul dispositivo; con la copia di sicurezza
- * si porta quanto preparato sul computer al tablet dell'utente (e viceversa).
+ * e consulta i risultati. Tutto si salva da solo sul dispositivo; con Esporta dati / Importa dati
+ * (menu ☰ della pagina iniziale) si porta quanto preparato sul computer al tablet dell'utente (e viceversa).
  */
 (function () {
     const C = CT.Concetti;
@@ -608,17 +608,6 @@
                         ${radio('dopoErrore', 'mostra', imp.dopoErrore, 'Mostra la giusta e vai avanti', 'La risposta giusta si illumina, poi pausa LIS')}
                     </div></div>
             </div>
-            <div class="riquadro">
-                <h3>${CT.icona('salva')} Copia di sicurezza</h3>
-                <p class="nota">Tutto resta su questo dispositivo. La copia è un file con scene, foto, impostazioni e risultati:
-                tienila al sicuro e, per passare dal computer al tablet dell'utente, ripristinala sul tablet.</p>
-                <div style="display:flex;gap:10px;flex-wrap:wrap">
-                    <button type="button" class="btn btn-primario" id="btnEsporta">${CT.icona('scarica')} Scarica la copia</button>
-                    <button type="button" class="btn" id="btnImporta">${CT.icona('carica')} Ripristina una copia</button>
-                    <input type="file" id="fileCopia" accept=".json,application/json" hidden>
-                </div>
-                <p class="nota nota-piccola">Ripristinando, scene e impostazioni di questo dispositivo vengono sostituite; i risultati della copia si aggiungono a quelli già presenti.</p>
-            </div>
         </div>`;
 
         const p = $('pannello');
@@ -640,44 +629,6 @@
         $('impScambia').addEventListener('change', e => { imp.scambiaTessere = e.target.checked; modificato(); });
         $('impSpecchia').addEventListener('change', e => { imp.specchia = e.target.checked; modificato(); });
         $('impQuante').addEventListener('change', e => { imp.scenePerSessione = parseInt(e.target.value, 10) || 0; modificato(); });
-        $('btnEsporta').addEventListener('click', esporta);
-        $('btnImporta').addEventListener('click', () => $('fileCopia').click());
-        $('fileCopia').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (f) importa(f); });
-    }
-
-    async function esporta() {
-        try {
-            await salvaOra();
-            const dati = await CT.Archivio.esportaDati();
-            const blob = new Blob([JSON.stringify(dati)], { type: 'application/json' });
-            const d = new Date(), p = n => String(n).padStart(2, '0');
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `concetti-topologici-copia-${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}.json`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            setTimeout(() => URL.revokeObjectURL(a.href), 4000);
-            CT.util.toast(`Copia scaricata: ${dati.profilo.scene.length} scene, ${Object.keys(dati.foto).length} foto, ${dati.risultati.length} risposte`, 'ok', 4500);
-        } catch (e) { CT.util.toast(`Copia non riuscita: ${e.message}`, 'errore', 5000); }
-    }
-
-    async function importa(file) {
-        let dati;
-        try { dati = JSON.parse(await file.text()); } catch (e) { CT.util.toast('Il file non è leggibile', 'errore'); return; }
-        if (!dati || dati.formato !== 'concetti_topologici-copia') { CT.util.toast('Il file non è una copia di Concetti topologici', 'errore'); return; }
-        const n = Array.isArray(dati.profilo?.scene) ? dati.profilo.scene.length : 0;
-        const ok = await CT.util.conferma('Ripristinare la copia?', `La copia ha ${n} scene. Scene e impostazioni di questo dispositivo verranno sostituite; i risultati si sommano.`, { ok: 'Ripristina' });
-        if (!ok) return;
-        try {
-            const esito = await CT.Archivio.importaDati(dati);
-            stato.profilo = CT.Archivio.profilo().documento;
-            await CT.Archivio.precaricaFoto(stato.profilo);
-            stato.daSalvare = false;
-            $('statoSalvataggio').textContent = 'Copia ripristinata';
-            CT.util.toast(`Ripristinata: ${esito.scene} scene, ${esito.foto} foto, ${esito.risultati} risposte aggiunte${esito.fotoMancanti ? ` (${esito.fotoMancanti} foto mancanti nel file)` : ''}`, 'ok', 6000);
-            disegna();
-        } catch (e) { CT.util.toast(`Ripristino non riuscito: ${e.message}`, 'errore', 6000); }
     }
 
     /* ---------- Scheda Risultati ---------- */
@@ -719,7 +670,7 @@
                     <td>${s.scene}</td><td><strong>${s.giuste_subito}</strong> / ${s.scene} (${pct(s.giuste_subito, s.scene)}%)</td><td>${s.errori}</td><td>${durata(s.tempo_medio)}</td></tr>`).join('')}</tbody>
             </table></div>
             <p style="margin-top:18px"><button type="button" class="btn btn-piccolo" id="btnCancellaRisultati">${CT.icona('elimina')} Cancella i risultati</button>
-            <span class="nota">Prima, se servono, scarica la copia di sicurezza (Impostazioni).</span></p>`;
+            <span class="nota">Prima, se servono, esporta i dati (menu ☰ della pagina iniziale).</span></p>`;
         p.querySelectorAll('tr[data-sessione]').forEach(tr => tr.addEventListener('click', () => dettaglio(tr.dataset.sessione)));
         $('btnCancellaRisultati').addEventListener('click', async () => {
             const ok = await CT.util.conferma('Cancellare tutti i risultati?', 'Le risposte salvate su questo dispositivo verranno eliminate. Scene e impostazioni restano.', { ok: 'Cancella', pericolo: true });

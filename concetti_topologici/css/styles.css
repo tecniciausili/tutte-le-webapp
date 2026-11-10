@@ -466,6 +466,11 @@ body.con-modale { overflow: hidden; }
 .ct-freccia:hover { background: var(--giallo); transform: translateY(-2px); }
 .ct-freccia:focus-visible { outline: 3px solid var(--azzurro); outline-offset: 2px; }
 .ct-freccia svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-/* Pulsante «Aggiorna l'app»: stesso cerchio delle frecce, ma è un <button> */
+/* Pulsanti ☰ «Menu» e ⟳ «Aggiorna l'app»: stesso cerchio delle frecce, ma sono <button> */
 button.ct-freccia { padding: 0; font: inherit; cursor: pointer; }
+/* Menu ☰ della pagina iniziale: le voci una sotto l'altra */
+.menu-app { display: grid; gap: 10px; }
+.menu-app .btn { width: 100%; justify-content: flex-start; }
+.menu-app .menu-app-aggiorna { color: #b84300; }
+.menu-app + .nota { margin-top: 16px; }
 .barra-azioni { justify-content: flex-end; }
