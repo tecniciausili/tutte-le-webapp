@@ -1,0 +1,14 @@
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Dipendenze (non usate: app statica pura)
+node_modules/
+
+# Dati esportati (backup): non vanno nel repository né online
+backup/
+causa-effetto-dati-*.json

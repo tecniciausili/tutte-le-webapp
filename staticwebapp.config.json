@@ -1,6 +1,12 @@
 {
     "routes": [
         {
+            "route": "/causa-effetto/service-worker.js",
+            "headers": {
+                "Cache-Control": "no-cache"
+            }
+        },
+        {
             "route": "/concetti_topologici/service-worker.js",
             "headers": {
                 "Cache-Control": "no-cache"

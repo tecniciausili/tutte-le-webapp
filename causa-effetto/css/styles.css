@@ -1,0 +1,1836 @@
+/* ==================== CAUSA EFFETTO ====================
+   Stesso linguaggio visivo delle altre app autonome (header, pannelli,
+   pulsanti arrotondati, menu laterali), con l'indaco come colore. */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #3949AB;
+    --primary-dark: #1A237E;
+    --secondary-color: #5C6BC0;
+    --primary-soft: rgba(57, 73, 171, 0.1);
+    --primary-border: rgba(57, 73, 171, 0.25);
+    --accent-color: #FF7043;
+    --danger-color: #d32f2f;
+    --text-color: #263238;
+    --muted-color: #5f6b72;
+    --card-bg: #ffffff;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --header-h: 70px;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #5C6BC0 0%, #283593 100%);
+    background-attachment: fixed;
+    color: var(--text-color);
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==================== HEADER ==================== */
+
+.app-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 0 1.5rem;
+    padding-top: env(safe-area-inset-top);
+    height: calc(var(--header-h) + env(safe-area-inset-top));
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    gap: 1rem;
+}
+
+.app-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    flex: 1;
+    text-align: center;
+}
+
+.header-actions-left {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    min-width: 45px;
+}
+
+.btn-indietro,
+.btn-menu,
+.btn-user-options {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.btn-indietro:hover,
+.btn-menu:hover,
+.btn-user-options:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.05);
+}
+
+.btn-user-options {
+    display: none;
+}
+
+body.user-mode-active .btn-user-options {
+    display: flex;
+}
+
+/* ← solo dentro le aree: nella pagina iniziale non c'è (l'app non torna all'elenco delle app) */
+.btn-indietro {
+    display: none;
+}
+
+body.educator-mode .btn-indietro,
+body.user-mode-active .btn-indietro {
+    display: flex;
+}
+
+/* ==================== CONTENUTO PRINCIPALE ==================== */
+
+.app-main {
+    max-width: 1200px;
+    width: 100%;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+body.educator-mode .app-main,
+body.user-mode-active .app-main {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.welcome-screen {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    box-shadow: var(--shadow);
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.welcome-icon {
+    font-size: 5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.welcome-screen h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.description {
+    color: var(--muted-color);
+    font-size: 1.1rem;
+    margin: 1.5rem 0 0;
+}
+
+.mode-selection {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.btn-mode {
+    padding: 2rem 2.5rem;
+    border: 2px solid var(--primary-border);
+    border-radius: 20px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    min-width: 200px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    font-family: inherit;
+}
+
+.btn-mode i {
+    font-size: 3rem;
+}
+
+.btn-mode:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(57, 73, 171, 0.3);
+    border-color: var(--primary-color);
+    background: var(--primary-soft);
+}
+
+.btn-user {
+    border-color: rgba(255, 112, 67, 0.45);
+    color: #e64a19;
+}
+
+.btn-user:hover {
+    border-color: #e64a19;
+    box-shadow: 0 10px 25px rgba(255, 112, 67, 0.3);
+    background: rgba(255, 112, 67, 0.06);
+}
+
+/* ==================== PULSANTI ==================== */
+
+.btn-primary,
+.btn-secondary {
+    padding: 12px 26px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    font-family: inherit;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(57, 73, 171, 0.3);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.btn-secondary {
+    background: #eceef7;
+    color: var(--text-color);
+}
+
+.btn-secondary:hover {
+    background: #dcdff0;
+    transform: translateY(-2px);
+}
+
+.btn-piccolo {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.85rem;
+}
+
+.btn-icona {
+    border: none;
+    background: #eceef7;
+    color: var(--text-color);
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    transition: background 0.2s, transform 0.2s;
+    text-decoration: none;
+}
+
+.btn-icona:hover {
+    background: #dcdff0;
+    transform: scale(1.05);
+}
+
+.btn-icona.pericolo,
+.btn-secondary.pericolo {
+    color: var(--danger-color);
+}
+
+.btn-carica {
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.link {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--primary-color);
+    text-decoration: underline;
+    cursor: pointer;
+    font: inherit;
+}
+
+/* ==================== MENU LATERALE, OVERLAY, FINESTRE ==================== */
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    right: -310px;
+    width: 300px;
+    height: 100vh;
+    background: white;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease;
+    z-index: 1001;
+    overflow-y: auto;
+}
+
+.side-menu.active {
+    right: 0;
+}
+
+.menu-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 1.5rem;
+    padding-top: calc(1.5rem + env(safe-area-inset-top));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-close-menu {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.menu-list {
+    list-style: none;
+    padding: 1rem 0;
+}
+
+.menu-list button {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--text-color);
+}
+
+.menu-list button:hover {
+    background: #f3f4fa;
+}
+
+.menu-list .menu-aggiorna {
+    color: #e65100;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    z-index: 1000;
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    z-index: 2000;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 15px;
+    max-width: 560px;
+    width: 92%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+}
+
+.modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    color: var(--primary-color);
+}
+
+.btn-close-modal {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+    color: #999;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    line-height: 1.6;
+}
+
+.modal-body h4 {
+    color: var(--primary-color);
+    margin: 1rem 0 0.5rem;
+}
+
+.modal-body h4:first-child {
+    margin-top: 0;
+}
+
+.modal-body ul {
+    padding-left: 1.3rem;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #eee;
+    text-align: right;
+}
+
+.info-box {
+    background: #eef0fa;
+    border-left: 4px solid var(--primary-color);
+    padding: 1rem;
+    margin-top: 1rem;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    border-radius: 0 8px 8px 0;
+}
+
+.info-box i {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes gira {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulsaCentro {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.05); }
+}
+
+/* ==================== MODULI ==================== */
+
+.panel {
+    background: var(--card-bg);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+    width: 100%;
+}
+
+.panel h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
+    font-size: 1.2rem;
+}
+
+.intestazione-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.intestazione-area h2 {
+    color: var(--primary-color);
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.helper-text {
+    font-size: 0.85rem;
+    color: var(--muted-color);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+}
+
+.form-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    border: 1px solid var(--primary-border);
+    border-radius: 12px;
+    padding: 0.7rem 0.9rem;
+    font-size: 1rem;
+    background: white;
+    width: 100%;
+    font-family: inherit;
+    color: var(--text-color);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(57, 73, 171, 0.15);
+}
+
+.riga-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.tempo {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.tempo input {
+    text-align: center;
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.spunta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted-color);
+}
+
+.spunta input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.spunta.grande {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-color);
+    padding: 0.4rem 0;
+}
+
+.spunta.grande input {
+    width: 22px;
+    height: 22px;
+}
+
+.status-message {
+    margin-top: 0.75rem;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    display: none;
+}
+
+.status-message.success {
+    display: block;
+    background: rgba(76, 175, 80, 0.1);
+    color: #2e7d32;
+    border: 1px solid rgba(76, 175, 80, 0.25);
+}
+
+.status-message.error {
+    display: block;
+    background: rgba(244, 67, 54, 0.1);
+    color: #c62828;
+    border: 1px solid rgba(244, 67, 54, 0.25);
+}
+
+.status-message.info {
+    display: block;
+    background: rgba(33, 150, 243, 0.1);
+    color: #1565c0;
+    border: 1px solid rgba(33, 150, 243, 0.25);
+}
+
+/* ==================== AREA EDUCATORE ==================== */
+
+.educatore {
+    display: flex;
+    min-height: calc(100vh - var(--header-h));
+}
+
+.pannello-educatore {
+    width: 33.33%;
+    min-width: 420px;
+    max-width: 620px;
+    border-radius: 0;
+    min-height: calc(100vh - var(--header-h));
+}
+
+/* Lo spazio a destra resta libero per la finestra di ricerca di YouTube */
+.spazio-youtube {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+    color: rgba(255, 255, 255, 0.75);
+    text-align: center;
+    font-size: 1.05rem;
+    line-height: 1.5;
+}
+
+.spazio-youtube i {
+    font-size: 4rem;
+    opacity: 0.6;
+}
+
+.spazio-youtube p {
+    max-width: 360px;
+}
+
+.schede {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin: 1rem 0 1.25rem;
+}
+
+.scheda {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.6rem 0.3rem;
+    border: 2px solid var(--primary-border);
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.scheda i {
+    font-size: 1.4rem;
+}
+
+.scheda:hover {
+    background: var(--primary-soft);
+}
+
+.scheda.attiva {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.scheda-contenuto {
+    display: flex;
+    flex-direction: column;
+}
+
+.titolo-lista {
+    color: var(--primary-color);
+    font-size: 0.95rem;
+    margin: 1.5rem 0 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* ---------- Anteprima: un piccolo schermo con le proporzioni di un tablet ---------- */
+
+.anteprima-schermo {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 14px;
+    border: 6px solid #263238;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.25rem 0 0.75rem;
+    transition: background-color 0.2s;
+}
+
+.anteprima-schermo .oggetto {
+    position: absolute;
+    top: 0;
+    left: 0;
+    will-change: transform;
+}
+
+/* Area centrale (visione a tunnel): bordo tratteggiato che si vede nell'anteprima
+   e, nell'Area Utente, solo mentre è aperto il pannello Dimensione e sfondo */
+.area-centrale {
+    position: absolute;
+    border: 3px dashed rgba(128, 128, 128, 0.9);
+    border-radius: 6px;
+    pointer-events: none;
+}
+
+.palco:not(.regolazione) .area-centrale {
+    visibility: hidden;
+}
+
+.anteprima-vuota {
+    color: #9aa3a8;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.oggetto-attuale {
+    font-size: 0.9rem;
+    color: var(--muted-color);
+    margin-bottom: 1rem;
+}
+
+/* ---------- Oggetto (anteprima e Area Utente) ---------- */
+
+.oggetto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.oggetto img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* ---------- Ricerca ARASAAC ---------- */
+
+.griglia-pittogrammi {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    max-height: 420px;
+    overflow-y: auto;
+}
+
+.pittogramma {
+    border: 2px solid #e3e5ee;
+    border-radius: 10px;
+    background: white;
+    padding: 0.4rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: inherit;
+    font-size: 0.75rem;
+    color: var(--text-color);
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.pittogramma img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: contain;
+}
+
+.pittogramma span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pittogramma:hover {
+    border-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.pittogramma.scelto {
+    border-color: var(--primary-color);
+    background: var(--primary-soft);
+    box-shadow: 0 0 0 3px rgba(57, 73, 171, 0.25);
+}
+
+/* ---------- Elenco degli oggetti ---------- */
+
+.griglia-oggetti {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+    gap: 0.6rem;
+}
+
+.scheda-oggetto {
+    position: relative;
+    border: 2px solid #e3e5ee;
+    border-radius: 12px;
+    background: white;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    text-align: center;
+}
+
+.scheda-oggetto.in-scena {
+    border-color: var(--primary-color);
+    background: var(--primary-soft);
+}
+
+.scheda-oggetto img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: contain;
+}
+
+.scheda-oggetto-nome {
+    font-size: 0.82rem;
+    font-weight: 600;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.scheda-oggetto small {
+    font-size: 0.72rem;
+    color: var(--muted-color);
+}
+
+.scheda-oggetto-elimina {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    font-size: 0.95rem;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.scheda-oggetto-ritaglia {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    font-size: 0.95rem;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* Pittogramma ARASAAC oppure immagine dal computer, uno accanto all'altro */
+.aggiungi-oggetto {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.aggiungi-oggetto .form-group {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.aggiungi-oppure {
+    color: var(--muted-color);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* ---------- Ritaglio delle immagini (js/ritaglio.js) ---------- */
+
+.ritaglio-nome {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    overflow-wrap: anywhere;
+}
+
+.ritaglio-riquadro {
+    position: relative;
+    width: min(100%, 400px);
+    aspect-ratio: 1;
+    margin: 0.75rem auto;
+    overflow: hidden;
+    border-radius: 12px;
+    outline: 3px solid var(--primary-color);
+    /* Scacchiera: le parti vuote del quadrato restano trasparenti (si vedrà lo sfondo scelto) */
+    background: repeating-conic-gradient(#e6e8f0 0% 25%, #ffffff 0% 50%) 0 0 / 24px 24px;
+    touch-action: none;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.ritaglio-riquadro:active {
+    cursor: grabbing;
+}
+
+.ritaglio-riquadro img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: none;
+    transform-origin: 0 0;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.ritaglio-scorciatoie {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.ritaglio-azioni {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.avviso-testo {
+    color: #c62828;
+    font-weight: 600;
+}
+
+/* ---------- Quali video fa partire ogni oggetto ---------- */
+
+.collegamenti-oggetti {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.collegamento {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    border: 2px solid #e3e5ee;
+    border-radius: 12px;
+    background: white;
+    padding: 0.6rem;
+}
+
+.collegamento.in-scena {
+    border-color: var(--primary-color);
+}
+
+.collegamento img {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.collegamento-testo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-width: 0;
+    flex: 1;
+}
+
+.collegamento-esito {
+    font-size: 0.8rem;
+    color: var(--muted-color);
+}
+
+.chip-elenco {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.chip-categoria {
+    cursor: pointer;
+}
+
+.chip-categoria input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.chip-categoria span {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border: 2px solid #d5d9ea;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted-color);
+    background: white;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.chip-categoria small {
+    font-weight: 400;
+}
+
+.chip-categoria input:checked + span {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.chip-categoria input:focus-visible + span {
+    outline: 3px solid rgba(57, 73, 171, 0.4);
+    outline-offset: 2px;
+}
+
+.crediti-arasaac {
+    margin-top: 0.75rem;
+    font-size: 0.78rem;
+}
+
+/* ---------- Controlli di aspetto (scheda Aspetto e pannello dell'Area Utente) ---------- */
+
+.dettaglio {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding: 0.2rem 0 0 1.9rem;
+}
+
+.controllo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    margin-bottom: 1.1rem;
+}
+
+.controllo-titolo {
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.controllo-titolo output {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.controllo .helper-text {
+    margin: 0;
+}
+
+.riga-cursore {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.riga-cursore input[type="range"] {
+    flex: 1;
+    accent-color: var(--primary-color);
+    height: 32px;
+}
+
+.campioni {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.campione {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid #c5c9d6;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.15s;
+}
+
+.campione:hover {
+    transform: scale(1.08);
+}
+
+.campione.scelto {
+    box-shadow: 0 0 0 3px white, 0 0 0 6px var(--primary-color);
+}
+
+.campione-libero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: conic-gradient(#f44336, #ffeb3b, #4caf50, #03a9f4, #3f51b5, #e91e63, #f44336);
+    color: white;
+    font-size: 1rem;
+    overflow: hidden;
+}
+
+.campione-libero i {
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+    pointer-events: none;
+}
+
+.campione-libero input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.nota-contrasto {
+    font-size: 0.85rem;
+    color: #8d4a00;
+    background: #fff4e0;
+    border-left: 4px solid #ff9800;
+    padding: 0.6rem 0.8rem;
+    border-radius: 0 8px 8px 0;
+    line-height: 1.45;
+}
+
+/* ---------- YouTube ---------- */
+
+.verifica-video {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.yt-anteprima {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #000;
+}
+
+.yt-anteprima iframe,
+.yt-anteprima > div {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.verifica-esito {
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.verifica-esito.ok {
+    color: #2e7d32;
+}
+
+.verifica-esito.errore {
+    color: #c62828;
+}
+
+.verifica-esito.attesa {
+    color: #8d6e00;
+}
+
+.blocco-playlist {
+    margin-top: 1.5rem;
+    padding: 0.9rem;
+    border: 2px dashed #d3d7ea;
+    border-radius: 12px;
+    background: #f7f8fc;
+}
+
+.blocco-playlist .titolo-lista {
+    margin-top: 0;
+}
+
+.import-player-nascosto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.lista-elementi {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.conteggio {
+    font-size: 0.8rem;
+    color: var(--muted-color);
+}
+
+.vuoto {
+    color: var(--muted-color);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    padding: 0.5rem 0;
+}
+
+.gruppo-playlist {
+    border: 2px solid #d3d7ea;
+    border-radius: 12px;
+    background: #f7f8fc;
+    padding: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.gruppo-playlist-intestazione {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.gruppo-playlist-titolo {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 0;
+    color: var(--primary-color);
+}
+
+.gruppo-playlist-titolo strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.gruppo-playlist-titolo small {
+    color: var(--muted-color);
+    font-weight: normal;
+    white-space: nowrap;
+}
+
+.gruppo-playlist-video {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.elemento {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.6rem;
+    border: 2px solid #e3e5ee;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.elemento.attivo {
+    border-color: var(--primary-color);
+    background: #f4f5fc;
+}
+
+.elemento-testo {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.elemento-testo strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.elemento-testo small {
+    font-size: 0.78rem;
+    color: #7b878d;
+}
+
+.elemento-azioni {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.miniatura {
+    width: 84px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+    background: #eee;
+}
+
+.tempi-riga {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem 0.9rem;
+    flex-wrap: wrap;
+    margin-top: 0.25rem;
+}
+
+.campo-tempo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    color: var(--muted-color);
+}
+
+.campo-tempo > span:first-child {
+    min-width: 2.6rem;
+}
+
+.campo-tempo input {
+    width: 3.4rem;
+    padding: 0.25rem 0.35rem;
+    border: 2px solid #e3e5ee;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    text-align: center;
+    font-family: inherit;
+}
+
+.campo-tempo input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.tempi-esito {
+    font-size: 0.8rem;
+    min-height: 1em;
+}
+
+.tempi-esito.ok {
+    color: var(--primary-color);
+}
+
+.tempi-esito.errore {
+    color: var(--danger-color);
+}
+
+.avviso-video {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.35rem;
+    padding: 0.45rem 0.6rem;
+    border-radius: 8px;
+    background: #fdecea;
+    color: #b71c1c;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* ---------- Sessione ---------- */
+
+.gruppo-scelte {
+    border: 1px solid var(--primary-border);
+    border-radius: 12px;
+    padding: 0.5rem 1rem 0.9rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.gruppo-scelte legend {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    padding: 0 0.4rem;
+}
+
+.scelta {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    cursor: pointer;
+    padding: 0.55rem 0.6rem;
+    border-radius: 10px;
+    border: 2px solid transparent;
+}
+
+.scelta:has(input:checked) {
+    border-color: var(--primary-color);
+    background: var(--primary-soft);
+}
+
+.scelta input {
+    width: 22px;
+    height: 22px;
+    margin-top: 0.1rem;
+    accent-color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.scelta span {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.scelta small {
+    color: var(--muted-color);
+    font-size: 0.83rem;
+    line-height: 1.45;
+}
+
+.secondi-temporizzato {
+    padding-left: 2.2rem;
+}
+
+.secondi-temporizzato input {
+    max-width: 9rem;
+}
+
+.riepilogo-sessione {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    font-weight: 600;
+    color: #2e7d32;
+    margin-top: 0.5rem;
+}
+
+.riepilogo-sessione.manca {
+    color: #c62828;
+}
+
+/* ==================== AREA UTENTE ==================== */
+
+body.user-mode-active {
+    background: var(--sfondo-utente, #000);
+}
+
+.utente {
+    height: calc(100vh - var(--header-h) - env(safe-area-inset-top));
+    height: calc(100dvh - var(--header-h) - env(safe-area-inset-top));
+    display: flex;
+}
+
+/* ==================== PALCO ==================== */
+
+.palco {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: #000;
+    touch-action: none;                 /* niente zoom, scorrimento o doppio tocco */
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;        /* niente menu del tocco lungo su iPad */
+    -webkit-tap-highlight-color: transparent;
+}
+
+.palco:focus {
+    outline: none;
+}
+
+/* ---------- Blocco dello schermo durante l'attività (vedi js/utente.js) ---------- */
+
+html.blocco-attivo,
+html.blocco-attivo body {
+    touch-action: none;                 /* niente pizzico con due dita (zoom) in tutta la pagina */
+    overscroll-behavior: none;          /* niente "indietro" con lo scorrimento laterale */
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+/* Si vedono solo lo sfondo e l'oggetto: niente barra in alto, niente pulsanti */
+html.blocco-attivo .app-header,
+html.blocco-attivo .palco-comandi {
+    display: none;
+}
+
+html.blocco-attivo .utente {
+    height: 100vh;
+    height: 100dvh;
+}
+
+.palco-video {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: #000;
+}
+
+.palco-video iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Sfondo colorato e oggetto: copre il video quando non deve vedersi */
+.palco-scena {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    background: #000;
+}
+
+.palco[data-vista="video"] .palco-scena,
+.palco[data-vista="sblocco"] .palco-scena {
+    visibility: hidden;
+}
+
+.palco-scena .oggetto {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    will-change: transform;
+}
+
+/* Velo trasparente sopra il video: i tocchi non arrivano a YouTube (e sono ignorati) */
+.palco-velo {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: none;
+    background: transparent;
+}
+
+.palco[data-vista="video"] .palco-velo {
+    display: block;
+}
+
+/* Quando serve toccare il video (iPad), il velo lascia passare il tocco */
+.palco.attende-tocco-video .palco-velo {
+    display: none;
+}
+
+.palco-messaggio {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 12;
+    width: min(92%, 560px);
+    background: white;
+    border-radius: 20px;
+    padding: 2rem 1.75rem;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    user-select: text;
+    -webkit-user-select: text;
+}
+
+.palco-messaggio-icona {
+    font-size: 3.5rem;
+    color: var(--primary-color);
+    line-height: 1;
+}
+
+.palco-messaggio-icona.gira {
+    animation: gira 1.2s linear infinite;
+}
+
+.palco-messaggio-titolo {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+.palco-messaggio-testo {
+    color: var(--muted-color);
+    line-height: 1.5;
+}
+
+.palco-messaggio-azioni {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+.palco-messaggio-azioni .btn-primary {
+    font-size: 1.15rem;
+    padding: 14px 34px;
+}
+
+.palco-avviso {
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    z-index: 15;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.8rem 1.6rem;
+    border-radius: 999px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    max-width: 90%;
+    text-align: center;
+    animation: pulsaCentro 1.5s ease-in-out infinite;
+}
+
+/* Pulsanti dell'educatore, piccoli e discreti in alto a sinistra */
+.palco-comandi {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 20;
+    display: flex;
+    gap: 8px;
+}
+
+.palco-pulsante {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.palco-pulsante:hover,
+.palco-pulsante:focus-visible {
+    opacity: 1;
+}
+
+/* Durante il video i pulsanti spariscono: il video resta pulito */
+.palco[data-vista="video"] .palco-comandi {
+    display: none;
+}
+
+.palco:fullscreen,
+.palco:-webkit-full-screen {
+    width: 100vw;
+    height: 100vh;
+}
+
+/* ---------- Pannello "Dimensione e sfondo" ---------- */
+
+.pannello-opzioni {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(360px, 88%);
+    z-index: 30;
+    background: white;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.35);
+    transform: translateX(-105%);
+    transition: transform 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    user-select: auto;
+    -webkit-user-select: auto;
+    touch-action: auto;
+}
+
+.pannello-opzioni.aperto {
+    transform: translateX(0);
+}
+
+.pannello-opzioni-intestazione {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #eee;
+}
+
+.pannello-opzioni-intestazione h3 {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.pannello-opzioni-controlli {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.1rem 1.25rem;
+}
+
+.pannello-opzioni-azioni {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid #eee;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 900px) {
+    .educatore {
+        flex-direction: column;
+    }
+
+    .pannello-educatore {
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+    }
+
+    .spazio-youtube {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    :root {
+        --header-h: 60px;
+    }
+
+    .app-title {
+        font-size: 1.2rem;
+    }
+
+    .mode-selection {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-mode {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .riga-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .panel {
+        padding: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .palco-avviso,
+    .palco-messaggio-icona.gira {
+        animation: none !important;
+    }
+}

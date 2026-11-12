@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#3949AB">
+    <meta name="description" content="Causa Effetto - tocca l'oggetto sullo schermo e parte un video YouTube">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Causa Effetto">
+
+    <title>Causa Effetto</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="css/styles.css?v=1.0.7">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css?v=1.0.7">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-actions-left">
+                <!-- ← dall'Area Educatore o dall'Area Utente torna alla pagina iniziale dell'app (mai all'elenco delle app) -->
+                <button type="button" class="btn-indietro" data-app="home" title="Torna a: Causa Effetto" aria-label="Torna a: Causa Effetto">
+                    <i class="bi bi-arrow-left"></i>
+                </button>
+                <button type="button" class="btn-user-options" data-app="opzioni" title="Dimensione e sfondo" aria-label="Dimensione e sfondo">
+                    <i class="bi bi-sliders"></i>
+                </button>
+            </div>
+            <h1 class="app-title">Causa Effetto</h1>
+            <button type="button" class="btn-menu" data-app="menu" title="Menu" aria-label="Menu">
+                <i class="bi bi-list"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="app-main" id="appMain"></main>
+
+    <template id="modelloBenvenuto">
+        <div class="welcome-screen">
+            <div class="welcome-icon"><i class="bi bi-hand-index-thumb"></i></div>
+            <h2>Benvenuto in Causa Effetto</h2>
+            <p>Tocca l'<strong>oggetto</strong> sullo schermo e parte un <strong>video YouTube</strong></p>
+            <p class="description">Scegli dove entrare:</p>
+            <div class="mode-selection">
+                <button type="button" class="btn-mode btn-educator" data-app="educatore">
+                    <i class="bi bi-person-workspace"></i>
+                    <span>Area Educatore</span>
+                </button>
+                <button type="button" class="btn-mode btn-user" data-app="utente">
+                    <i class="bi bi-hand-index-thumb"></i>
+                    <span>Area Utente</span>
+                </button>
+            </div>
+            <button type="button" class="btn-primary" data-app="installa">
+                <i class="bi bi-download"></i> Installa l'app su questo dispositivo
+            </button>
+        </div>
+    </template>
+
+    <nav class="side-menu" id="sideMenu" aria-label="Menu">
+        <div class="menu-header">
+            <h3>Menu</h3>
+            <button type="button" class="btn-close-menu" data-app="chiudi-menu" aria-label="Chiudi menu">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <ul class="menu-list">
+            <li><button type="button" data-app="home"><i class="bi bi-arrow-left"></i> Schermata iniziale</button></li>
+            <li><button type="button" data-app="educatore"><i class="bi bi-person-workspace"></i> Area Educatore</button></li>
+            <li><button type="button" data-app="utente"><i class="bi bi-hand-index-thumb"></i> Area Utente</button></li>
+            <li><button type="button" data-app="esporta"><i class="bi bi-box-arrow-up"></i> Esporta dati</button></li>
+            <li><button type="button" data-app="importa"><i class="bi bi-box-arrow-in-down"></i> Importa dati</button></li>
+            <li><button type="button" data-app="installa"><i class="bi bi-download"></i> Installa l'app</button></li>
+            <li><button type="button" data-app="istruzioni"><i class="bi bi-question-circle"></i> Come funziona</button></li>
+            <li><button type="button" data-app="informazioni"><i class="bi bi-info-circle"></i> Informazioni</button></li>
+            <li><button type="button" data-app="aggiorna" class="menu-aggiorna"><i class="bi bi-arrow-repeat"></i> Aggiorna App</button></li>
+        </ul>
+        <input type="file" id="fileImporta" accept="application/json,.json" hidden>
+    </nav>
+    <div class="overlay" id="overlay" data-app="chiudi-menu"></div>
+
+    <div class="modal" id="instructionsModal" role="dialog" aria-modal="true" aria-labelledby="titoloIstruzioni">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="titoloIstruzioni"><i class="bi bi-question-circle"></i> Come funziona</h3>
+                <button type="button" class="btn-close-modal" data-app="chiudi-finestra" data-finestra="instructionsModal" aria-label="Chiudi">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>Area Educatore</h4>
+                <ul>
+                    <li><strong>Oggetti</strong>: pittogrammi ARASAAC e immagini dal computer o dal tablet. Le immagini si ritagliano quadrate, così sullo schermo sono grandi come un pittogramma (pulsante <i class="bi bi-crop"></i> per ritagliarle di nuovo). Si usa un solo oggetto, oppure più oggetti che compaiono uno alla volta a caso.</li>
+                    <li><strong>Quali video fa partire ogni oggetto</strong>: nella scheda Oggetti spunta le categorie dei video di ogni oggetto (anche più di una). Senza spunte l'oggetto fa partire tutti i video.</li>
+                    <li><strong>Aspetto</strong>: dimensione dell'oggetto, colore dello sfondo (l'unico sfondo: l'immagine non ne ha uno suo), solo area centrale per chi ha una visione a tunnel, oggetto statico o in movimento con la sua velocità.</li>
+                    <li><strong>YouTube</strong>: scrivi la categoria, scegli il video e incolla il link. Puoi impostare inizio e fine, importare una playlist e decidere quali video sono nella lista dell'utente.</li>
+                    <li><strong>Sessione</strong>: video fino alla fine o temporizzato; ordine in sequenza o random.</li>
+                </ul>
+                <h4>Area Utente</h4>
+                <ul>
+                    <li>L'utente tocca l'oggetto e parte un video. Mentre il video scorre, gli altri tocchi non fanno nulla.</li>
+                    <li>Poi l'oggetto torna in un altro punto dello schermo (con più oggetti in scena, è un oggetto diverso scelto a caso). Nel temporizzato il video va in pausa e riprende da dove si era fermato la prossima volta che compare un oggetto della sua categoria.</li>
+                    <li>Il pulsante <i class="bi bi-sliders"></i> regola dimensione e sfondo anche durante l'uso.</li>
+                    <li>Anche <strong>SPAZIO</strong> e <strong>INVIO</strong> valgono come tocco (switch USB o Bluetooth).</li>
+                    <li><strong>Schermo bloccato</strong>: durante l'attività l'app va a schermo intero e conta solo il tocco sull'oggetto. Palmo, altre dita, pizzico (zoom), tocco lungo, tasto destro e rotella non fanno nulla; barra e pulsanti spariscono.</li>
+                    <li>Per fermare l'attività l'educatore preme <strong>ESC</strong>.</li>
+                </ul>
+                <h4>Su computer con schermo touch</h4>
+                <ul>
+                    <li>Gli swipe dai bordi dello schermo e i gesti a tre o quattro dita sono di Windows e l'app non li può bloccare: disattivali in Impostazioni → Bluetooth e dispositivi → Tocco.</li>
+                </ul>
+                <h4>Su iPad</h4>
+                <ul>
+                    <li>All'inizio l'educatore tocca il video una volta: da quel momento YouTube parte da solo.</li>
+                    <li>Attiva l'<strong>Accesso Guidato</strong> (Impostazioni → Accessibilità) per impedire di uscire dall'app.</li>
+                </ul>
+                <div class="info-box">
+                    <i class="bi bi-lightbulb"></i>
+                    <p>I video non vengono scaricati: si salva solo il link. Serve la connessione a internet. Conviene configurare tutto sul computer e passarlo all'iPad con <strong>Esporta dati</strong> e <strong>Importa dati</strong>.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-primary" data-app="chiudi-finestra" data-finestra="instructionsModal">Ho capito</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="titoloInfo">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="titoloInfo"><i class="bi bi-info-circle"></i> Informazioni</h3>
+                <button type="button" class="btn-close-modal" data-app="chiudi-finestra" data-finestra="infoModal" aria-label="Chiudi">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>Causa Effetto</h4>
+                <p>Stimolo-risposta: tocca l'oggetto e parte un video. Autonoma: tutti i dati restano su questo dispositivo.</p>
+                <p><strong>Versione:</strong> <span id="infoVersione">-</span></p>
+                <p id="infoStorage"><strong>Spazio dati:</strong> calcolo in corso…</p>
+                <div class="info-box">
+                    <i class="bi bi-hdd"></i>
+                    <p>Link dei video e impostazioni sono nel localStorage, le immagini caricate in IndexedDB del browser di questo dispositivo. Non cancellare i dati di navigazione.</p>
+                </div>
+                <h4>Pittogrammi</h4>
+                <p>I pittogrammi sono di Sergio Palao, proprietà del Governo di Aragona (<a href="https://arasaac.org" target="_blank" rel="noopener">ARASAAC</a>), distribuiti con licenza Creative Commons BY-NC-SA.
+                    <button type="button" class="link" data-app="arasaac">Condizioni d'uso</button></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-primary" data-app="chiudi-finestra" data-finestra="infoModal">Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="arasaacModal" role="dialog" aria-modal="true" aria-labelledby="titoloArasaac">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="titoloArasaac"><i class="bi bi-info-circle"></i> Condizioni d'uso ARASAAC</h3>
+                <button type="button" class="btn-close-modal" data-app="chiudi-finestra" data-finestra="arasaacModal" aria-label="Chiudi">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4>Licenza Creative Commons</h4>
+                <p>I pittogrammi e le immagini di ARASAAC sono pubblicati sotto licenza Creative Commons (BY-NC-SA), che permette di scaricare, utilizzare e condividere in qualsiasi tipo di formato, purché non sia a scopo commerciale, si citi la fonte e si condivida con la stessa licenza.</p>
+                <h4>Uso consentito</h4>
+                <ul>
+                    <li>Uso educativo e terapeutico</li>
+                    <li>Uso personale e familiare</li>
+                    <li>Condivisione con la stessa licenza</li>
+                    <li>Modifiche e adattamenti (citando la fonte)</li>
+                </ul>
+                <h4>Citazione</h4>
+                <p>Autore dei pittogrammi: Sergio Palao. Origine: ARASAAC (<a href="https://arasaac.org" target="_blank" rel="noopener">arasaac.org</a>). Licenza: CC (BY-NC-SA). Proprietà: Governo di Aragona (Spagna).</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-primary" data-app="chiudi-finestra" data-finestra="arasaacModal">Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- YouTube IFrame Player API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <script src="js/raccolta.js?v=1.0.7"></script>
+    <script src="js/util.js?v=1.0.7"></script>
+    <script src="js/archivio.js?v=1.0.7"></script>
+    <script src="js/oggetto.js?v=1.0.7"></script>
+    <script src="js/ritaglio.js?v=1.0.7"></script>
+    <script src="js/riproduttore.js?v=1.0.7"></script>
+    <script src="js/educatore.js?v=1.0.7"></script>
+    <script src="js/utente.js?v=1.0.7"></script>
+    <script src="js/app.js?v=1.0.7"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js?v=1.0.7')
+                    .then((registrazione) => {
+                        // update() può fallire se nel frattempo il service worker è stato rimosso
+                        setInterval(() => registrazione.update().catch(() => {}), 60000);
+                    })
+                    .catch((errore) => console.error('Service worker non registrato:', errore));
+            });
+        }
+    </script>
+</body>
+</html>

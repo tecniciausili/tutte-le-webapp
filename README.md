@@ -1,7 +1,7 @@
 # Web app Lega del Filo d'Oro: raccolta
 
 Un solo sito con dentro più web app: `index.html` mostra un box per app, e ogni app sta nella sua
-cartella (`/conta_con_le_dita/`, `/scrivo_parole/`, `/frase_minima/`, `/concetti_topologici/`).
+cartella (`/conta_con_le_dita/`, `/scrivo_parole/`, `/frase_minima/`, `/concetti_topologici/`, `/causa-effetto/`, …).
 Così su Azure si occupa **una sola** App Web statica (piano Gratuito) invece di una per app.
 
 Tutte le app sono **statiche** (HTML, CSS, JavaScript) e installabili come PWA (pulsante «Installa sul
@@ -23,7 +23,7 @@ Questo repository è **autonomo**: le app si modificano direttamente qui. Non di
 | `controlla.sh` | Controlli prima del commit e rigenerazione delle due configurazioni |
 
 Le app condividono lo stesso indirizzo (origine), quindi ognuna usa un **prefisso suo** per le chiavi
-di localStorage (`cd_`, `spl_`, `sps_`, `fm_`, `ct_`) e per le cache del service worker. Nessuna app
+di localStorage (`cd_`, `spl_`, `sps_`, `fm_`, `ct_`, `ce_`) e per le cache del service worker. Nessuna app
 deve chiamare `localStorage.clear()`: cancellerebbe i dati di tutte le altre.
 
 ## Frecce di navigazione
