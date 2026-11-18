@@ -31,6 +31,19 @@
     --radius-lg: 22px;
     /* Scala dei box dell'esercizio: modificabile dal menu impostazioni */
     --scala-box: 1;
+    /* Altezza visibile: 1dvh dove esiste (Safari su iPad conta anche la barra
+       degli indirizzi in 100vh, e il contenuto finirebbe sotto lo schermo) */
+    --vh: 1vh;
+    /* Altezza dei tre box numero */
+    --tile-h: calc(clamp(90px, calc(22 * var(--vh)), 230px) * var(--scala-box));
+    /* Lato dei due box grandi: 44% dell'altezza, ma mai più di quanto resta
+       sotto l'header dopo i tre numeri, la consegna e la barra di stato */
+    --big-box: max(140px, min(calc(44 * var(--vh) * var(--scala-box)),
+                              calc(100 * var(--vh) - 72px - var(--tile-h) - 180px)));
+}
+
+@supports (height: 1dvh) {
+    :root { --vh: 1dvh; }
 }
 
 html, body {
@@ -762,8 +775,7 @@ body {
     justify-content: center;
     gap: clamp(12px, 2.5vh, 28px);
     /* Riempie lo schermo sotto l'header: il contenuto resta centrato in verticale */
-    min-height: calc(100vh - 72px);
-    min-height: calc(100dvh - 72px);
+    min-height: calc(100 * var(--vh) - 72px);
 }
 
 .consegna {
@@ -812,9 +824,11 @@ body {
     border: 4px solid var(--color-border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
+    /* Sempre quadrato: largo quanto la colonna, ma non oltre --big-box
+       (prima c'era max-height, che in orizzontale lo schiacciava a rettangolo) */
     aspect-ratio: 1 / 1;
-    width: 100%;
-    max-height: calc(44vh * var(--scala-box));
+    width: min(100%, var(--big-box));
+    justify-self: center;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -841,8 +855,14 @@ body {
 .finger-box { border-color: var(--color-primary-light); }
 
 .finger-box img {
-    max-width: 100%;
-    max-height: 100%;
+    /* Posizionata in assoluto dentro il box: Safari (iPad) non applica
+       max-height: 100% a un figlio di un box alto quanto aspect-ratio,
+       e l'immagine restava alla sua misura reale, tagliata e sotto la didascalia */
+    position: absolute;
+    top: 30px;
+    left: 10px;
+    width: calc(100% - 20px);
+    height: calc(100% - 40px);
     object-fit: contain;
     user-select: none;
     -webkit-user-drag: none;
@@ -902,7 +922,7 @@ body {
 
 /* Numero atterrato nel box di rilascio */
 .dropped-number {
-    font-size: clamp(3rem, min(22vh, 26vw), 12rem);
+    font-size: clamp(3rem, min(calc(var(--big-box) * 0.55), 26vw), 12rem);
     font-weight: 800;
     color: var(--color-success-dark);
     line-height: 1;
@@ -928,14 +948,14 @@ body {
     border: 4px solid var(--color-primary-light);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
-    min-height: calc(clamp(90px, 22vh, 230px) * var(--scala-box));
+    min-height: var(--tile-h);
     padding: 8px;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     line-height: 1;
-    font-size: calc(clamp(2.2rem, min(13vh, 17vw), 8rem) * var(--scala-box));
+    font-size: calc(clamp(2.2rem, min(calc(13 * var(--vh)), 17vw), 8rem) * var(--scala-box));
     font-weight: 800;
     color: var(--color-primary-dark);
     cursor: grab;
@@ -1275,15 +1295,13 @@ body {
     .box-caption { font-size: 0.68rem; }
     /* Su telefono i due box sopra sono limitati dalla larghezza: lo spazio verticale
        che avanza va ai tre numeri, che restano il bersaglio da toccare */
-    .number-tile {
-        border-width: 3px;
-        min-height: calc(clamp(110px, 26vh, 230px) * var(--scala-box));
-    }
+    :root { --tile-h: calc(clamp(110px, calc(26 * var(--vh)), 230px) * var(--scala-box)); }
+    .number-tile { border-width: 3px; }
+    .finger-box img { top: 24px; left: 6px; width: calc(100% - 12px); height: calc(100% - 30px); }
 }
 
 /* Schermi bassi in orizzontale (tablet in landscape): box più compatti */
 @media (max-height: 560px) and (orientation: landscape) {
-    .big-box { max-height: calc(38vh * var(--scala-box)); }
     .consegna { font-size: 1rem; }
     .app-header { padding: 6px 12px; }
 }
