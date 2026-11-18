@@ -33,6 +33,7 @@ body {
     background-attachment: fixed;
     color: var(--text-color);
     min-height: 100vh;
+    min-height: 100dvh;     /* Safari su iPad: 100vh comprende la barra degli indirizzi */
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
@@ -309,6 +310,7 @@ body.user-mode-active .app-main {
     right: -310px;
     width: 300px;
     height: 100vh;
+    height: 100dvh;
     background: white;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
     transition: right 0.3s ease;
@@ -651,6 +653,7 @@ body.user-mode-active .app-main {
 .educatore {
     display: flex;
     min-height: calc(100vh - var(--header-h));
+    min-height: calc(100dvh - var(--header-h));
 }
 
 .pannello-educatore {
@@ -659,6 +662,7 @@ body.user-mode-active .app-main {
     max-width: 620px;
     border-radius: 0;
     min-height: calc(100vh - var(--header-h));
+    min-height: calc(100dvh - var(--header-h));
 }
 
 /* Lo spazio a destra resta libero per la finestra di ricerca di YouTube */

@@ -8,7 +8,7 @@ const CACHE_ARASAAC = `${PREFISSO_CACHE}arasaac`;
 
 const APP_CONFIG = {
   nome: 'Causa Effetto',
-  versione: '1.0.7',
+  versione: '1.0.8',
 };
 window.APP_CONFIG = APP_CONFIG;
 

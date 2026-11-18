@@ -36,6 +36,16 @@
     --scala-box: 1;
     /* Scala del testo (parola) sotto le immagini: modificabile dal menu impostazioni */
     --scala-testo: 1;
+    /* Altezza visibile: 1dvh dove esiste (su iPad 100vh comprende anche
+       la barra di Safari e il fondo della schermata finirebbe fuori) */
+    --vh: 1vh;
+    /* Altezza desiderata dei box (cambia con le media query più sotto) */
+    --slot-h-base: calc(clamp(120px, calc(30 * var(--vh)), 300px) * var(--scala-box));
+    --tile-h-base: calc(clamp(110px, calc(26 * var(--vh)), 280px) * var(--scala-box));
+    /* Spazio che resta per i due file di box sotto header, consegna,
+       frase, barra di stato e spazi: con «Dimensione box» alta i box
+       si fermano qui invece di spingere la barra fuori dallo schermo */
+    --spazio-box: calc(100 * var(--vh) - 315px);
 
     /* Codice colore dei ruoli della frase */
     --col-soggetto: #1565C0;
@@ -44,6 +54,10 @@
     --col-predicato-tenue: #FFEBEE;
     --col-complemento: #2E7D32;
     --col-complemento-tenue: #E8F5E9;
+}
+
+@supports (height: 1dvh) {
+    :root { --vh: 1dvh; }
 }
 
 html, body {
@@ -474,6 +488,11 @@ body {
 
 /* Anteprima dell'immagine scelta per l'elemento */
 .el-preview {
+    position: relative;
+    /* In colonna singola (iPad verticale) l'anteprima non diventa enorme */
+    width: min(100%, 320px);
+    margin-left: auto;
+    margin-right: auto;
     background: white;
     border: 2px dashed var(--color-border);
     border-radius: var(--radius-sm);
@@ -485,7 +504,15 @@ body {
     overflow: hidden;
 }
 
-.el-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.el-preview img {
+    /* In assoluto: Safari ignora max-height: 100% dentro un box alto quanto
+       aspect-ratio, e una foto verticale usciva dall'anteprima */
+    position: absolute;
+    inset: 4px;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    object-fit: contain;
+}
 
 .el-preview .el-vuoto {
     color: var(--color-text-light);
@@ -866,8 +893,7 @@ body {
     flex-direction: column;
     justify-content: center;
     gap: clamp(10px, 2vh, 22px);
-    min-height: calc(100vh - 72px);
-    min-height: calc(100dvh - 72px);
+    min-height: calc(100 * var(--vh) - 72px);
 }
 
 .consegna {
@@ -913,7 +939,7 @@ body {
     box-shadow: var(--shadow-sm);
     /* Altezza fissa: il box non deve crescere quando riceve l'immagine,
        altrimenti il resto della schermata scivola fuori dallo schermo */
-    height: calc(clamp(120px, 30vh, 300px) * var(--scala-box));
+    height: min(var(--slot-h-base), max(90px, calc(var(--spazio-box) * 0.54)));
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1084,7 +1110,7 @@ body {
     background: var(--color-surface);
     border: 5px solid;
     border-radius: var(--radius-lg);
-    height: calc(clamp(110px, 26vh, 280px) * var(--scala-box));
+    height: min(var(--tile-h-base), max(80px, calc(var(--spazio-box) * 0.46)));
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -1493,15 +1519,17 @@ body {
 
 @media (max-width: 520px) {
     .board-top, .board-bottom { gap: 6px; }
+    :root {
+        --slot-h-base: calc(clamp(100px, calc(23 * var(--vh)), 300px) * var(--scala-box));
+        --tile-h-base: calc(clamp(100px, calc(21 * var(--vh)), 280px) * var(--scala-box));
+    }
     .slot {
         border-width: 3px;
         padding: 20px 4px 4px;
-        height: calc(clamp(100px, 23vh, 300px) * var(--scala-box));
     }
     .picto-tile {
         border-width: 4px;
         padding: 6px;
-        height: calc(clamp(100px, 21vh, 280px) * var(--scala-box));
     }
     .slot .slot-label { font-size: 0.58rem; }
     .btn-ripeti { padding: 8px 16px; }
@@ -1509,8 +1537,10 @@ body {
 
 /* Schermi bassi in orizzontale (tablet in landscape): box più compatti */
 @media (max-height: 560px) and (orientation: landscape) {
-    .slot       { height: calc(clamp(90px, 26vh, 300px) * var(--scala-box)); }
-    .picto-tile { height: calc(clamp(90px, 24vh, 280px) * var(--scala-box)); }
+    :root {
+        --slot-h-base: calc(clamp(90px, calc(26 * var(--vh)), 300px) * var(--scala-box));
+        --tile-h-base: calc(clamp(90px, calc(24 * var(--vh)), 280px) * var(--scala-box));
+    }
     .consegna { font-size: 1rem; }
     .app-header { padding: 6px 12px; }
 }

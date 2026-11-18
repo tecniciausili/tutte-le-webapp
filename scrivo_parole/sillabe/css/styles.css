@@ -48,6 +48,12 @@
     --syllable-bg-color: #E3F2FD;
     --syllable-text-color: #1565C0;
     --syllable-border-color: #1976D2;
+    /* Altezza visibile: 1dvh dove esiste (in Safari 100vh include la barra degli indirizzi) */
+    --vh: 1vh;
+}
+
+@supports (height: 1dvh) {
+    :root { --vh: 1dvh; }
 }
 
 body {
@@ -910,7 +916,7 @@ body.user-mode-active .app-main {
 
 .image-box img {
     max-width: 280px;
-    max-height: 280px;
+    max-height: min(280px, calc(30 * var(--vh)));
     width: 100%;
     height: auto;
     border-radius: 20px;
@@ -2257,4 +2263,34 @@ body.user-mode-active .app-main {
 
 .exercise-item-info small {
     color: var(--text-light);
+}
+
+/* ============================================
+   iPad: esercizio dentro lo schermo
+   ============================================ */
+
+/* Box «TU SCRIVI» ingrandito alla risposta giusta: in verticale (iPad 820 px)
+   con scale(1.15) usciva dal bordo destro e copriva lo spazio fra i due box */
+@media (max-width: 900px) {
+    .answer-image-box.correct { transform: scale(1.05); }
+}
+
+/* In orizzontale (iPad, soprattutto con le barre di Safari) il pulsante
+   «Verifica parola» finiva sotto lo schermo: spazi e immagini più compatti */
+@media (orientation: landscape) and (max-height: 900px) {
+    .exercise-main { padding-top: var(--spacing-md); padding-bottom: var(--spacing-md); }
+    .images-comparison-zone { gap: 1.5rem; margin-bottom: 1rem; }
+    .image-box { padding: 0.75rem 1.5rem; }
+    .image-box .image-label { font-size: 1.2rem; margin-bottom: 0.5rem; padding: 0.3rem 0.9rem; }
+    .image-box img { max-height: calc(22 * var(--vh)); }
+    .image-box .no-image { min-height: min(200px, calc(22 * var(--vh))); }
+    .image-box .no-image i { font-size: 3.5rem; margin-bottom: 0.4rem; }
+    .answer-zone { min-height: 84px; margin-bottom: 0.75rem; padding: 0.6rem; }
+    .syllables-zone { padding: 0.5rem; }
+    .syllables-zone { gap: 0.75rem; }
+    .verify-zone { margin-top: 0.5rem; }
+    .verify-hint { display: none; }   /* il pulsante si spiega da solo; la riga finiva sotto lo schermo */
+    .btn-verify { padding: 0.9rem 2.2rem; }
+    /* con lo spazio fra i box ridotto, scale(1.15) faceva toccare i due box */
+    .answer-image-box.correct { transform: scale(1.08); }
 }

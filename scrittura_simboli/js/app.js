@@ -10,7 +10,7 @@ const CACHE_MULBERRY = `${PREFISSO_CACHE}mulberry`;
 
 const APP_CONFIG = {
   nome: 'Scrittura con Simboli',
-  versione: '1.5.4',
+  versione: '1.5.5',
 };
 window.APP_CONFIG = APP_CONFIG;
 

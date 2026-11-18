@@ -2230,3 +2230,128 @@ body {
     flex-direction: column;
     text-align: center;
 }
+
+/* =====================================================
+   ESERCIZI SU TABLET (iPad): box immagine sempre quadrati
+   e sempre dentro lo schermo
+   - il lato scelto con lo slider arriva come --lato (js/esercizio.js)
+     e qui viene ridotto se la colonna o l'altezza non bastano;
+   - l'immagine è in assoluto dentro il box: Safari non applica
+     max-height: 100% dentro un box alto quanto aspect-ratio.
+===================================================== */
+:root { --vh: 1vh; }
+@supports (height: 1dvh) {
+    :root { --vh: 1dvh; }
+}
+
+.exercise-area {
+    --lato: 200px;
+    --spazio-img: 24px;
+    --spazio-col: 16px;
+    /* Altezza utile sotto header e barra Prova/Inizia/Ascolta/Avanti */
+    --alto-utile: calc(100 * var(--vh) - 230px);
+}
+
+.images-column .image-box,
+.image-column .image-display {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    min-height: 0;
+    min-width: 0;
+    flex: 0 0 auto;
+}
+
+/* Parola → Immagine: le due immagini una sopra l'altra */
+.images-column .image-box {
+    width: min(var(--lato), 100%, calc((var(--alto-utile) - var(--spazio-img)) / 2));
+}
+
+/* Immagine → Parola: una sola immagine (la colonna è «auto»: niente 100% qui) */
+.image-column .image-display {
+    width: min(var(--lato), var(--alto-utile));
+    max-width: 100%;
+}
+
+.images-column .image-box img,
+.image-column .image-display img {
+    position: absolute;
+    top: var(--pad-img);
+    left: var(--pad-img);
+    width: calc(100% - 2 * var(--pad-img));
+    height: calc(100% - 2 * var(--pad-img));
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+}
+.images-column .image-box { --pad-img: var(--spacing-lg); }
+.image-column .image-display { --pad-img: var(--spacing-md); }
+
+/* Tablet/computer in orizzontale (Parola → Immagine): la parola e le immagini
+   stanno al centro come gruppo; se la parola è più lunga dello spazio, il suo
+   box si ferma al bordo e la parola va a capo invece di uscire dallo schermo */
+@media (orientation: landscape) and (min-width: 901px) {
+    .exercise-area:has(.word-column) {
+        grid-template-columns: minmax(0, max-content) max-content;
+        justify-content: center;
+    }
+    .images-column .image-box {
+        width: min(var(--lato), calc((var(--alto-utile) - var(--spazio-img)) / 2));
+    }
+    /* Immagine → Parola: le parole restano su una riga; se lo spazio non basta
+       è l'immagine a rimpicciolirsi (prima le parole uscivano dallo schermo) */
+    .exercise-area:has(.image-column) {
+        grid-template-columns: minmax(0, max-content) minmax(max-content, 1fr);
+    }
+    .image-column { min-width: 0; }
+}
+.word-column .word-display { max-width: 100%; }
+.word-column .word-text,
+.words-column .word-box .word-option { white-space: normal; overflow-wrap: anywhere; }
+
+/* Telefono in orizzontale: immagini affiancate */
+@media (max-width: 900px) and (orientation: landscape) {
+    .images-column .image-box {
+        width: min(var(--lato), calc((100% - var(--spazio-img)) / 2), var(--alto-utile));
+    }
+}
+
+/* Tablet in verticale (iPad): lo stimolo sopra a tutta larghezza, le risposte sotto.
+   Prima le due colonne affiancate lasciavano 300 px a testa: le immagini diventavano
+   strisce strette e le parole andavano a capo lettera per lettera */
+@media (orientation: portrait) and (min-width: 601px) {
+    .exercise-area:has(.word-column),
+    .exercise-area:has(.image-column) {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+    .word-column { justify-content: center; width: 100%; }
+    .word-display { min-height: 180px; max-width: 100%; }
+    .word-column .word-text, .word-box .word-option { word-break: normal; overflow-wrap: anywhere; }
+
+    .images-column {
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+    }
+    .images-column .image-box {
+        /* sopra resta la parola (circa 190 px) e lo spazio fra le righe */
+        width: min(var(--lato), calc((100% - var(--spazio-img)) / 2),
+                   calc(var(--alto-utile) - 190px - var(--spazio-col)));
+    }
+
+    .image-column { width: 100%; }
+    .image-column .image-display {
+        /* sotto restano le due parole (circa 2 × 165 px) e gli spazi */
+        width: min(var(--lato), 100%,
+                   calc(var(--alto-utile) - 330px - var(--spazio-img) - var(--spazio-col)));
+    }
+    .words-column { flex-direction: column; width: 100%; }
+}
+
+
+/* Messaggio «Inserisci una parola per cercare…» a tutta larghezza:
+   prima stava nella prima cella da 100 px e andava a capo parola per parola */
+.pictogram-grid > .loading {
+    grid-column: 1 / -1;
+}

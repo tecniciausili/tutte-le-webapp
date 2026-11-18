@@ -50,6 +50,8 @@
     /* Transizioni */
     --transition-fast: 0.15s ease;
     --transition-normal: 0.3s ease;
+    /* Altezza visibile: 1dvh dove esiste (in Safari 100vh include la barra degli indirizzi) */
+    --vh: 1vh;
 }
 
 * {
@@ -977,7 +979,11 @@ body {
 
 .answer-boxes {
     display: flex;
-    justify-content: center;
+    /* Centratura "sicura": con justify-content: center, se le caselle non
+       stanno nella riga le prime finiscono a sinistra fuori dal box e non si
+       possono più raggiungere scorrendo. I margini automatici del primo e
+       dell'ultimo box centrano senza tagliare (vedi sotto). */
+    justify-content: flex-start;
     gap: var(--spacing-sm);
     flex-wrap: nowrap;
     min-height: 80px;
@@ -1121,8 +1127,9 @@ body {
     display: flex;
     justify-content: center;
     gap: var(--spacing-sm);
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    /* Le lettere vanno a capo invece di uscire dal box: con la dimensione
+       ingrandita dal menu, in una riga sola le prime restavano tagliate */
+    flex-wrap: wrap;
 }
 
 .letter-btn {
@@ -1573,7 +1580,11 @@ body {
     box-shadow: var(--shadow-md); position: relative;
     min-height: 200px; display: flex; align-items: center; justify-content: center;
 }
-.stimulus-image { max-width: 250px; max-height: 250px; object-fit: contain; }
+.stimulus-image {
+    max-width: min(250px, 100%);
+    max-height: min(250px, calc(30 * var(--vh)));
+    object-fit: contain;
+}
 .stimulus-word {
     font-size: 3rem; font-weight: bold; color: var(--primary-color);
     text-transform: uppercase; letter-spacing: 0.15em;
@@ -1928,4 +1939,26 @@ body {
 #btnNextCountdown {
     font-weight: 700;
     font-variant-numeric: tabular-nums;
+}
+
+@supports (height: 1dvh) {
+    :root { --vh: 1dvh; }
+}
+
+/* =====================================================
+   iPad: pagina esercizio dentro lo schermo
+===================================================== */
+.answer-boxes > :first-child { margin-left: auto; }
+.answer-boxes > :last-child  { margin-right: auto; }
+
+/* In orizzontale (iPad, soprattutto con le barre di Safari) le lettere da
+   toccare finivano sotto lo schermo: spazi e immagine più compatti */
+@media (orientation: landscape) and (max-height: 900px) {
+    .exercise-main { padding-top: var(--spacing-md); padding-bottom: var(--spacing-md); }
+    .exercise-toolbar { padding: var(--spacing-sm) var(--spacing-lg); margin-bottom: var(--spacing-md); }
+    .exercise-area { gap: var(--spacing-md); }
+    .stimulus-display { padding: var(--spacing-md); min-height: 0; }
+    .stimulus-image { max-height: calc(22 * var(--vh)); }
+    .answer-area, .letters-area { padding: var(--spacing-md) var(--spacing-lg); }
+    .answer-header, .letters-label { margin-bottom: var(--spacing-sm); }
 }

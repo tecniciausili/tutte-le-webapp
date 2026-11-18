@@ -17,8 +17,8 @@
     <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
-    <link rel="stylesheet" href="css/styles.css?v=1.0.7">
-    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css?v=1.0.7">
+    <link rel="stylesheet" href="css/styles.css?v=1.0.8">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css?v=1.0.8">
 </head>
 <body>
     <header class="app-header">
@@ -188,20 +188,20 @@
     <!-- YouTube IFrame Player API -->
     <script src="https://www.youtube.com/iframe_api"></script>
 
-    <script src="js/raccolta.js?v=1.0.7"></script>
-    <script src="js/util.js?v=1.0.7"></script>
-    <script src="js/archivio.js?v=1.0.7"></script>
-    <script src="js/oggetto.js?v=1.0.7"></script>
-    <script src="js/ritaglio.js?v=1.0.7"></script>
-    <script src="js/riproduttore.js?v=1.0.7"></script>
-    <script src="js/educatore.js?v=1.0.7"></script>
-    <script src="js/utente.js?v=1.0.7"></script>
-    <script src="js/app.js?v=1.0.7"></script>
+    <script src="js/raccolta.js?v=1.0.8"></script>
+    <script src="js/util.js?v=1.0.8"></script>
+    <script src="js/archivio.js?v=1.0.8"></script>
+    <script src="js/oggetto.js?v=1.0.8"></script>
+    <script src="js/ritaglio.js?v=1.0.8"></script>
+    <script src="js/riproduttore.js?v=1.0.8"></script>
+    <script src="js/educatore.js?v=1.0.8"></script>
+    <script src="js/utente.js?v=1.0.8"></script>
+    <script src="js/app.js?v=1.0.8"></script>
 
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js?v=1.0.7')
+                navigator.serviceWorker.register('./service-worker.js?v=1.0.8')
                     .then((registrazione) => {
                         // update() può fallire se nel frattempo il service worker è stato rimosso
                         setInterval(() => registrazione.update().catch(() => {}), 60000);

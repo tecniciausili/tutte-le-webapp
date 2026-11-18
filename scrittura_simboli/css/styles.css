@@ -218,6 +218,13 @@ html:not(.icone-pronte) .ms {
     --alto-colonne: clamp(320px, calc(100vh - 380px), 1400px);
 }
 
+/* iPad: in Safari 100vh comprende anche la barra degli indirizzi (quando si
+   compatta), così il fondo delle colonne poteva finire sotto la barra.
+   dvh è l'altezza davvero visibile. */
+@supports (height: 1dvh) {
+    .lavoro { --alto-colonne: clamp(320px, calc(100dvh - 380px), 1400px); }
+}
+
 /* Barra degli strumenti: grandezza, grassetto e colore del testo, grandezza delle immagini */
 .strumenti {
     background: var(--card-bg);

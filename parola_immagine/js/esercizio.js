@@ -478,16 +478,11 @@ function updateFontSize(value, salva = true) {
     if (salva) salvaPreferenza('fontSize', value);
 }
 
-// Lo slider dimensiona il BOX; l'immagine si adatta dentro (max 100%)
+// Lo slider dà il lato del BOX (quadrato) come variabile CSS --lato: il CSS lo
+// riduce quando lo schermo non basta (iPad in verticale, Safari con le barre),
+// così le immagini non escono dallo schermo e non si schiacciano a striscia
 function updateImageSize(value, salva = true) {
-    const boxes = PAROLA_IMMAGINE
-        ? [...document.querySelectorAll('.images-column .image-box')]
-        : [document.getElementById('imageDisplay')];
-    boxes.forEach((box) => {
-        box.style.width = `${value}px`;
-        box.style.height = `${value}px`;
-        box.style.minHeight = `${value}px`;
-    });
+    document.getElementById('exerciseArea').style.setProperty('--lato', `${value}px`);
     document.getElementById('imageValue').textContent = value;
     if (salva) salvaPreferenza('imageSize', value);
 }
@@ -495,12 +490,15 @@ function updateImageSize(value, salva = true) {
 function updateGap(value, salva = true) {
     const colonna = document.querySelector(PAROLA_IMMAGINE ? '.images-column' : '.words-column');
     if (colonna) colonna.style.gap = `${value}px`;
+    document.getElementById('exerciseArea').style.setProperty('--spazio-img', `${value}px`);
     document.getElementById('gapValue').textContent = value;
     if (salva) salvaPreferenza('gap', value);
 }
 
 function updateColumnGap(value, salva = true) {
-    document.getElementById('exerciseArea').style.gap = `${value}px`;
+    const area = document.getElementById('exerciseArea');
+    area.style.gap = `${value}px`;
+    area.style.setProperty('--spazio-col', `${value}px`);
     document.getElementById('colGapValue').textContent = value;
     if (salva) salvaPreferenza('colGap', value);
 }

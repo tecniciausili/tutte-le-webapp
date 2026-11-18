@@ -6,7 +6,7 @@
 // Tutte le cache iniziano con PREFISSO: sullo stesso dominio ci sono altre app,
 // e le loro cache non vanno toccate.
 const PREFISSO = 'scrivo_parole_con_le_lettere_';
-const CACHE_NAME = `${PREFISSO}v3.0.8`;
+const CACHE_NAME = `${PREFISSO}v3.0.9`;
 
 const URLS_TO_CACHE = [
   './',
