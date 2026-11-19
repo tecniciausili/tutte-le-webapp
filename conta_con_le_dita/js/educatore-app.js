@@ -1,6 +1,5 @@
 /**
  * Conta con le Dita - Area Educatore
- * AssistiveTech.it - Training Cognitivo
  *
  * L'educatore sceglie un'immagine di dita dalla galleria (cartella assets/dita/)
  * e scrive i 3 numeri che l'utente vedrà nei box in basso: uno corrisponde alle

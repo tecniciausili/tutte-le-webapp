@@ -1,6 +1,5 @@
 /**
  * Parola-Immagine - Esercizi (Area Utente)
- * AssistiveTech.it - Training Cognitivo
  *
  * Un solo script per i due esercizi; la pagina sceglie con <body data-modo="...">:
  *   parola-immagine  → si vede (e si ascolta) la PAROLA, si sceglie tra due IMMAGINI

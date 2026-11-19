@@ -1,6 +1,6 @@
 /**
  * Concetti topologici - Concetti, coppie, geometria e disegno delle scene (SVG)
- * AssistiveTech.it - Web App autonoma
+ * Web App autonoma
  *
  * Ogni scena è disegnata in un SVG con viewBox 400×300 (più una striscia «vassoio» sotto
  * nella modalità Esegui). Le posizioni sono fisse per coppia: così, in Esegui, i due posti

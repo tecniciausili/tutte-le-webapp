@@ -5,10 +5,10 @@
 // - Scontorno delle foto: runtime onnxruntime-web (jsDelivr, versione fissata) e modello
 //   modelli/u2netp.onnx (~4,5 MB): scaricati al primo uso, poi dalla cache (anche offline).
 // - I dati (profilo, foto, risultati) NON passano di qui: stanno in localStorage e IndexedDB.
-// Tutte le cache dell'app iniziano con PREFISSO: sullo stesso dominio (assistivetech.it/webapp/)
+// Tutte le cache dell'app iniziano con PREFISSO: sullo stesso dominio
 // ci sono altre app, e le loro cache non vanno toccate.
 const PREFISSO = 'concetti_topologici_';
-const CACHE_NAME = `${PREFISSO}v1.1.6`;
+const CACHE_NAME = `${PREFISSO}v1.1.7`;
 const CACHE_ARASAAC = `${PREFISSO}arasaac`;
 const CACHE_MODELLI = `${PREFISSO}modelli`;
 const LIMITE_ARASAAC = 800;

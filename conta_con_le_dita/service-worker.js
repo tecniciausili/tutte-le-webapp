@@ -2,10 +2,9 @@
 // Strategia: prima la rete per i file dell'app (stessa origine), poi la cache
 // quando si è offline. I dati (esercizi, risultati) NON passano di qui: stanno
 // in localStorage.
-// Tutte le cache iniziano con PREFISSO: sullo stesso dominio (per esempio
-// assistivetech.it/webapp/) ci sono altre app, e le loro cache non vanno toccate.
+// Tutte le cache iniziano con PREFISSO: sullo stesso dominio ci sono altre app, e le loro cache non vanno toccate.
 const PREFISSO = 'conta_con_le_dita_';
-const CACHE_NAME = `${PREFISSO}v1.1.11`;
+const CACHE_NAME = `${PREFISSO}v1.1.12`;
 
 const URLS_TO_CACHE = [
   './',

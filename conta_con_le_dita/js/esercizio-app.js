@@ -1,6 +1,5 @@
 /**
  * Conta con le Dita - Area Utente
- * AssistiveTech.it - Training Cognitivo
  *
  * L'utente vede l'immagine di una mano (o due) e trascina nel box accanto
  * il numero corrispondente, scegliendolo fra i tre riquadri in basso.

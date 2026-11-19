@@ -1,6 +1,6 @@
 // ==================== UTILITÀ COMUNI ====================
 // Piccole funzioni usate da tutti i moduli. Nessuna dipendenza.
-// Stesse regole delle altre app di assistivetech.it/webapp.
+// Stesse regole delle altre app della raccolta.
 
 const Util = {
   // Protegge il testo quando finisce dentro innerHTML

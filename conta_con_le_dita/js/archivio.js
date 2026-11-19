@@ -3,7 +3,7 @@
 // UN DISPOSITIVO = UN UTENTE, nessun server: tutto in localStorage.
 //
 // Le chiavi hanno il prefisso "cd_" perché sullo stesso dominio
-// (es. assistivetech.it/webapp/) ci sono altre app: i loro dati NON vanno toccati.
+// ci sono altre app: i loro dati NON vanno toccati.
 //
 //  - cd_config     → elenco degli esercizi configurati dall'educatore
 //  - cd_risultati  → storico delle esecuzioni dell'utente

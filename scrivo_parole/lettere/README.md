@@ -7,7 +7,7 @@ compare lo stimolo e l'utente compone la parola toccando o trascinando le letter
 Applicazione **statica** (HTML/CSS/JavaScript), installabile come PWA su tablet Android, iPad e
 computer. **Un dispositivo = un utente**: non c'è registrazione né login, i dati restano nel browser.
 
-> Versione autonoma del modulo che faceva parte del portale assistivetech.it (backend PHP + MySQL).
+> Versione autonoma di un modulo che aveva un backend PHP + MySQL.
 > Qui il backend è sostituito da un archivio locale in `localStorage` (`js/archivio.js`).
 
 ## Funzionalità

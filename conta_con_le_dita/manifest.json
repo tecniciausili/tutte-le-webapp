@@ -1,5 +1,5 @@
 {
-    "name": "Conta con le Dita - AssistiveTech",
+    "name": "Conta con le Dita",
     "short_name": "Conta Dita",
     "description": "Riconoscimento della quantità mostrata con le dita: trascina il numero corretto",
     "start_url": "./index.html",

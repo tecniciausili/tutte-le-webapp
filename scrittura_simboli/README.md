@@ -119,14 +119,12 @@ Si può anche aprire `index.html` con un doppio clic: tutto funziona tranne inst
 Dopo ogni modifica si aumenta la versione in `service-worker.js` (`CACHE_NAME`), il `?v=` in
 `index.html` e `APP_CONFIG.versione` in `js/app.js`.
 
-## Pubblicazione nel portale assistivetech.it
+## Pubblicazione
 
-- Cartella `scrittura_simboli` caricata intera via FTP dentro `webapp/`; voce «Scrittura con
-  Simboli» nell'array `APP` di `webapp/index.html`.
-- Indirizzo: `https://www.assistivetech.it/webapp/scrittura_simboli/`.
-- Non serve caricare `README.md`, `serve.json`, `staticwebapp.config.json`, `.gitignore`, `strumenti/`.
+- L'app è la cartella `scrittura_simboli/` del repository **tutte-le-webapp**, con la sua voce
+  nell'elenco `APP` dell'`index.html` della radice. Ogni `git push` sul ramo `main` aggiorna il sito.
 - Cache con prefisso `scrittura_simboli_`, dati con chiavi `ss_…` e database `scrittura-simboli`:
-  non toccano le altre app del dominio.
+  non toccano le altre app dello stesso indirizzo.
 
 ## Su tablet
 

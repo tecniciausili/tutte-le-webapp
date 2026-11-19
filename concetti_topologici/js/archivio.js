@@ -1,6 +1,5 @@
 /**
  * Concetti topologici - Archivio sul dispositivo (Web App autonoma)
- * AssistiveTech.it
  *
  * Come nelle altre web app autonome: UN DISPOSITIVO = UN UTENTE, nessun server, nessun login.
  *   - Profilo (impostazioni e scene)          → localStorage «ct_profilo» (JSON)

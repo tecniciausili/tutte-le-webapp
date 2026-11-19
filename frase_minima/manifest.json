@@ -1,5 +1,5 @@
 {
-    "name": "Frase Minima - AssistiveTech",
+    "name": "Frase Minima",
     "short_name": "Frase Minima",
     "description": "Composizione di frasi minime: soggetto, predicato e complemento. Web app autonoma: i dati restano sul dispositivo.",
     "start_url": "./index.html",

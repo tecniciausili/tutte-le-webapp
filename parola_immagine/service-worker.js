@@ -7,7 +7,7 @@
 // cache non vanno toccate.
 // Quando si modifica l'app: aumentare la versione qui (e i ?v= nelle pagine).
 const PREFISSO = 'parola_immagine_';
-const CACHE_NAME = `${PREFISSO}v3.0.4`;
+const CACHE_NAME = `${PREFISSO}v3.0.5`;
 
 const URLS_TO_CACHE = [
   './',

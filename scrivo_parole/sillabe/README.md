@@ -8,8 +8,8 @@ dimensione del testo e colori delle sillabe si scelgono per ogni esercizio.
 Applicazione **statica** (HTML/CSS/JavaScript), installabile come PWA su tablet Android, iPad e
 computer. **Un dispositivo = un utente**: non c'è registrazione né login, i dati restano nel browser.
 
-> Versione autonoma del modulo che faceva parte del portale assistivetech.it (backend su server
-> con database). Qui il backend è sostituito da un archivio locale in `localStorage`
+> Versione autonoma di un modulo che aveva un backend su server
+> con database. Qui il backend è sostituito da un archivio locale in `localStorage`
 > (`js/archivio.js`). Sta in `scrivo_parole/sillabe/`, accanto a `scrivo_parole/lettere/`: la pagina
 > `scrivo_parole/index.html` fa scegliere fra le due.
 

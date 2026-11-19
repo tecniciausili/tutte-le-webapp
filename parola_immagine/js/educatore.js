@@ -1,6 +1,5 @@
 /**
  * Parola-Immagine - Area Educatore
- * AssistiveTech.it - Training Cognitivo
  *
  * L'educatore crea le coppie: TARGET (immagine giusta) e DISTRATTORE (immagine sbagliata),
  * ciascuna con la sua parola. Le immagini sono pittogrammi ARASAAC oppure foto del dispositivo.

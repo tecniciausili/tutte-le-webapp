@@ -1,6 +1,5 @@
 /**
  * Scrivo Parole con le Lettere - Area Educatore
- * AssistiveTech.it - Training Cognitivo
  */
 
 // =====================================================

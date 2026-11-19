@@ -1,13 +1,11 @@
 # Parola-Immagine
 
-Esercizio di Training Cognitivo - AssistiveTech.it
 Categoria: **leggo-scrivo**
 
 Applicazione **statica** (HTML/CSS/JavaScript), installabile come PWA su tablet Android, iPad e
 computer. **Un dispositivo = un utente**: non c'è registrazione né login, i dati restano nel browser.
 
-> Versione autonoma del modulo `training_cognitivo/leggoscrivo/parolaimmagine` del portale
-> assistivetech.it, che usava un database sul server (API PHP, tabelle `parola_immagine_*`,
+> Versione autonoma di un modulo che usava un database sul server (API PHP, tabelle `parola_immagine_*`,
 > taratura font per utente). Qui l'archivio è locale (`js/archivio.js`): nessun server necessario.
 
 ## Cosa fa

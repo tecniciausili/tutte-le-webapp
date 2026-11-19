@@ -1,6 +1,6 @@
 /**
  * Concetti topologici - Esercizio (Area Utente)
- * AssistiveTech.it - Web App autonoma (un dispositivo = un utente, nessun server)
+ * Web App autonoma (un dispositivo = un utente, nessun server)
  *
  * L'utente è sordo: nessuna domanda scritta o parlata, nessun suono. Per ogni scena:
  *   1. pausa LIS «prima»: si vede la scena (o la consegna in Esegui); l'educatore segna

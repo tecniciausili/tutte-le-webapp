@@ -1,6 +1,6 @@
 /**
  * Concetti topologici - Icone e utilità comuni
- * AssistiveTech.it - Web App autonoma (un dispositivo = un utente, nessun server)
+ * Web App autonoma (un dispositivo = un utente, nessun server)
  */
 window.CT = window.CT || {};
 

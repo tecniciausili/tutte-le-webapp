@@ -1,7 +1,7 @@
 /**
  * Aggiorna l'app: scarica di nuovo i file dalla rete.
  *
- * ATTENZIONE: su questo dominio convivono più app (assistivetech.it/webapp/...),
+ * ATTENZIONE: su questo dominio convivono più app,
  * che condividono localStorage e la lista delle cache. Quindi qui si tocca SOLO
  * questa app:
  *   - NON si cancella localStorage: contiene gli esercizi e i risultati dell'utente.

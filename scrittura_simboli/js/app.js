@@ -161,7 +161,7 @@ const App = (() => {
   }
 
   // Svuota solo la cache dei file di questa app: testo, simboli scelti e foto restano.
-  // Sullo stesso dominio ci sono altre app (assistivetech.it/webapp/): i loro
+  // Sullo stesso dominio ci sono altre app: i loro
   // service worker e le loro cache non vanno toccati.
   async function aggiorna() {
     alternaMenu(false);

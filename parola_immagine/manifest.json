@@ -1,5 +1,5 @@
 {
-    "name": "Parola-Immagine - AssistiveTech",
+    "name": "Parola-Immagine",
     "short_name": "Parola-Immagine",
     "description": "Associazione parola-pittogramma: dalla parola all'immagine e dall'immagine alla parola. Web app autonoma: i dati restano sul dispositivo.",
     "start_url": "./index.html",

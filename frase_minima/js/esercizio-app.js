@@ -1,6 +1,5 @@
 /**
  * Frase Minima - Area Utente
- * AssistiveTech.it - Training Cognitivo
  *
  * L'utente compone la frase trascinando i tre pittogrammi nei box colorati,
  * rispettando la sequenza: soggetto (blu) -> predicato (rosso) -> complemento (verde).

@@ -1,5 +1,5 @@
 {
-    "name": "Scrivo parole - AssistiveTech",
+    "name": "Scrivo parole",
     "short_name": "Scrivo parole",
     "description": "Comporre parole con le lettere o con le sillabe: l'educatore sceglie l'esercizio, prepara le parole e vede i risultati.",
     "start_url": "./index.html",

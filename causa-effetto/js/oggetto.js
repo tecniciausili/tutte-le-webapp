@@ -1,6 +1,6 @@
 // ==================== OGGETTI DA TOCCARE ====================
 // Ogni oggetto è un pittogramma ARASAAC (si salva solo l'id, l'immagine arriva dal
-// server ARASAAC come nelle app di assistivetech) oppure un'immagine caricata
+// server ARASAAC come nelle altre app) oppure un'immagine caricata
 // dal dispositivo (salvata in IndexedDB). L'elenco sta in Archivio.
 // Qui ci sono anche le regole di aspetto comuni ad Area Educatore e Area Utente:
 // dimensione dell'oggetto e sfondo.

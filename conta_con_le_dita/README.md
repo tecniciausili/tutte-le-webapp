@@ -7,8 +7,8 @@ compare l'immagine e l'utente trascina nel box il numero giusto, scegliendolo fr
 Applicazione **statica** (HTML/CSS/JavaScript), installabile come PWA su tablet Android, iPad e
 computer. **Un dispositivo = un utente**: non c'è registrazione né login, i dati restano nel browser.
 
-> Versione autonoma del modulo originariamente parte del portale assistivetech.it (che usava un
-> backend PHP + MySQL). Qui il backend è stato sostituito da un archivio locale in `localStorage`
+> Versione autonoma di un modulo che usava un
+> backend PHP + MySQL. Qui il backend è stato sostituito da un archivio locale in `localStorage`
 > (`js/archivio.js`): nessun server, nessuna rete necessaria.
 
 ## Funzionalità

@@ -118,8 +118,7 @@ file vecchi.
 
 L'app è la cartella `causa-effetto/` del repository **tutte-le-webapp** (GitHub → Azure Static
 Web Apps), con la sua voce nell'elenco `APP` dell'`index.html` della radice. Ogni `git push` sul
-ramo `main` aggiorna il sito. La stessa cartella si può caricare anche nel portale
-`https://www.assistivetech.it/webapp/causa-effetto/` (FileZilla).
+ramo `main` aggiorna il sito.
 
 - Tutte le app dello stesso indirizzo condividono cache e dati del browser, per questo:
   - il service worker cancella solo le proprie cache (prefisso `causa_effetto_`);

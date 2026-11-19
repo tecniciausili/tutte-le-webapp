@@ -1,6 +1,5 @@
 /**
  * Concetti topologici - Area Educatore (Web App autonoma)
- * AssistiveTech.it
  *
  * UN DISPOSITIVO = UN UTENTE: niente login, tutto resta su questo dispositivo.
  * L'educatore (o il familiare) prepara per l'utente:

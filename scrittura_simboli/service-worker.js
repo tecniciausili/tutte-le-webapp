@@ -2,7 +2,7 @@
 // Strategia: prima la rete per i file dell'app (stessa origine), cache senza rete.
 // Tutto è sullo stesso dominio, anche i font e le emoji: l'app funziona offline.
 // I dati (testo, simboli scelti, foto) NON passano di qui: stanno in localStorage e IndexedDB.
-// Tutte le cache dell'app iniziano con PREFISSO: sullo stesso dominio (assistivetech.it/webapp/)
+// Tutte le cache dell'app iniziano con PREFISSO: sullo stesso dominio
 // ci sono altre app, e le loro cache non vanno toccate.
 const PREFISSO = 'scrittura_simboli_';
 const CACHE_NAME = `${PREFISSO}v1.5.5`;

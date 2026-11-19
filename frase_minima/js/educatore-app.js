@@ -1,6 +1,5 @@
 /**
  * Frase Minima - Area Educatore
- * AssistiveTech.it - Training Cognitivo
  *
  * L'educatore compone una frase minima con tre elementi in sequenza:
  * soggetto (blu), predicato (rosso), complemento (verde).

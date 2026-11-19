@@ -1,13 +1,12 @@
 # Frase Minima
 
-Esercizio di Training Cognitivo - AssistiveTech.it
 Categoria: **leggo-scrivo**
 
 Applicazione **statica** (HTML/CSS/JavaScript), installabile come PWA su tablet Android, iPad e
 computer. **Un dispositivo = un utente**: non c'è registrazione né login, i dati restano nel browser.
 
-> Versione autonoma del modulo che faceva parte del portale assistivetech.it (con un archivio sul
-> server). Qui l'archivio è locale, in `localStorage` (`js/archivio.js`): nessun server necessario.
+> Versione autonoma di un modulo che aveva un archivio sul
+> server. Qui l'archivio è locale, in `localStorage` (`js/archivio.js`): nessun server necessario.
 
 ## Cosa fa
 
