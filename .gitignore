@@ -33,3 +33,7 @@ skills-lock.json
 
 # File dei test nel browser (Playwright)
 .playwright-mcp/
+
+# Installatori Windows di Mastertutor (oltre 100 MB: stanno nelle Release di GitHub, non nel sito)
+/installatori/
+*.exe

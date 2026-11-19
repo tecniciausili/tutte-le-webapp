@@ -196,6 +196,9 @@
         // icona (facoltativa): percorso dell'icona dentro la cartella dell'app
         // apk (facoltativo): il box scarica questo file Android invece di aprire una pagina
         //   (nella cartella c'è anche versione.json con versione, data e byte dell'APK)
+        // url (al posto di cartella): il box scarica da un indirizzo esterno, per esempio
+        //   l'installatore Windows pubblicato come Release su GitHub (troppo grande per il sito);
+        //   icona è allora il percorso dalla radice, sistema e dettaglio il testo del box
         // Scrivere ogni voce su una riga «cartella: '...'»: controlla.sh legge l'elenco da qui.
         const APP = [
             { cartella: 'conta_con_le_dita', nome: 'Conta con le dita' },
@@ -208,6 +211,7 @@
             { cartella: 'apprendere_categorie', nome: 'Apprendere Categorie' },
             { cartella: 'mastertutor', nome: 'Mastertutor' },
             { cartella: 'mastertutor-android', nome: 'Mastertutor Android', icona: '../mastertutor/assets/icons/icon-192.png', apk: 'Mastertutor.apk' },
+            { nome: 'Mastertutor Windows', url: 'https://github.com/tecniciausili/mastertutor/releases/download/windows-1.0.16/Mastertutor-Setup-1.0.16.exe', icona: 'mastertutor/assets/icons/icon-192.png', sistema: 'Windows', dettaglio: 'Versione 1.0.16 · installatore da 109 MB' },
         ];
 
         const ICONA_PREDEFINITA = 'assets/icons/icon-192.png';
@@ -227,7 +231,7 @@
             const voce = document.createElement('li');
             const link = document.createElement('a');
             link.className = 'app';
-            link.href = app.apk ? `${app.cartella}/${app.apk}` : `${app.cartella}/`;
+            link.href = app.url || (app.apk ? `${app.cartella}/${app.apk}` : `${app.cartella}/`);
             if (app.apk) link.setAttribute('download', app.apk);
 
             const icona = document.createElement('span');
@@ -235,7 +239,7 @@
             icona.setAttribute('aria-hidden', 'true');
             const img = document.createElement('img');
             img.alt = '';
-            img.src = `${app.cartella}/${app.icona || ICONA_PREDEFINITA}`;
+            img.src = app.cartella ? `${app.cartella}/${app.icona || ICONA_PREDEFINITA}` : app.icona;
             img.onerror = () => {   // senza icona: l'iniziale del nome
                 img.remove();
                 icona.textContent = app.nome.charAt(0).toUpperCase();
@@ -248,12 +252,14 @@
 
             const dettaglio = document.createElement('span');
             dettaglio.className = 'dettaglio';
+            if (app.dettaglio) dettaglio.textContent = app.dettaglio;
 
             const apri = document.createElement('span');
             apri.className = 'apri';
             apri.setAttribute('aria-hidden', 'true');
-            apri.textContent = app.apk ? 'Scarica per Android ↓' : 'Apri →';
-            link.setAttribute('aria-label', app.apk ? `Scarica ${app.nome} per Android` : `Apri ${app.nome}`);
+            const sistema = app.apk ? 'Android' : app.sistema;
+            apri.textContent = sistema ? `Scarica per ${sistema} ↓` : 'Apri →';
+            link.setAttribute('aria-label', sistema ? `Scarica ${app.nome} per ${sistema}` : `Apri ${app.nome}`);
 
             link.append(icona, nome, dettaglio, apri);
             voce.appendChild(link);

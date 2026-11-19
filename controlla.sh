@@ -47,6 +47,7 @@ fi
 for d in "$QUI"/*/; do
   d=$(basename "$d")
   [ "$d" = api ] && continue   # funzione Azure, non un'app
+  [ "$d" = installatori ] && continue   # installatori Windows, esclusi da git
   [[ " ${APP[*]} " == *" $d "* ]] || echo "⚠ $d: cartella non presente nell'elenco APP di index.html"
 done
 

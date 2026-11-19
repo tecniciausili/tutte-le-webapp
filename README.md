@@ -23,6 +23,7 @@ Questo repository è **autonomo**: le app si modificano direttamente qui. Non di
 | `controlla.sh` | Controlli prima del commit e rigenerazione delle due configurazioni |
 | `api/` | Funzione Azure `api/negotiate` per le prese Tapo di Mastertutor (vedi `mastertutor/README.md`). Non è un'app |
 | `mastertutor-android/` | `Mastertutor.apk` e `versione.json`: il riquadro dell'indice scarica l'APK (voce `apk` nell'elenco `APP`) |
+| Mastertutor Windows | Nessuna cartella: l'installatore (oltre 100 MB, troppo grande per GitHub e per il sito) è una **Release** del repository `tecniciausili/mastertutor`; nell'elenco `APP` c'è una voce con `url` al posto di `cartella`. A ogni versione nuova si aggiornano `url` e `dettaglio` |
 
 Le app condividono lo stesso indirizzo (origine), quindi ognuna usa un **prefisso suo** per le chiavi
 di localStorage (`cd_`, `spl_`, `sps_`, `fm_`, `ct_`, `ce_`, `ac_`, `mt_`) e per le cache del service worker. Nessuna app
