@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1f2937">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Categorie">
+<meta name="description" content="Comunicatore a griglie: dalla categoria all'elemento, fino alla frase letta ad alta voce.">
+<title>Apprendere Categorie</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
+<script src="js/raccolta.js?v=1.0.0"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{overscroll-behavior:none;touch-action:manipulation;margin:0;height:100%;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f3f4f6;color:#111}
+#app{display:flex;flex-direction:column;height:100dvh}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px;background:#1f2937;color:#fff}
+.bar .sp{flex:1}
+.bar button,.bar select{font-size:1rem;padding:8px 12px;border-radius:10px;border:0;background:#374151;color:#fff;min-height:44px}
+.bar button.big{font-size:1.5rem;min-width:56px}
+.bar button.on{background:#2563eb}
+.bar .stepper{display:flex;align-items:center;gap:4px;font-size:.9rem}
+.bar .stepper button{min-width:36px;padding:8px}
+.grid{flex:1;min-height:0;display:grid;gap:10px;padding:10px}
+.cell{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:0;min-height:0;border:4px solid rgba(0,0,0,.28);border-radius:18px;padding:8px;font:inherit;cursor:pointer;overflow:hidden}
+.cell:active{transform:scale(.97)}
+.cell img{flex:1;min-height:0;max-width:100%;object-fit:contain}
+.cell span.t{font-weight:700;font-size:clamp(1rem,3.2vmin,2.4rem);text-align:center;line-height:1.1;word-break:break-word}
+.cell.ghost{border:0;background:transparent;pointer-events:none}
+.cell.emptyedit{background:#fff;border:3px dashed #9ca3af;color:#9ca3af;font-size:2rem}
+.badge{position:absolute;top:4px;right:6px;font-size:1rem;background:rgba(255,255,255,.85);color:#111;border-radius:8px;padding:0 6px}
+.sentence{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2vmin;padding:2vmin;cursor:pointer}
+.srow{display:flex;flex-wrap:wrap;justify-content:center;gap:2vmin}
+.scell{width:clamp(110px,24vmin,280px);height:clamp(150px,34vmin,360px);cursor:pointer}
+.sentence{position:relative;padding:3vmin}
+.sbig{flex:1;min-height:0;width:100%;display:flex;flex-wrap:wrap;gap:3vmin;align-content:center}
+.sbig .cell{flex:1 1 22vw;min-width:0;min-height:40%;border-radius:28px;border-width:6px;cursor:pointer}
+.sbig .cell span.t{font-size:clamp(1.8rem,7vmin,4.5rem)}
+.replay{position:absolute;right:8px;bottom:8px;width:44px;height:44px;border:0;border-radius:50%;background:transparent;opacity:.18;font-size:1.3rem}
+.ghostbar{position:fixed;top:0;left:0;right:0;height:0;z-index:5}
+.ghostbar button{position:absolute;top:4px;width:44px;height:44px;border:0;border-radius:50%;background:#1f2937;color:#fff;opacity:.2;font-size:1.2rem;padding:0}
+.ghostbar .home{left:4px}.ghostbar .back{left:56px}.ghostbar .gear{right:4px}
+.gearbtn{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.gearbtn.pressing{animation:hold 1.2s linear forwards}
+@keyframes hold{from{box-shadow:0 0 0 0 #60a5fa;background:#374151}to{box-shadow:0 0 0 8px #60a5fa;background:#2563eb}}
+.stext{font-size:clamp(1.4rem,5vmin,3rem);font-weight:700;text-align:center}
+dialog{border:0;border-radius:16px;padding:0;width:min(560px,94vw);max-height:92dvh}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+.dlg{padding:16px;display:flex;flex-direction:column;gap:12px;max-height:92dvh;overflow:auto}
+.dlg h2{margin:0;font-size:1.2rem}
+.dlg label{display:flex;flex-direction:column;gap:4px;font-size:.9rem;font-weight:600}
+.dlg input[type=text],.dlg input[type=search],.dlg select{font-size:1rem;padding:10px;border:1px solid #9ca3af;border-radius:8px}
+.dlg .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.dlg .chk{flex-direction:row;align-items:center;gap:8px;font-weight:500}
+.dlg button{font-size:1rem;padding:10px 14px;border-radius:10px;border:1px solid #9ca3af;background:#fff}
+.dlg button.pri{background:#2563eb;color:#fff;border-color:#2563eb}
+.dlg button.dan{color:#b91c1c;border-color:#b91c1c}
+.prev{width:120px;height:120px;border:1px solid #9ca3af;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#fff}
+.prev img{max-width:100%;max-height:100%}
+.muted{color:#6b7280;font-size:.85rem}
+.results{display:flex;flex-wrap:wrap;gap:6px}
+.thumb{width:76px;height:76px;padding:2px!important}
+.thumb img{width:100%;height:100%;object-fit:contain}
+.sw{width:34px;height:34px;border-radius:50%!important;padding:0!important;border:3px solid #9ca3af!important}
+.sw.sel{border-color:#111!important}
+.foot{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;gap:12px}
+#player{position:fixed;inset:0;z-index:100;background:#000;display:flex;flex-direction:column}
+#player[hidden]{display:none}
+#pback{border:0;background:#dc2626;color:#fff;font:inherit;font-weight:800;font-size:clamp(1.4rem,5vmin,2.4rem);padding:16px;padding-bottom:max(16px,env(safe-area-inset-bottom))}
+#pbox{flex:1;min-height:0}
+#pbox iframe,#ytbox{width:100%;height:100%;border:0;display:block}
+#pmsg{margin:0;padding:14px;background:#222;color:#fff;font-size:1.3rem;text-align:center}
+.vprev img{height:90px;border-radius:8px;display:block}
+.vres{display:flex;flex-direction:column;gap:6px}
+.vitem{display:flex!important;gap:8px;align-items:center;text-align:left}
+.vitem img{width:110px;border-radius:6px;flex:none}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="player" hidden>
+  <p id="pmsg" hidden></p>
+  <div id="pbox"></div>
+  <button id="pback" type="button">← </button>
+</div>
+<dialog id="dlg"></dialog>
+
+<script>
+'use strict';
+/* ---------- utilità ---------- */
+const $ = s => document.querySelector(s);
+const uid = () => Math.random().toString(36).slice(2, 9);
+function h(tag, props, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) {
+    if (k === 'class') e.className = v;
+    else if (k === 'style') e.style.cssText = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else if (k === 'value') e.value = v;
+    else if (k === 'checked') e.checked = v;
+    else if (v !== false && v != null) e.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of kids.flat()) {
+    if (c == null || c === false) continue;
+    e.append(c.nodeType ? c : document.createTextNode(c));
+  }
+  return e;
+}
+function textOn(hex) {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex || ''); if (!m) return '#111';
+  const n = parseInt(m[1], 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.6 ? '#111' : '#fff';
+}
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+/* ---------- video YouTube ---------- */
+function parseYT(s) {
+  s = (s || '').trim();
+  if (/^[\w-]{11}$/.test(s)) return s;
+  try {
+    const u = new URL(s);
+    if (u.hostname.includes('youtu.be')) return u.pathname.slice(1, 12);
+    const v = u.searchParams.get('v'); if (v) return v.slice(0, 11);
+    const m = u.pathname.match(/\/(embed|shorts|live)\/([\w-]{11})/); if (m) return m[2];
+  } catch { }
+  return '';
+}
+const ytThumb = id => `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+const hasVideo = c => !!(c && c.action && c.action.type === 'video' && c.action.videoId);
+const decodeHtml = s => { const t = document.createElement('textarea'); t.innerHTML = s; return t.value; };
+// Le app della raccolta condividono lo stesso indirizzo: chiavi, database e cache di questa
+// app hanno un nome suo (prefisso ac_ / apprendere-categorie / apprendere_categorie_).
+const YT_KEY = 'ac_ytkey';
+const ytKey = {   // la chiave resta solo su questo dispositivo, fuori dal backup
+  get() { try { return localStorage.getItem(YT_KEY) || ''; } catch { return ''; } },
+  set(v) { try { v ? localStorage.setItem(YT_KEY, v) : localStorage.removeItem(YT_KEY); } catch { } }
+};
+let ytp = null, ytApi = null, playerOpen = false, playerId = null;
+function loadYT() {
+  if (window.YT && YT.Player) return Promise.resolve();
+  if (ytApi) return ytApi;
+  ytApi = new Promise((res, rej) => {
+    window.onYouTubeIframeAPIReady = () => res();
+    const sc = document.createElement('script'); sc.src = 'https://www.youtube.com/iframe_api';
+    sc.onerror = () => { ytApi = null; rej(); };
+    document.head.appendChild(sc);
+    setTimeout(() => { if (!(window.YT && YT.Player)) { ytApi = null; rej(); } }, 8000);
+  });
+  return ytApi;
+}
+function openVideo(id) {
+  if (playerOpen) return;
+  playerOpen = true; playerId = id;
+  stopSpeech();
+  history.pushState({ video: true }, '');   // il tasto Indietro di Android chiude il video
+  $('#player').hidden = false; $('#pmsg').hidden = true;
+  const box = $('#pbox'); box.replaceChildren(h('div', { id: 'ytbox' }));
+  loadYT().then(() => {
+    if (!playerOpen || playerId !== id) return;
+    const pv = { autoplay: 1, rel: 0, modestbranding: 1, playsinline: 1, iv_load_policy: 3 };
+    if (/^https?:$/.test(location.protocol)) pv.origin = location.origin;
+    ytp = new YT.Player('ytbox', {
+      host: 'https://www.youtube-nocookie.com', videoId: id, width: '100%', height: '100%', playerVars: pv,
+      events: {
+        onStateChange: e => { if (e.data === 0) closeVideo(); },   // a fine video si torna alla griglia
+        onError: () => { const m = $('#pmsg'); m.textContent = 'Questo video non può essere riprodotto qui. Torna indietro.'; m.hidden = false; }
+      }
+    });
+  }).catch(() => {
+    if (!playerOpen || playerId !== id) return;
+    box.replaceChildren(h('iframe', { src: `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0&playsinline=1`, allow: 'autoplay; encrypted-media; fullscreen', allowfullscreen: true }));
+  });
+}
+function closeVideo() { if (playerOpen) history.back(); }
+function cleanupVideo() {
+  try { ytp && ytp.destroy(); } catch { }
+  ytp = null; playerOpen = false; playerId = null;
+  $('#pbox').replaceChildren(); $('#player').hidden = true;
+}
+addEventListener('popstate', () => { if (playerOpen) cleanupVideo(); });
+$('#pback').addEventListener('click', closeVideo);
+
+/* ---------- persistenza (IndexedDB) ---------- */
+const idb = {
+  db: null,
+  open() { return new Promise((res, rej) => { const r = indexedDB.open('apprendere-categorie', 1); r.onupgradeneeded = () => r.result.createObjectStore('kv'); r.onsuccess = () => { this.db = r.result; res(); }; r.onerror = () => rej(r.error); }); },
+  get(k) { return new Promise((res, rej) => { const q = this.db.transaction('kv').objectStore('kv').get(k); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); }); },
+  set(k, v) { return new Promise((res, rej) => { const t = this.db.transaction('kv', 'readwrite'); t.objectStore('kv').put(v, k); t.oncomplete = res; t.onerror = () => rej(t.error); }); }
+};
+let saveTimer;
+function save() { clearTimeout(saveTimer); saveTimer = setTimeout(() => { if (idb.db) idb.set('state', state).catch(console.error); }, 300); }
+
+/* ---------- modello dati ---------- */
+const emptyCell = () => ({ id: uid(), label: '', phrase: '', img: null, color: '#ffffff', action: { type: 'none', target: null }, inPhrase: true, isSubject: false });
+function newGrid(name, cols, rows, id) {
+  return { id: id || uid(), name, cols, rows, cells: Array.from({ length: cols * rows }, emptyCell) };
+}
+function ensureCells(g) { while (g.cells.length < g.cols * g.rows) g.cells.push(emptyCell()); }
+function mk(label, phrase, color, action) { return { ...emptyCell(), label, phrase, color, action: action || { type: 'none', target: null } }; }
+function demo() {
+  const home = newGrid('Categorie', 3, 2, 'home');
+  const gMan = newGrid('Mangiare', 3, 2, 'g_mangiare');
+  const gGio = newGrid('Giocare', 3, 2, 'g_giocare');
+  const S = { type: 'sentence', target: null };
+  home.cells[0] = mk('Mangiare', 'mangio', '#ffd6a5', { type: 'grid', target: 'g_mangiare' });
+  home.cells[1] = mk('Giocare', 'gioco', '#caffbf', { type: 'grid', target: 'g_giocare' });
+  gMan.cells[0] = mk('Patatine', 'le patatine', '#fdffb6', S);
+  gMan.cells[1] = mk('Pizza', 'la pizza', '#ffadad', S);
+  gMan.cells[2] = mk('Gelato', 'il gelato', '#a0c4ff', S);
+  gMan.cells[3] = mk('Mela', 'la mela', '#caffbf', S);
+  gGio.cells[0] = mk('Palla', 'con la palla', '#9bf6ff', S);
+  gGio.cells[1] = mk('Puzzle', 'con il puzzle', '#ffc6ff', S);
+  return {
+    v: 1, home: 'home', speakOnTap: false, rate: 0.9, voiceURI: null,
+    subject: { label: 'Io', phrase: 'io', img: null, color: '#ffe5b4' },
+    grids: { home, g_mangiare: gMan, g_giocare: gGio }
+  };
+}
+function normalize(s) {
+  s.grids = s.grids || {};
+  for (const g of Object.values(s.grids)) { g.cells = g.cells || []; ensureCells(g); g.cells.forEach(c => { c.action = c.action || { type: 'none', target: null }; if (c.action.type === 'video') c.action.videoId = parseYT(c.action.videoId); }); }
+  if (!s.grids[s.home]) s.home = Object.keys(s.grids)[0];
+  s.subject = s.subject || { label: 'Io', phrase: 'io', img: null, color: '#ffe5b4' };
+  if (s.rate == null) s.rate = 0.9;
+  return s;
+}
+
+/* ---------- stato runtime ---------- */
+let state, view = { t: 'grid', id: null }, stack = [], path = [], subjOverride = null, edit = false, homeOrder = null;
+
+/* ---------- sintesi vocale ---------- */
+function stopSpeech() { if ('speechSynthesis' in window) speechSynthesis.cancel(); }
+function speak(text) {
+  if (!text || !('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'it-IT'; u.rate = state.rate || 0.9;
+  const vs = speechSynthesis.getVoices();
+  const v = vs.find(x => x.voiceURI === state.voiceURI) || vs.find(x => x.lang.toLowerCase().startsWith('it'));
+  if (v) u.voice = v;
+  speechSynthesis.speak(u);
+}
+const sentenceCells = () => [subjOverride || state.subject, ...path];
+const sentenceText = () => sentenceCells().map(c => (c.phrase || c.label || '').trim()).filter(Boolean).join(' ');
+
+/* ---------- schermo intero ---------- */
+const isFS = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+function enterFS() {
+  const e = document.documentElement, f = e.requestFullscreen || e.webkitRequestFullscreen;
+  if (f && !isFS()) { try { const p = f.call(e); if (p && p.catch) p.catch(() => { }); } catch { } }
+}
+function toggleFS() {
+  if (isFS()) { const x = document.exitFullscreen || document.webkitExitFullscreen; try { x.call(document); } catch { } }
+  else enterFS();
+}
+
+/* ---------- uscita dall'app ---------- */
+function exitApp() {
+  if (!confirm('Chiudere il comunicatore?')) return;
+  try { if (isFS()) toggleFS(); } catch { }
+  window.close();
+  setTimeout(() => alert('Per chiudere l\'app usa Home o Recenti. Se la schermata è fissata, tieni premuti Indietro e Recenti.'), 400);
+}
+
+/* ---------- navigazione ---------- */
+function goHome() { view = { t: 'grid', id: state.home }; path = []; subjOverride = null; stack = []; render(); }
+function goBack() { const s = stack.pop(); if (!s) return goHome(); view = s.view; path = s.path; subjOverride = s.subj; render(); }
+
+function press(c) {
+  if (!c.label && !c.img && !hasVideo(c)) return;
+  if (hasVideo(c)) { openVideo(c.action.videoId); return; }   // il video non entra nella frase
+  if (state.speakOnTap) speak(c.label);
+  const a = c.action; let next = null;
+  if (a.type === 'grid' && state.grids[a.target]) next = { t: 'grid', id: a.target };
+  else if (a.type === 'sentence') next = { t: 'sentence' };
+  if (!next) return;
+  stack.push({ view: { ...view }, path: [...path], subj: subjOverride });
+  if (c.isSubject) subjOverride = c; else if (c.inPhrase !== false) path.push(c);
+  view = next; render();
+  if (next.t === 'sentence') speak(sentenceText());
+}
+function sentenceTap() {
+  stopSpeech();
+  const home = state.grids[state.home];
+  homeOrder = shuffle([...Array(home.cols * home.rows).keys()]);   // ordine casuale alla griglia iniziale
+  goHome();
+}
+function orderFor(g, n) {
+  if (g.id === state.home && homeOrder && homeOrder.length === n) return homeOrder;
+  return [...Array(n).keys()];
+}
+
+/* ---------- rendering ---------- */
+function render() {
+  const app = $('#app'); app.replaceChildren();
+  app.append(topbar());
+  app.append(view.t === 'sentence' ? sentenceView() : gridView());
+}
+
+function topbar() {
+  if (!edit) {
+    let timer, fired = false;
+    const gear = h('button', { class: 'big gearbtn', title: 'Tieni premuto per modificare', 'aria-label': 'Modifica (tieni premuto)' }, '⚙');
+    const stop = () => { clearTimeout(timer); gear.classList.remove('pressing'); };
+    gear.addEventListener('pointerdown', e => {
+      e.preventDefault(); gear.classList.add('pressing');
+      timer = setTimeout(() => { fired = true; edit = true; stop(); if (view.t === 'sentence') { view = { t: 'grid', id: state.home }; } render(); }, 1200);
+    });
+    ['pointerup', 'pointerleave'].forEach(ev => gear.addEventListener(ev, stop));
+    gear.addEventListener('contextmenu', e => e.preventDefault());   // il menu di pressione lunga del browser non deve interrompere
+    const homeBtn = h('button', { class: 'big home', onclick: () => { stopSpeech(); goHome(); }, 'aria-label': 'Inizio' }, '🏠');
+    const backBtn = h('button', { class: 'big back', onclick: goBack, 'aria-label': 'Indietro' }, '←');
+    if (state.hideBar) { gear.classList.add('gear'); return h('div', { class: 'ghostbar' }, gear); }
+    const fsBtn = h('button', { class: 'big', onclick: toggleFS, 'aria-label': 'Schermo intero' }, '⛶');
+    return h('div', { class: 'bar' }, homeBtn, backBtn, h('div', { class: 'sp' }), fsBtn, gear);
+  }
+  const g = state.grids[view.id];
+  const sel = h('select', { onchange: e => { view = { t: 'grid', id: e.target.value }; render(); } },
+    Object.values(state.grids).map(x => h('option', { value: x.id }, (x.id === state.home ? '★ ' : '') + x.name)));
+  sel.value = g.id;
+  const step = (label, key) => h('div', { class: 'stepper' }, label,
+    h('button', { onclick: () => { g[key] = Math.max(1, g[key] - 1); ensureCells(g); save(); render(); } }, '−'), g[key],
+    h('button', { onclick: () => { g[key] = Math.min(8, g[key] + 1); ensureCells(g); save(); render(); } }, '+'));
+  return h('div', { class: 'bar' },
+    sel,
+    h('button', { onclick: () => { const n = prompt('Nome della nuova griglia:'); if (!n) return; const ng = newGrid(n, 3, 3); state.grids[ng.id] = ng; view = { t: 'grid', id: ng.id }; save(); render(); } }, '＋ Griglia'),
+    h('button', { onclick: () => { const n = prompt('Nuovo nome:', g.name); if (n) { g.name = n; save(); render(); } } }, 'Rinomina'),
+    h('button', { onclick: () => { state.home = g.id; save(); render(); } }, '★ Iniziale'),
+    h('button', { onclick: () => deleteGrid(g) }, 'Elimina'),
+    step('Colonne', 'cols'), step('Righe', 'rows'),
+    h('div', { class: 'sp' }),
+    h('button', { onclick: openMenu, 'aria-label': 'Menu' }, '☰ Menu'),
+    h('button', { onclick: toggleFS }, '⛶ Schermo intero'),
+    h('button', { onclick: openSettings }, '⚙ Impostazioni'),
+    h('button', { onclick: exitApp }, '⏻ Esci dall\'app'),
+    h('button', { class: 'on', onclick: () => { if (state.autoFs !== false) enterFS(); edit = false; goHome(); } }, '✓ Fine'));
+}
+
+function deleteGrid(g) {
+  if (Object.keys(state.grids).length < 2) return alert('Serve almeno una griglia.');
+  if (g.id === state.home) return alert('Questa è la griglia iniziale: impostane un\'altra come iniziale prima di eliminarla.');
+  if (!confirm(`Eliminare la griglia "${g.name}"?`)) return;
+  delete state.grids[g.id];
+  Object.values(state.grids).forEach(x => x.cells.forEach(c => { if (c.action.target === g.id) c.action = { type: 'none', target: null }; }));
+  view = { t: 'grid', id: state.home }; save(); render();
+}
+
+function cellEl(c, onclick, editing, extraClass) {
+  const vid = hasVideo(c);
+  const empty = !c.label && !c.img && !vid;
+  if (empty && !editing) return h('div', { class: 'cell ghost' });
+  if (empty) return h('button', { class: 'cell emptyedit', onclick }, '+');
+  const badge = editing ? (c.action.type === 'grid' ? '↗' : c.action.type === 'sentence' ? '💬' : c.action.type === 'video' ? '▶' : '') : '';
+  return h('button', { class: 'cell ' + (extraClass || ''), style: `background:${c.color};color:${textOn(c.color)}`, onclick },
+    badge && h('span', { class: 'badge' }, badge),
+    (c.img || vid) && h('img', { src: c.img || ytThumb(c.action.videoId), alt: '' }),
+    c.label && h('span', { class: 't' }, c.label));
+}
+
+function gridView() {
+  const g = state.grids[view.id]; ensureCells(g);
+  const n = g.cols * g.rows;
+  const order = edit ? [...Array(n).keys()] : orderFor(g, n);
+  const wrap = h('div', { class: 'grid', style: `grid-template-columns:repeat(${g.cols},minmax(0,1fr));grid-template-rows:repeat(${g.rows},minmax(0,1fr))` });
+  order.forEach(i => { const c = g.cells[i]; wrap.append(cellEl(c, () => edit ? openCellEditor(g, i) : press(c), edit)); });
+  return wrap;
+}
+
+function sentenceView() {
+  const cells = sentenceCells();
+  const row = h('div', { class: 'sbig' }, cells.map(c => {
+    const shown = { ...c, label: (c.phrase || c.label || '') };
+    return cellEl(shown, () => { }, false, 'scell');
+  }));
+  const replay = h('button', { class: 'replay', 'aria-label': 'Ripeti', onclick: e => { e.stopPropagation(); speak(sentenceText()); } }, '🔊');
+  return h('div', { class: 'sentence', onclick: sentenceTap }, row, replay);   // tocco ovunque = torna all'inizio (ordine casuale)
+}
+
+/* ---------- dialog ---------- */
+function openDialog(content) { const d = $('#dlg'); d.replaceChildren(h('div', { class: 'dlg' }, content)); if (!d.open) d.showModal(); return d; }
+const closeDialog = () => $('#dlg').close();
+
+async function urlToData(url) {
+  try { const r = await fetch(url); const b = await r.blob(); return await new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = rej; fr.readAsDataURL(b); }); }
+  catch { return url; }
+}
+function fileToData(file) {
+  return new Promise((res, rej) => {
+    const u = URL.createObjectURL(file), im = new Image();
+    im.onload = () => {
+      const k = Math.min(1, 320 / Math.max(im.width, im.height));
+      const cv = document.createElement('canvas'); cv.width = Math.round(im.width * k); cv.height = Math.round(im.height * k);
+      cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height); URL.revokeObjectURL(u);
+      res(file.type === 'image/png' ? cv.toDataURL('image/png') : cv.toDataURL('image/jpeg', 0.88));
+    };
+    im.onerror = rej; im.src = u;
+  });
+}
+
+function imagePicker(initial, getTerm) {
+  let img = initial || null;
+  const prev = h('div', { class: 'prev' });
+  const results = h('div', { class: 'results' });
+  const q = h('input', { type: 'search', placeholder: 'Cerca simbolo ARASAAC' });
+  const file = h('input', { type: 'file', accept: 'image/*', style: 'display:none' });
+  const paint = () => prev.replaceChildren(img ? h('img', { src: img }) : h('span', { class: 'muted' }, 'Nessuna immagine'));
+  async function search() {
+    const term = (q.value || getTerm() || '').trim(); if (!term) return;
+    results.textContent = 'Cerco…';
+    try {
+      const r = await fetch(`https://api.arasaac.org/v1/pictograms/it/search/${encodeURIComponent(term)}`);
+      if (r.status === 404) { results.textContent = 'Nessun risultato'; return; }
+      if (!r.ok) throw new Error(r.status);
+      const data = await r.json();
+      if (!data.length) { results.textContent = 'Nessun risultato'; return; }
+      results.replaceChildren(...data.slice(0, 30).map(p => {
+        const url = `https://static.arasaac.org/pictograms/${p._id}/${p._id}_300.png`;
+        return h('button', { type: 'button', class: 'thumb', onclick: async () => { img = await urlToData(url); paint(); results.replaceChildren(); } }, h('img', { src: url, loading: 'lazy' }));
+      }));
+    } catch (e) { results.textContent = 'Ricerca non disponibile (serve la connessione).'; }
+  }
+  q.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  file.addEventListener('change', async () => { if (file.files[0]) { img = await fileToData(file.files[0]); paint(); } file.value = ''; });
+  paint();
+  const el = h('div', { class: 'row', style: 'align-items:flex-start' }, prev,
+    h('div', { style: 'flex:1;min-width:200px;display:flex;flex-direction:column;gap:8px' },
+      h('div', { class: 'row' }, q, h('button', { type: 'button', onclick: search }, 'Cerca')),
+      h('div', { class: 'row' }, h('button', { type: 'button', onclick: () => file.click() }, 'Carica immagine…'), h('button', { type: 'button', onclick: () => { img = null; paint(); } }, 'Rimuovi'), file),
+      results));
+  return { el, get: () => img };
+}
+
+function videoPicker(initialId, getTerm, onTitle) {
+  let id = initialId || '';
+  const inp = h('input', { type: 'text', value: id ? 'https://youtu.be/' + id : '', placeholder: 'Incolla il link di YouTube o l\'ID del video', autocomplete: 'off', spellcheck: 'false' });
+  const stat = h('div', { class: 'muted' });
+  const prev = h('div', { class: 'vprev' });
+  const q = h('input', { type: 'search', placeholder: 'Cerca su YouTube' });
+  const results = h('div', { class: 'vres' });
+  const paint = () => {
+    const raw = inp.value.trim();
+    stat.textContent = !raw ? '' : id ? '✓ Video riconosciuto' : '⚠ Link non riconosciuto';
+    prev.replaceChildren(id ? h('img', { src: ytThumb(id), alt: '' }) : '');
+  };
+  inp.addEventListener('input', () => { id = parseYT(inp.value); paint(); });
+  async function search() {
+    const term = (q.value || getTerm() || '').trim(); if (!term) return;
+    const key = ytKey.get();
+    if (!key) {
+      window.open('https://www.youtube.com/results?search_query=' + encodeURIComponent(term), '_blank', 'noopener');
+      results.textContent = 'Scegli il video su YouTube, copia il link e incollalo qui sopra. (Per cercare direttamente qui, inserisci la chiave API di YouTube in Impostazioni.)';
+      return;
+    }
+    results.textContent = 'Cerco…';
+    try {
+      const r = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=12&videoEmbeddable=true&safeSearch=strict&q=' + encodeURIComponent(term) + '&key=' + encodeURIComponent(key));
+      const j = await r.json();
+      if (j.error) { results.textContent = 'Errore: ' + (j.error.message || 'ricerca non riuscita'); return; }
+      const items = j.items || [];
+      if (!items.length) { results.textContent = 'Nessun risultato'; return; }
+      results.replaceChildren(...items.map(it => {
+        const title = decodeHtml(it.snippet.title);
+        const th = (it.snippet.thumbnails.medium || it.snippet.thumbnails.default).url;
+        return h('button', { type: 'button', class: 'vitem', onclick: () => {
+          id = it.id.videoId; inp.value = 'https://youtu.be/' + id; paint(); onTitle(title.slice(0, 40)); results.replaceChildren();
+        } }, h('img', { src: th, alt: '' }), h('span', {}, title));
+      }));
+    } catch { results.textContent = 'Ricerca non disponibile (serve la connessione).'; }
+  }
+  q.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  paint();
+  const el = h('div', { class: 'col' },
+    h('label', {}, 'Video YouTube', inp), stat, prev,
+    h('div', { class: 'row' }, q, h('button', { type: 'button', onclick: search }, 'Cerca')),
+    results);
+  return { el, get: () => id };
+}
+
+const PALETTE = ['#ffffff', '#ffd6a5', '#fdffb6', '#caffbf', '#9bf6ff', '#a0c4ff', '#ffc6ff', '#ffadad', '#d1d5db', '#f4a261'];
+function colorPicker(initial) {
+  let color = initial || '#ffffff';
+  const box = h('div', { class: 'row' });
+  const input = h('input', { type: 'color', value: color, oninput: e => { color = e.target.value; paint(); } });
+  function paint() { box.replaceChildren(...PALETTE.map(c => h('button', { type: 'button', class: 'sw' + (c === color ? ' sel' : ''), style: `background:${c}`, onclick: () => { color = c; input.value = c; paint(); } })), input); }
+  paint();
+  return { el: box, get: () => color };
+}
+
+function openCellEditor(g, i) {
+  const c = structuredClone(g.cells[i]);
+  const label = h('input', { type: 'text', value: c.label, placeholder: 'es. Mangiare' });
+  const phrase = h('input', { type: 'text', value: c.phrase || '', placeholder: 'come appare nella frase (es. "mangio"); vuoto = uguale al testo' });
+  const pick = imagePicker(c.img, () => label.value);
+  const col = colorPicker(c.color);
+  const act = h('select', {},
+    h('option', { value: 'none' }, 'Nessuna azione'),
+    h('option', { value: 'grid' }, 'Passa ad un\'altra griglia'),
+    h('option', { value: 'sentence' }, 'Vai alla griglia "Frase"'),
+    h('option', { value: 'video' }, 'Avvia video YouTube'));
+  act.value = c.action.type;
+  const target = h('select', {}, Object.values(state.grids).map(x => h('option', { value: x.id }, x.name)), h('option', { value: '__new' }, '＋ Crea nuova griglia (col nome della cella)'));
+  target.value = state.grids[c.action.target] ? c.action.target : '__new';
+  const targetWrap = h('label', {}, 'Griglia di destinazione', target);
+  const inPhrase = h('input', { type: 'checkbox', checked: c.inPhrase !== false });
+  const isSubj = h('input', { type: 'checkbox', checked: !!c.isSubject });
+  const phraseWrap = h('label', {}, 'Testo nella frase (opzionale)', phrase);
+  const phraseOpts = h('div', { class: 'col' },
+    h('label', { class: 'chk' }, inPhrase, 'Includi nella frase'),
+    h('label', { class: 'chk' }, isSubj, 'È un soggetto (sostituisce "Io" nella frase)'));
+  const vp = videoPicker(c.action.videoId || '', () => label.value, t => { if (!label.value.trim()) label.value = t; });
+  const sync = () => {
+    const isV = act.value === 'video';
+    targetWrap.style.display = act.value === 'grid' ? '' : 'none';
+    vp.el.style.display = isV ? '' : 'none';
+    phraseWrap.style.display = isV ? 'none' : '';
+    phraseOpts.style.display = isV ? 'none' : '';
+  };
+  act.addEventListener('change', sync); sync();
+
+  const doSave = () => {
+    c.label = label.value.trim(); c.phrase = phrase.value.trim(); c.img = pick.get(); c.color = col.get();
+    c.inPhrase = inPhrase.checked; c.isSubject = isSubj.checked;
+    c.action = { type: act.value, target: null };
+    if (act.value === 'video') {
+      c.action.videoId = vp.get();
+      if (!c.action.videoId) return alert('Inserisci un link o un ID di YouTube valido (oppure scegli un\'altra azione).');
+    }
+    if (act.value === 'grid') {
+      if (target.value === '__new') {
+        const ng = newGrid(c.label || 'Nuova griglia', 3, 3); state.grids[ng.id] = ng; c.action.target = ng.id;
+      } else c.action.target = target.value;
+    }
+    g.cells[i] = c; save(); closeDialog(); render();
+  };
+  openDialog([
+    h('h2', {}, 'Modifica cella'),
+    h('label', {}, 'Testo', label),
+    phraseWrap,
+    h('div', {}, h('div', { class: 'muted', style: 'margin-bottom:4px' }, 'Immagine'), pick.el),
+    h('div', {}, h('div', { class: 'muted', style: 'margin-bottom:4px' }, 'Colore'), col.el),
+    h('label', {}, 'Azione', act), targetWrap, vp.el, phraseOpts,
+    h('div', { class: 'foot' },
+      act.value === 'grid' && state.grids[c.action.target] ? h('button', { type: 'button', onclick: () => { closeDialog(); view = { t: 'grid', id: c.action.target }; render(); } }, 'Apri griglia collegata') : null,
+      h('button', { class: 'dan', type: 'button', onclick: () => { g.cells[i] = emptyCell(); save(); closeDialog(); render(); } }, 'Svuota'),
+      h('button', { type: 'button', onclick: closeDialog }, 'Annulla'),
+      h('button', { class: 'pri', type: 'button', onclick: doSave }, 'Salva'))
+  ]);
+}
+
+function openSettings() {
+  const s = state.subject;
+  const label = h('input', { type: 'text', value: s.label });
+  const phrase = h('input', { type: 'text', value: s.phrase || '', placeholder: 'es. io' });
+  const pick = imagePicker(s.img, () => label.value);
+  const col = colorPicker(s.color);
+  const speakTap = h('input', { type: 'checkbox', checked: !!state.speakOnTap });
+  const hideBar = h('input', { type: 'checkbox', checked: !!state.hideBar });
+  const autoFs = h('input', { type: 'checkbox', checked: state.autoFs !== false });
+  const rate = h('input', { type: 'range', min: 0.5, max: 1.4, step: 0.05, value: state.rate });
+  const voices = ('speechSynthesis' in window) ? speechSynthesis.getVoices().filter(v => v.lang.toLowerCase().startsWith('it')) : [];
+  const voice = h('select', {}, h('option', { value: '' }, 'Automatica (italiano)'), voices.map(v => h('option', { value: v.voiceURI }, v.name)));
+  voice.value = state.voiceURI || '';
+  const ytk = h('input', { type: 'text', value: ytKey.get(), placeholder: 'facoltativa', autocomplete: 'off', spellcheck: 'false' });
+  openDialog([
+    h('h2', {}, 'Impostazioni'),
+    h('b', {}, 'Soggetto predefinito della frase'),
+    h('label', {}, 'Testo', label), h('label', {}, 'Testo nella frase', phrase),
+    pick.el, col.el,
+    h('hr'),
+    h('label', { class: 'chk' }, speakTap, 'Pronuncia ogni cella quando viene toccata'),
+    h('label', { class: 'chk' }, autoFs, 'Vai a schermo intero quando premo "Fine" (uscita dalla modifica)'),
+    h('label', { class: 'chk' }, hideBar, 'Nascondi la barra in alto (resta solo ⚙ in alto a destra, tocco prolungato)'),
+    h('label', {}, 'Chiave API YouTube (per cercare i video dentro l\'app)', ytk),
+    h('div', { class: 'muted' }, 'Gratuita: Google Cloud Console → nuovo progetto → abilita «YouTube Data API v3» → Credenziali → Chiave API (meglio limitarla all\'indirizzo dell\'app). Resta solo su questo dispositivo e non finisce nel backup. Senza chiave, «Cerca» apre YouTube in una nuova scheda.'),
+    h('label', {}, 'Velocità voce', rate),
+    h('label', {}, 'Voce', voice),
+    h('button', { type: 'button', onclick: () => { state.rate = +rate.value; state.voiceURI = voice.value || null; speak('Io mangio le patatine'); } }, 'Prova voce'),
+    h('hr'),
+    h('div', { class: 'muted' }, 'Esporta e Importa dati sono nel menu ☰.'),
+    h('div', { class: 'row' },
+      h('button', { class: 'dan', type: 'button', onclick: () => { if (confirm('Ripristinare i dati di esempio? Si perde tutto.')) { state = demo(); save(); closeDialog(); goHome(); } } }, 'Reset')),
+    h('div', { class: 'foot' },
+      h('button', { type: 'button', onclick: closeDialog }, 'Annulla'),
+      h('button', { class: 'pri', type: 'button', onclick: () => {
+        state.subject = { label: label.value.trim() || 'Io', phrase: phrase.value.trim(), img: pick.get(), color: col.get() };
+        ytKey.set(ytk.value.trim());
+        state.speakOnTap = speakTap.checked; state.hideBar = hideBar.checked; state.autoFs = autoFs.checked; state.rate = +rate.value; state.voiceURI = voice.value || null;
+        save(); closeDialog(); render();
+      } }, 'Salva'))
+  ]);
+}
+
+/* ---------- menu ☰ (come nelle altre app della raccolta) ---------- */
+const PREFISSO_CACHE = 'apprendere_categorie_';
+let installPrompt = null;
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); installPrompt = e; });
+
+function openMenu() {
+  const voce = (testo, fn) => h('button', { type: 'button', style: 'text-align:left', onclick: () => { closeDialog(); fn(); } }, testo);
+  openDialog([
+    h('h2', {}, 'Menu'),
+    voce('📤 Esporta dati', exportData),
+    voce('📥 Importa dati', importData),
+    voce('📱 Installa l\'app', installApp),
+    voce('🔄 Aggiorna App', updateApp),
+    h('div', { class: 'foot' }, h('button', { type: 'button', onclick: closeDialog }, 'Chiudi'))
+  ]);
+}
+
+function exportData() {
+  const oggi = new Date().toISOString().slice(0, 10);
+  const blob = new Blob([JSON.stringify({ app: 'apprendere-categorie', ...state })], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = h('a', { href: url, download: `apprendere-categorie-dati-${oggi}.json` });
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
+
+function importData() {
+  if (!confirm('📥 IMPORTA DATI\n\nLe griglie del file sostituiscono TUTTE quelle di questo dispositivo.\n\nContinuare?')) return;
+  const inp = h('input', { type: 'file', accept: 'application/json,.json', style: 'display:none' });
+  inp.addEventListener('change', async () => {
+    try {
+      const dati = JSON.parse(await inp.files[0].text());
+      if (!dati || typeof dati !== 'object' || !dati.grids || !Object.keys(dati.grids).length) throw new Error('nel file non ci sono griglie');
+      delete dati.app;
+      state = normalize(dati);
+      if (idb.db) await idb.set('state', state);
+      edit = false; goHome();
+      alert(`✅ Dati importati: ${Object.keys(state.grids).length} griglie.`);
+    } catch (e) { alert('❌ File non valido: ' + (e.message || e)); }
+    inp.remove();
+  });
+  document.body.append(inp); inp.click();
+}
+
+function installApp() {
+  if (installPrompt) { installPrompt.prompt(); installPrompt.userChoice.finally(() => { installPrompt = null; }); return; }
+  if (matchMedia('(display-mode: standalone)').matches || navigator.standalone) return alert('✅ L\'app è già installata su questo dispositivo.');
+  alert('📱 INSTALLA APP\n\n'
+    + '🍎 iPad con Safari: pulsante Condividi → "Aggiungi alla schermata Home"\n'
+    + '🌐 Chrome/Edge sul computer: icona di installazione nella barra degli indirizzi, oppure Menu (⋮) → "Installa app"\n'
+    + '📱 Android: Menu (⋮) → "Aggiungi a schermata Home"');
+}
+
+// Svuota solo la cache dei file di questa app: griglie, celle e immagini (IndexedDB) restano.
+// Sullo stesso indirizzo ci sono altre app: i loro service worker e le loro cache non si toccano.
+async function updateApp() {
+  if (!confirm('🔄 AGGIORNA APP\n\nScarica l\'ultima versione dell\'applicazione.\n\nGriglie, immagini e impostazioni NON vengono toccate.\n\nContinuare?')) return;
+  let rete = false;   // HEAD non passa dalla cache del service worker: senza connessione fallisce davvero
+  try { rete = (await fetch(`./?rete=${Date.now()}`, { method: 'HEAD', cache: 'no-store' })).ok; } catch { }
+  if (!rete) return alert('📡 Per aggiornare serve la connessione a internet.\n\nNon è stato cambiato nulla: riprova quando c\'è la connessione.');
+  try {
+    if ('serviceWorker' in navigator) {
+      const scope = new URL('./', location.href).href;
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.filter(r => r.scope === scope).map(r => r.unregister()));
+    }
+    if ('caches' in window) {
+      const nomi = await caches.keys();
+      await Promise.all(nomi.filter(n => n.startsWith(PREFISSO_CACHE)).map(n => caches.delete(n)));
+    }
+    location.reload();
+  } catch (e) { alert('❌ Errore durante l\'aggiornamento: ' + e.message); }
+}
+
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+  addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js?v=1.0.0')
+      .then(reg => setInterval(() => reg.update().catch(() => { }), 60000))
+      .catch(err => console.error('Service worker non registrato:', err));
+  });
+}
+
+/* ---------- avvio ---------- */
+(async function main() {
+  try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch { }   // i dati non vengono cancellati dal browser
+  let first = false;
+  try { await idb.open(); state = await idb.get('state'); } catch (e) { console.warn('IndexedDB non disponibile', e); }
+  if (!state) { state = demo(); first = true; }
+  normalize(state);
+  view = { t: 'grid', id: state.home };
+  edit = first;       // al primo avvio si parte in modalità modifica
+  if (first) save();
+  if ('speechSynthesis' in window) speechSynthesis.getVoices();
+  render();
+})();
+</script>
+</body>
+</html>

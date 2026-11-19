@@ -1,0 +1,44 @@
+{
+    "name": "Apprendere Categorie",
+    "short_name": "Categorie",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "background_color": "#1f2937",
+    "theme_color": "#1f2937",
+    "description": "Comunicatore a griglie: dalla categoria all'elemento, fino alla frase letta ad alta voce. Dati sul dispositivo.",
+    "orientation": "any",
+    "prefer_related_applications": false,
+    "categories": [
+        "education",
+        "health"
+    ],
+    "lang": "it",
+    "dir": "ltr",
+    "icons": [
+        {
+            "src": "assets/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "assets/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "assets/icons/icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "assets/icons/icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}

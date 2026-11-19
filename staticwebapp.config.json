@@ -1,6 +1,12 @@
 {
     "routes": [
         {
+            "route": "/apprendere_categorie/service-worker.js",
+            "headers": {
+                "Cache-Control": "no-cache"
+            }
+        },
+        {
             "route": "/causa-effetto/service-worker.js",
             "headers": {
                 "Cache-Control": "no-cache"

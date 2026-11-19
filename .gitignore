@@ -28,3 +28,6 @@ skills-lock.json
 *.docx
 *.doc
 *.pdf
+
+# File dei test nel browser (Playwright)
+.playwright-mcp/
