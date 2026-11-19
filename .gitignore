@@ -9,8 +9,10 @@ Thumbs.db
 # Dipendenze (non usate: app statiche pure)
 node_modules/
 
-# Backend e credenziali dei vecchi moduli PHP del portale: MAI su GitHub
+# Backend e credenziali dei vecchi moduli PHP: MAI su GitHub
+# (l'unica cartella api ammessa è quella della radice: la funzione Azure di Mastertutor)
 api/
+!/api/
 *.php
 *.sql
 

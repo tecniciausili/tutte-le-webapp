@@ -9,8 +9,9 @@
 #
 # Cosa fa:
 #   1. verifica che ogni app dell'elenco abbia la sua cartella con index.html;
-#   2. si ferma se trova file da server (.php, .sql, cartella api/, config.php):
-#      non devono MAI finire su GitHub;
+#   2. si ferma se trova file da server (.php, .sql, cartella api/ dentro un'app, config.php):
+#      non devono MAI finire su GitHub. L'unica api/ ammessa è quella della radice: la funzione
+#      Azure api/negotiate usata da Mastertutor per le prese Tapo (solo JavaScript);
 #   3. avvisa se ci sono cartelle che non stanno nell'elenco;
 #   4. rigenera staticwebapp.config.json (l'unica configurazione Azure del sito) e serve.json
 #      (per la prova in locale con npx serve): non modificarli a mano.
@@ -35,7 +36,7 @@ for nome in "${APP[@]}"; do
 done
 
 # Controllo di sicurezza: niente backend né credenziali nel repository
-pericolosi=$(find "$QUI" -path "$QUI/.git" -prune -o \( -name '*.php' -o -name '*.sql' -o -name 'config.php' -o -type d -name api \) -print)
+pericolosi=$(find "$QUI" \( -path "$QUI/.git" -o -path "$QUI/npm" \) -prune -o \( -name '*.php' -o -name '*.sql' -o -name 'config.php' -o \( -type d -name api -not -path "$QUI/api" \) \) -print)
 if [ -n "$pericolosi" ]; then
   echo "✗ Trovati file da server che non devono andare su GitHub:" >&2
   echo "$pericolosi" >&2
@@ -45,6 +46,7 @@ fi
 # Cartelle presenti qui ma non nell'elenco (non vengono cancellate: decidi tu)
 for d in "$QUI"/*/; do
   d=$(basename "$d")
+  [ "$d" = api ] && continue   # funzione Azure, non un'app
   [[ " ${APP[*]} " == *" $d "* ]] || echo "⚠ $d: cartella non presente nell'elenco APP di index.html"
 done
 
@@ -77,7 +79,10 @@ config = {
         ".woff2": "font/woff2",
         ".woff": "font/woff",
         ".onnx": "application/octet-stream",
+        ".apk": "application/vnd.android.package-archive",
     },
+    # Funzione Azure della radice (api/negotiate, prese Tapo di Mastertutor)
+    "platform": {"apiRuntime": "node:20"},
 }
 with open(destinazione, "w", encoding="utf-8") as f:
     json.dump(config, f, ensure_ascii=False, indent=4)

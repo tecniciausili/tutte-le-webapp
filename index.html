@@ -9,10 +9,10 @@
     <!--
         INDICE DELLA RACCOLTA (repository GitHub → Azure Static Web Apps)
         Ogni app sta in una sottocartella del repository.
-        Per aggiungere un'app: aggiungere una voce all'elenco APP qui sotto
-        (una riga «cartella: '...'» e il nome), poi lanciare  bash aggiorna.sh :
-        copia la cartella da ~/PROGETTTI_SINGOLI_AZURE/webapp e rigenera
-        staticwebapp.config.json. Questo elenco è l'unica lista delle app.
+        Per aggiungere un'app: mettere la sua cartella nel repository, aggiungere una voce
+        all'elenco APP qui sotto (una riga «cartella: '...'» e il nome), poi lanciare
+        bash controlla.sh : rigenera staticwebapp.config.json. Questo elenco è l'unica lista
+        delle app.
     -->
     <style>
         :root {
@@ -144,6 +144,16 @@
             line-height: 1.3;
         }
 
+        .dettaglio {
+            font-size: 0.82rem;
+            color: var(--tenue);
+            margin-top: -0.4rem;
+        }
+
+        .dettaglio:empty {
+            display: none;
+        }
+
         .apri {
             margin-top: auto;
             font-size: 0.92rem;
@@ -181,10 +191,12 @@
 
     <script>
         // ==================== ELENCO DELLE APP ====================
-        // cartella: nome della sottocartella del repository (uguale a quella in ~/PROGETTTI_SINGOLI_AZURE/webapp)
+        // cartella: nome della sottocartella del repository
         // nome: quello che si legge nel box
         // icona (facoltativa): percorso dell'icona dentro la cartella dell'app
-        // Scrivere ogni voce su una riga «cartella: '...'»: aggiorna.sh legge l'elenco da qui.
+        // apk (facoltativo): il box scarica questo file Android invece di aprire una pagina
+        //   (nella cartella c'è anche versione.json con versione, data e byte dell'APK)
+        // Scrivere ogni voce su una riga «cartella: '...'»: controlla.sh legge l'elenco da qui.
         const APP = [
             { cartella: 'conta_con_le_dita', nome: 'Conta con le dita' },
             { cartella: 'scrivo_parole', nome: 'Scrivo parole con le lettere/sillabe' },
@@ -194,16 +206,29 @@
             { cartella: 'parola_immagine', nome: 'Parola-Immagine' },
             { cartella: 'causa-effetto', nome: 'Causa Effetto' },
             { cartella: 'apprendere_categorie', nome: 'Apprendere Categorie' },
+            { cartella: 'mastertutor', nome: 'Mastertutor' },
+            { cartella: 'mastertutor-android', nome: 'Mastertutor Android', icona: '../mastertutor/assets/icons/icon-192.png', apk: 'Mastertutor.apk' },
         ];
 
         const ICONA_PREDEFINITA = 'assets/icons/icon-192.png';
+
+        // App Android: versione, data e dimensione dell'APK (file versione.json nella sua cartella)
+        async function infoApk(app, dettaglio) {
+            try {
+                const r = await fetch(`${app.cartella}/versione.json`, { cache: 'no-cache' });
+                const v = await r.json();
+                const mb = (v.byte / (1024 * 1024)).toFixed(1).replace('.', ',');
+                dettaglio.textContent = `Versione ${v.versione} del ${v.data} · ${mb} MB`;
+            } catch (e) { /* senza versione.json il box resta valido */ }
+        }
 
         const elenco = document.getElementById('elencoApp');
         for (const app of APP) {
             const voce = document.createElement('li');
             const link = document.createElement('a');
             link.className = 'app';
-            link.href = `${app.cartella}/`;
+            link.href = app.apk ? `${app.cartella}/${app.apk}` : `${app.cartella}/`;
+            if (app.apk) link.setAttribute('download', app.apk);
 
             const icona = document.createElement('span');
             icona.className = 'icona';
@@ -221,14 +246,19 @@
             nome.className = 'nome';
             nome.textContent = app.nome;
 
+            const dettaglio = document.createElement('span');
+            dettaglio.className = 'dettaglio';
+
             const apri = document.createElement('span');
             apri.className = 'apri';
             apri.setAttribute('aria-hidden', 'true');
-            apri.textContent = 'Apri →';
+            apri.textContent = app.apk ? 'Scarica per Android ↓' : 'Apri →';
+            link.setAttribute('aria-label', app.apk ? `Scarica ${app.nome} per Android` : `Apri ${app.nome}`);
 
-            link.append(icona, nome, apri);
+            link.append(icona, nome, dettaglio, apri);
             voce.appendChild(link);
             elenco.appendChild(voce);
+            if (app.apk) infoApk(app, dettaglio);
         }
     </script>
 </body>

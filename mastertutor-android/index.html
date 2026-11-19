@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#673AB7">
+    <title>Mastertutor per Android</title>
+    <link rel="icon" type="image/png" href="../mastertutor/assets/icons/icon-192.png">
+    <!--
+        Pagina per scaricare l'APK di Mastertutor (tablet Android).
+        L'APK si compila nel repository tecniciausili/mastertutor-android; qui si copiano
+        Mastertutor.apk e versione.json (versione, data, byte) a ogni nuova versione.
+    -->
+    <style>
+        :root {
+            --viola: #673AB7;
+            --magenta: #9C27B0;
+            --sfondo: #f4f1f8;
+            --box: #ffffff;
+            --testo: #263238;
+            --tenue: #6b6478;
+            --bordo: #e7e0f2;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --sfondo: #17131f;
+                --box: #231d2e;
+                --testo: #ece8f3;
+                --tenue: #a69fb3;
+                --bordo: #362c46;
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+            background: var(--sfondo);
+            color: var(--testo);
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px 16px;
+        }
+
+        main {
+            width: 100%;
+            max-width: 520px;
+            background: var(--box);
+            border: 1px solid var(--bordo);
+            border-radius: 22px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 14px rgba(60, 30, 110, 0.08);
+        }
+
+        img {
+            width: 96px;
+            height: 96px;
+            border-radius: 24px;
+        }
+
+        h1 { font-size: 1.6rem; margin: 1rem 0 0.3rem; }
+        .versione { color: var(--tenue); font-size: 0.95rem; min-height: 1.2em; }
+
+        .scarica {
+            display: inline-block;
+            margin: 1.4rem 0 1.6rem;
+            padding: 0.9rem 1.6rem;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--viola), var(--magenta));
+            color: #fff;
+            font-weight: 650;
+            font-size: 1.1rem;
+            text-decoration: none;
+        }
+
+        .scarica:focus-visible { outline: 3px solid var(--magenta); outline-offset: 3px; }
+
+        ol {
+            text-align: left;
+            padding-left: 1.3rem;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        li + li { margin-top: 0.5rem; }
+    </style>
+</head>
+<body>
+    <main>
+        <img src="../mastertutor/assets/icons/icon-192.png" alt="">
+        <h1>Mastertutor per Android</h1>
+        <p class="versione" id="versione"></p>
+        <a class="scarica" href="Mastertutor.apk" download="Mastertutor.apk">Scarica l'APK ↓</a>
+        <ol>
+            <li>Apri questa pagina <strong>dal tablet Android</strong> e scarica il file.</li>
+            <li>Apri il file scaricato. Se Android lo chiede, consenti l'installazione da questa fonte
+                (<em>Installa app sconosciute</em>).</li>
+            <li>Nell'app, <strong>Area Educatore → Presa → Configura le prese</strong>: account Tapo e
+                indirizzi delle prese. Il tablet deve essere nella stessa rete Wi-Fi delle prese.</li>
+        </ol>
+    </main>
+    <script>
+        fetch('versione.json', { cache: 'no-cache' })
+            .then((r) => r.json())
+            .then((v) => {
+                const mb = (v.byte / (1024 * 1024)).toFixed(1).replace('.', ',');
+                document.getElementById('versione').textContent = `Versione ${v.versione} del ${v.data} · ${mb} MB`;
+            })
+            .catch(() => { /* senza versione.json la pagina resta valida */ });
+    </script>
+</body>
+</html>
