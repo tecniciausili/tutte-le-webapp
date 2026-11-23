@@ -44,7 +44,7 @@
     /* Spazio che resta per i due file di box sotto header, consegna,
        frase, barra di stato e spazi: con «Dimensione box» alta i box
        si fermano qui invece di spingere la barra fuori dallo schermo */
-    --spazio-box: calc(100 * var(--vh) - 321px);
+    --spazio-box: calc(100 * var(--vh) - 347px);
 
     /* Codice colore dei ruoli della frase */
     --col-soggetto: #1565C0;
@@ -107,7 +107,7 @@ body {
 
 .logo-lega {
     display: block;
-    height: 54px;
+    height: 80px;
     width: auto;
     flex-shrink: 0;
 }
@@ -204,7 +204,7 @@ body {
 }
 
 @media (max-width: 768px) {
-    .logo-lega { height: 40px; }
+    .logo-lega { height: 64px; }
 }
 
 @media (max-width: 700px) {
@@ -214,18 +214,25 @@ body {
 }
 
 @media (max-width: 480px) {
-    .logo-lega { height: 32px; }
+    .logo-lega { height: 48px; }
     /* Telefono: logo, tasti e titolo devono stare in una riga senza uscire dallo schermo */
     .app-header { padding: 8px 10px; }
     .header-content { grid-template-columns: auto minmax(0, 1fr) auto; gap: 6px; }
-    .header-buttons-left { gap: 8px; }
-    .header-buttons-right { gap: 6px; }
+    .header-buttons-left { gap: 6px; }
+    .header-buttons-right { gap: 4px; }
     .app-title { font-size: 0.95rem; }
     .app-title i { display: none; }
+    /* Con il logo da 48px, nell'esercizio sei tasti stanno in 360px solo se un po' più piccoli */
     .btn-back, .btn-home, .btn-menu, .btn-refresh, .btn-voce, .btn-bordi,
-    .btn-go-exercise, .btn-configurazione { width: 40px; height: 40px; font-size: 1.1rem; }
+    .btn-go-exercise, .btn-configurazione { width: 36px; height: 36px; font-size: 1rem; }
     /* Nell'esercizio a destra ci sono cinque tasti: il titolo lascia il posto ai tasti */
     .exercise-page .app-title { visibility: hidden; }
+}
+
+@media (max-width: 380px) {
+    /* Telefoni piccoli (360px): tasti ancora un po' più stretti */
+    .btn-back, .btn-home, .btn-menu, .btn-refresh, .btn-voce, .btn-bordi,
+    .btn-go-exercise, .btn-configurazione { width: 34px; height: 34px; font-size: 0.95rem; }
 }
 
 /* ===== MAIN ===== */
@@ -951,7 +958,7 @@ body {
     flex-direction: column;
     justify-content: center;
     gap: clamp(10px, 2vh, 22px);
-    min-height: calc(100 * var(--vh) - 78px);
+    min-height: calc(100 * var(--vh) - 104px);
 }
 
 .consegna {

@@ -14,7 +14,7 @@ tablet**. **Un dispositivo = un utente**: audio, video e registro restano nel br
 
 All'apertura l'app va **direttamente all'esercizio** se c'è almeno uno stimolo nel gioco, altrimenti
 sulla **Configurazione** (tasti «Vai all'esercizio» e «Configurazione» per passare dall'una all'altro).
-Intestazione bianca con il logo della Lega del Filo d'Oro (versione 1.0.19, 23/11/2026).
+Intestazione bianca con il logo della Lega del Filo d'Oro (versione 1.0.20, 23/11/2026).
 
 | Scheda | Cosa si fa |
 |---|---|

@@ -38,7 +38,7 @@
     /* Lato dei due box grandi: 44% dell'altezza, ma mai più di quanto resta
        sotto l'header dopo i tre numeri, la consegna e la barra di stato */
     --big-box: max(140px, min(calc(44 * var(--vh) * var(--scala-box)),
-                              calc(100 * var(--vh) - 78px - var(--tile-h) - 180px)));
+                              calc(100 * var(--vh) - 104px - var(--tile-h) - 180px)));
 }
 
 @supports (height: 1dvh) {
@@ -93,7 +93,7 @@ body {
 
 .logo-lega {
     display: block;
-    height: 54px;
+    height: 80px;
     width: auto;
     flex-shrink: 0;
 }
@@ -184,7 +184,7 @@ body {
 }
 
 @media (max-width: 768px) {
-    .logo-lega { height: 40px; }
+    .logo-lega { height: 64px; }
 }
 
 @media (max-width: 700px) {
@@ -194,7 +194,7 @@ body {
 }
 
 @media (max-width: 480px) {
-    .logo-lega { height: 32px; }
+    .logo-lega { height: 48px; }
     /* Telefono: logo, tasti e titolo devono stare in una riga senza uscire dallo schermo */
     .app-header { padding: 8px 10px; }
     .header-content { grid-template-columns: auto minmax(0, 1fr) auto; gap: 6px; }
@@ -830,7 +830,7 @@ body {
     justify-content: center;
     gap: clamp(12px, 2.5vh, 28px);
     /* Riempie lo schermo sotto l'header: il contenuto resta centrato in verticale */
-    min-height: calc(100 * var(--vh) - 78px);
+    min-height: calc(100 * var(--vh) - 104px);
 }
 
 .consegna {

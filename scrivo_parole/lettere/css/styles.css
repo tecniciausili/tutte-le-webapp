@@ -1980,7 +1980,7 @@ body {
 
 .logo-lega {
     display: block;
-    height: 54px;
+    height: 80px;
     width: auto;
     flex-shrink: 0;
 }
@@ -2038,7 +2038,7 @@ body {
 
 @media (max-width: 768px) {
     .logo-lega {
-        height: 40px;
+        height: 64px;
     }
 
     /* «Configurazione» nell'esercizio: solo l'icona dell'ingranaggio */
@@ -2068,6 +2068,6 @@ body {
 
 @media (max-width: 480px) {
     .logo-lega {
-        height: 32px;
+        height: 48px;
     }
 }
