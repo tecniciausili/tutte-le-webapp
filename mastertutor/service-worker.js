@@ -5,11 +5,13 @@
 // Tutte le cache dell'app iniziano con PREFISSO: sullo stesso indirizzo ci sono
 // altre app della raccolta, e le loro cache non vanno toccate.
 const PREFISSO = 'mastertutor_';
-const CACHE_NAME = `${PREFISSO}v1.0.16`;
+const CACHE_NAME = `${PREFISSO}v1.0.19`;
 const URLS_TO_CACHE = [
   './',
   './index.html',
   './css/styles.css',
+  './css/anticipatori.css',
+  './css/intestazione.css',
   './js/lib/lame.min.js',
   './js/util.js',
   './js/archivio.js',
@@ -34,6 +36,7 @@ const URLS_TO_CACHE = [
   './assets/icons/icon-maskable-192.png',
   './assets/icons/icon-maskable-512.png',
   './assets/icons/apple-touch-icon.png',
+  './assets/img/logo-lega-filo-oro.png',
 ];
 
 self.addEventListener('install', (event) => {

@@ -13,11 +13,27 @@
 
     <title>Frase Minima</title>
 
+    <!-- Apertura dell'app: se c'è già almeno un esercizio pronto si va diretti all'esercizio,
+         altrimenti alla Configurazione. Questo menu iniziale (Esporta/Importa/Installa) resta
+         raggiungibile con index.html?menu (tasto Indietro di Configurazione ed esercizio). -->
+    <script>
+        (function () {
+            if (/[?&]menu(=|&|$)/.test(location.search)) return;
+            let pronto = false;
+            try {
+                const elenco = JSON.parse(localStorage.getItem('fm_config') || '[]');
+                pronto = Array.isArray(elenco)
+                    && elenco.some((c) => c && typeof c === 'object' && c.stato !== 'archiviato');
+            } catch (e) { /* dati illeggibili: si apre la Configurazione */ }
+            location.replace(pronto ? 'esercizio.html' : 'gestione.html');
+        })();
+    </script>
+
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 
-    <link rel="stylesheet" href="css/styles.css?v=20261118.1">
+    <link rel="stylesheet" href="css/styles.css?v=20261123.1">
     <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
     <script src="js/raccolta.js?v=1.1"></script>
 </head>
@@ -25,6 +41,7 @@
     <header class="app-header">
         <div class="header-content">
             <div class="header-buttons-left">
+                <img class="logo-lega" src="assets/img/logo-lega-filo-oro.png" alt="Lega del Filo d'Oro">
             </div>
             <h1 class="app-title">
                 <i class="bi bi-chat-square-text"></i>
@@ -51,12 +68,12 @@
             </div>
 
             <div class="area-cards">
-                <a href="gestione.html" class="area-card educatore-card" tabindex="0" aria-label="Entra nell'area educatore">
+                <a href="gestione.html" class="area-card educatore-card" tabindex="0" aria-label="Entra nella configurazione">
                     <div class="card-icon">
-                        <i class="bi bi-person-gear"></i>
+                        <i class="bi bi-gear-fill"></i>
                     </div>
                     <div class="card-content">
-                        <h3>Area Educatore</h3>
+                        <h3>Configurazione</h3>
                         <p>Componi le frasi dell'utente</p>
                         <ul class="card-features">
                             <li><i class="bi bi-check-circle"></i> Pittogrammi ARASAAC o immagini tue</li>

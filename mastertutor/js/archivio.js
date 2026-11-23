@@ -21,8 +21,15 @@ const Archivio = (() => {
   const MAX_SESSIONI = 200;
 
   const IMPOSTAZIONI_DEFAULT = {
-    // 'predefinito' (suono incluso nell'app) | 'nessuno' | id di un audio dell'archivio
+    // Anticipatore GENERALE: 'predefinito' (suono incluso nell'app) | 'nessuno' | id di un audio
     anticipatore: 'predefinito',
+    // Anticipatore di ogni tipo di stimolo: 'generale' (= quello qui sopra) | 'nessuno' |
+    // 'predefinito' | id di un audio. Le prese ne hanno uno ciascuna: prese[idPresa]
+    anticipatori: {
+      audio: 'generale',       // voci registrate
+      youtube: 'generale',     // musica e video YouTube
+      prese: {},
+    },
     stimolazione: {
       attesa_min: 15,          // secondi di attesa casuale tra due stimoli (minimo)
       attesa_max: 20,          // ... (massimo) — valori del programma originale in sede
@@ -217,9 +224,12 @@ const Archivio = (() => {
     });
   }
 
-  // audio: {nome, origine: 'registrazione'|'upload', durata, blob, attivo?, data_creazione?}
+  // audio: {nome, origine: 'registrazione'|'upload', durata, blob, attivo?, data_creazione?, anticipa?}
+  // anticipa: per gli audio anticipatori, la categoria per cui sono stati registrati
+  //   'generale' | 'audio' | 'youtube' | 'presa:<id della presa>' (null = audio normale, uno stimolo)
   async function audioAggiungi(audio) {
     const record = {
+      anticipa: typeof audio.anticipa === 'string' && audio.anticipa ? audio.anticipa : null,
       nome: audio.nome,
       origine: audio.origine === 'registrazione' ? 'registrazione' : 'upload',
       durata: Number(audio.durata) || 0,
@@ -353,6 +363,7 @@ const Archivio = (() => {
       durata: a.durata,
       attivo: a.attivo,
       intero: !!a.intero,
+      anticipa: a.anticipa || null,
       data_creazione: a.data_creazione,
       tipo: a.blob?.type || 'audio/mpeg',
       dati: await blobInBase64(a.blob),
@@ -395,6 +406,7 @@ const Archivio = (() => {
       store.clear();
     });
     const mappaAudio = new Map();
+    const mappaId = new Map();   // vecchio id numerico → nuovo
     for (const a of (Array.isArray(oggetto.audio) ? oggetto.audio : [])) {
       const blob = base64InBlob(a.dati, a.tipo);
       const nuovo = await audioAggiungi({
@@ -403,13 +415,29 @@ const Archivio = (() => {
         durata: a.durata,
         attivo: a.attivo,
         intero: a.intero,
+        anticipa: a.anticipa,
         data_creazione: a.data_creazione,
         blob,
       });
       if (a.id != null) {
         mappaAudio.set(`a${a.id}`, `a${nuovo.id}`);
+        mappaId.set(Number(a.id), nuovo.id);
       }
     }
+
+    // Gli anticipatori scelti puntano agli id degli audio: li rimappo come l'ordine
+    // (prima l'anticipatore scelto si perdeva dopo un'importazione)
+    const rimappa = (v) => (typeof v === 'number' ? (mappaId.get(v) ?? 'predefinito') : v);
+    const imp = getImpostazioni();
+    const prese = {};
+    for (const [id, v] of Object.entries(imp.anticipatori.prese || {})) {
+      prese[id] = rimappa(v);
+    }
+    scriviJSON(CHIAVI.impostazioni, {
+      ...imp,
+      anticipatore: rimappa(imp.anticipatore),
+      anticipatori: { audio: rimappa(imp.anticipatori.audio), youtube: rimappa(imp.anticipatori.youtube), prese },
+    });
 
     // Ordine: rimappo le chiavi audio, lascio invariate quelle video ('y*') e 'presa'
     const ordine = (Array.isArray(oggetto.ordine) ? oggetto.ordine : [])

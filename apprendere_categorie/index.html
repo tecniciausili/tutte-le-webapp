@@ -14,16 +14,21 @@
 <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
-<script src="js/raccolta.js?v=1.0.0"></script>
+<script src="js/raccolta.js?v=1.0.1"></script>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{overscroll-behavior:none;touch-action:manipulation;margin:0;height:100%;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f3f4f6;color:#111}
 #app{display:flex;flex-direction:column;height:100dvh}
-.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px;background:#1f2937;color:#fff}
+/* barra in alto: bianca, senza fascia colorata, con il logo della Lega del Filo d'Oro a sinistra */
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px;background:#fff;color:#1f2937;box-shadow:0 1px 0 #e3e8e7,0 2px 8px rgba(0,0,0,.06);position:relative;z-index:1}
 .bar .sp{flex:1}
-.bar button,.bar select{font-size:1rem;padding:8px 12px;border-radius:10px;border:0;background:#374151;color:#fff;min-height:44px}
+.bar button,.bar select{font-size:1rem;padding:8px 12px;border-radius:10px;border:0;background:#eceff3;color:#1f2937;min-height:44px}
 .bar button.big{font-size:1.5rem;min-width:56px}
-.bar button.on{background:#2563eb}
+.bar button.on{background:#2563eb;color:#fff}
+.bar .titolo{font-size:1.1rem;padding:0 4px}
+.logo-lega{display:block;height:54px;width:auto}
+@media (max-width:768px){.logo-lega{height:40px}}
+@media (max-width:480px){.logo-lega{height:32px}}
 .bar .stepper{display:flex;align-items:center;gap:4px;font-size:.9rem}
 .bar .stepper button{min-width:36px;padding:8px}
 .grid{flex:1;min-height:0;display:grid;gap:10px;padding:10px}
@@ -47,7 +52,7 @@ html,body{overscroll-behavior:none;touch-action:manipulation;margin:0;height:100
 .ghostbar .home{left:4px}.ghostbar .back{left:56px}.ghostbar .gear{right:4px}
 .gearbtn{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .gearbtn.pressing{animation:hold 1.2s linear forwards}
-@keyframes hold{from{box-shadow:0 0 0 0 #60a5fa;background:#374151}to{box-shadow:0 0 0 8px #60a5fa;background:#2563eb}}
+@keyframes hold{from{box-shadow:0 0 0 0 #60a5fa;background:#eceff3}to{box-shadow:0 0 0 8px #60a5fa;background:#2563eb;color:#fff}}
 .stext{font-size:clamp(1.4rem,5vmin,3rem);font-weight:700;text-align:center}
 dialog{border:0;border-radius:16px;padding:0;width:min(560px,94vw);max-height:92dvh}
 dialog::backdrop{background:rgba(0,0,0,.5)}
@@ -306,7 +311,7 @@ function render() {
 function topbar() {
   if (!edit) {
     let timer, fired = false;
-    const gear = h('button', { class: 'big gearbtn', title: 'Tieni premuto per modificare', 'aria-label': 'Modifica (tieni premuto)' }, '⚙');
+    const gear = h('button', { class: 'big gearbtn', title: 'Configurazione: tieni premuto', 'aria-label': 'Configurazione (tieni premuto)' }, '⚙');
     const stop = () => { clearTimeout(timer); gear.classList.remove('pressing'); };
     gear.addEventListener('pointerdown', e => {
       e.preventDefault(); gear.classList.add('pressing');
@@ -318,7 +323,7 @@ function topbar() {
     const backBtn = h('button', { class: 'big back', onclick: goBack, 'aria-label': 'Indietro' }, '←');
     if (state.hideBar) { gear.classList.add('gear'); return h('div', { class: 'ghostbar' }, gear); }
     const fsBtn = h('button', { class: 'big', onclick: toggleFS, 'aria-label': 'Schermo intero' }, '⛶');
-    return h('div', { class: 'bar' }, homeBtn, backBtn, h('div', { class: 'sp' }), fsBtn, gear);
+    return h('div', { class: 'bar' }, logo(), homeBtn, backBtn, h('div', { class: 'sp' }), fsBtn, gear);
   }
   const g = state.grids[view.id];
   const sel = h('select', { onchange: e => { view = { t: 'grid', id: e.target.value }; render(); } },
@@ -328,6 +333,7 @@ function topbar() {
     h('button', { onclick: () => { g[key] = Math.max(1, g[key] - 1); ensureCells(g); save(); render(); } }, '−'), g[key],
     h('button', { onclick: () => { g[key] = Math.min(8, g[key] + 1); ensureCells(g); save(); render(); } }, '+'));
   return h('div', { class: 'bar' },
+    logo(), h('strong', { class: 'titolo' }, '⚙ Configurazione'),
     sel,
     h('button', { onclick: () => { const n = prompt('Nome della nuova griglia:'); if (!n) return; const ng = newGrid(n, 3, 3); state.grids[ng.id] = ng; view = { t: 'grid', id: ng.id }; save(); render(); } }, '＋ Griglia'),
     h('button', { onclick: () => { const n = prompt('Nuovo nome:', g.name); if (n) { g.name = n; save(); render(); } } }, 'Rinomina'),
@@ -339,7 +345,23 @@ function topbar() {
     h('button', { onclick: toggleFS }, '⛶ Schermo intero'),
     h('button', { onclick: openSettings }, '⚙ Impostazioni'),
     h('button', { onclick: exitApp }, '⏻ Esci dall\'app'),
-    h('button', { class: 'on', onclick: () => { if (state.autoFs !== false) enterFS(); edit = false; goHome(); } }, '✓ Fine'));
+    h('button', { class: 'on', onclick: vaiAllEsercizio }, '▶ Vai all\'esercizio'));
+}
+
+const logo = () => h('img', { class: 'logo-lega', src: 'assets/img/logo-lega-filo-oro.png', alt: 'Lega del Filo d\'Oro' });
+
+// Esercizio pronto: la griglia iniziale ha almeno una cella che si può toccare
+// (testo, immagine o video). I dati di esempio del primo avvio lo sono già.
+function esercizioPronto() {
+  const g = state && state.grids[state.home];
+  return !!g && g.cells.slice(0, g.cols * g.rows).some(c => c.label || c.img || hasVideo(c));
+}
+
+// Dalla Configurazione all'esercizio (prima era «✓ Fine»)
+function vaiAllEsercizio() {
+  if (!esercizioPronto() && !confirm('La griglia iniziale è vuota: nell\'esercizio non comparirà nessuna cella da toccare.\n\nAggiungi almeno una cella (testo, immagine o video).\n\nAndare lo stesso all\'esercizio?')) return;
+  if (state.autoFs !== false) enterFS();
+  edit = false; goHome();
 }
 
 function deleteGrid(g) {
@@ -574,8 +596,8 @@ function openSettings() {
     pick.el, col.el,
     h('hr'),
     h('label', { class: 'chk' }, speakTap, 'Pronuncia ogni cella quando viene toccata'),
-    h('label', { class: 'chk' }, autoFs, 'Vai a schermo intero quando premo "Fine" (uscita dalla modifica)'),
-    h('label', { class: 'chk' }, hideBar, 'Nascondi la barra in alto (resta solo ⚙ in alto a destra, tocco prolungato)'),
+    h('label', { class: 'chk' }, autoFs, 'Vai a schermo intero quando premo «Vai all\'esercizio» (uscita dalla Configurazione)'),
+    h('label', { class: 'chk' }, hideBar, 'Nascondi la barra in alto (resta solo ⚙ Configurazione in alto a destra, tocco prolungato)'),
     h('label', {}, 'Chiave API YouTube (per cercare i video dentro l\'app)', ytk),
     h('div', { class: 'muted' }, 'Gratuita: Google Cloud Console → nuovo progetto → abilita «YouTube Data API v3» → Credenziali → Chiave API (meglio limitarla all\'indirizzo dell\'app). Resta solo su questo dispositivo e non finisce nel backup. Senza chiave, «Cerca» apre YouTube in una nuova scheda.'),
     h('label', {}, 'Velocità voce', rate),
@@ -672,7 +694,7 @@ async function updateApp() {
 
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
   addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js?v=1.0.0')
+    navigator.serviceWorker.register('./service-worker.js?v=1.0.1')
       .then(reg => setInterval(() => reg.update().catch(() => { }), 60000))
       .catch(err => console.error('Service worker non registrato:', err));
   });
@@ -686,7 +708,9 @@ if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
   if (!state) { state = demo(); first = true; }
   normalize(state);
   view = { t: 'grid', id: state.home };
-  edit = first;       // al primo avvio si parte in modalità modifica
+  // Esercizio pronto (ci sono già i dati di esempio dal primo avvio) → si apre l'esercizio;
+  // altrimenti si apre la Configurazione (modalità modifica)
+  edit = !esercizioPronto();
   if (first) save();
   if ('speechSynthesis' in window) speechSynthesis.getVoices();
   render();

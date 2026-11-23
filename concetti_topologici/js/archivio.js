@@ -110,6 +110,18 @@ CT.Archivio = (function () {
         return { documento: profiloValido(doc), nuovo: !doc };
     }
 
+    /**
+     * Le scene che l'esercizio può proporre: attive, delle coppie accese e adatte alla modalità
+     * (in Esegui servono scene composte, non immagini pronte). Se ce n'è almeno una l'esercizio
+     * è pronto: all'apertura l'app va dritta all'esercizio (index.html), altrimenti alla Configurazione.
+     */
+    function sceneDaProporre(documento = profilo().documento) {
+        const imp = documento.impostazioni;
+        let scene = documento.scene.filter(s => s.attiva !== false && imp.coppie.includes(C().CONCETTI[s.concetto]?.coppia));
+        if (imp.modalita === 'esegui') scene = scene.filter(s => s.tipo !== 'pronta');
+        return scene;
+    }
+
     function salvaProfilo(documento) {
         try {
             localStorage.setItem(CHIAVE_PROFILO, JSON.stringify(documento));
@@ -287,7 +299,7 @@ CT.Archivio = (function () {
         })));
     }
 
-    /** Cancella le foto che nessuna scena usa più (si chiama all'apertura dell'Area Educatore) */
+    /** Cancella le foto che nessuna scena usa più (si chiama all'apertura della Configurazione) */
     async function pulisciFoto(documento) {
         const usate = idFoto(documento);
         const tutte = await transazione('foto', 'readonly', s => s.getAllKeys()) || [];
@@ -444,7 +456,7 @@ CT.Archivio = (function () {
     }
 
     return {
-        profilo, salvaProfilo, salvaFoto, urlFoto, precaricaFoto, pulisciFoto,
+        profilo, sceneDaProporre, salvaProfilo, salvaFoto, urlFoto, precaricaFoto, pulisciFoto,
         registraRisposta, risultati, dettaglioSessione, cancellaRisultati,
         esportaDati, importaDati, cercaArasaac, scontornaFoto, preparaScontorno
     };

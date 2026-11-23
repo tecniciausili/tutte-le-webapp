@@ -1,5 +1,5 @@
 /**
- * Parola-Immagine - Area Educatore
+ * Parola-Immagine - Configurazione (pagina dell'educatore)
  *
  * L'educatore crea le coppie: TARGET (immagine giusta) e DISTRATTORE (immagine sbagliata),
  * ciascuna con la sua parola. Le immagini sono pittogrammi ARASAAC oppure foto del dispositivo.
@@ -27,6 +27,7 @@ const appState = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    preparaVaiEsercizio();
     caricaImpostazioni();
     loadPairs();
     renderRisultati();
@@ -37,7 +38,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ===== NAVIGAZIONE =====
 function goBack() {
-    window.location.href = './';              // pagina iniziale di Parola-Immagine
+    // Pagina iniziale con la scelta degli esercizi: ?menu=1, altrimenti si aprirebbe da sola l'esercizio
+    window.location.href = 'index.html?menu=1';
+}
+
+// «Vai all'esercizio»: l'esercizio aperto per ultimo; accanto, il collegamento all'altro
+function preparaVaiEsercizio() {
+    const NOMI = { 'parola-immagine': 'Parola → Immagine', 'immagine-parola': 'Immagine → Parola' };
+    const modo = Archivio.ultimoEsercizio();
+    const altro = modo === 'parola-immagine' ? 'immagine-parola' : 'parola-immagine';
+    document.getElementById('btnVaiEsercizio').href = Archivio.paginaEsercizio(modo);
+    const nota = document.getElementById('notaEsercizio');
+    nota.innerHTML = `Esercizio dell'utente: <strong>${NOMI[modo]}</strong> · `
+        + `<a href="${Archivio.paginaEsercizio(altro)}">passa a ${NOMI[altro]}</a>`;
 }
 
 // =====================================================

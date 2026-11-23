@@ -2294,3 +2294,188 @@ body.user-mode-active .app-main {
     /* con lo spazio fra i box ridotto, scale(1.15) faceva toccare i due box */
     .answer-image-box.correct { transform: scale(1.08); }
 }
+
+/* =====================================================
+   INTESTAZIONE BIANCA CON IL LOGO DELLA LEGA DEL FILO D'ORO
+   (obiettivo comune alle app della raccolta): niente fascia colorata,
+   testo e icone nel colore dell'app, logo a sinistra prima dei pulsanti.
+===================================================== */
+.app-header {
+    background: #FFFFFF;
+    color: var(--primary-color);
+    box-shadow: 0 1px 0 #e3e8e7, 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.header-content {
+    width: 100%;
+}
+
+.app-title {
+    color: var(--primary-color);
+}
+
+.logo-lega {
+    display: block;
+    height: 54px;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.btn-back, .btn-menu, .btn-home, .btn-refresh, .btn-syllable, .btn-zoom {
+    background: #EDE7F6;
+    color: var(--primary-color);
+}
+
+.btn-back:hover, .btn-menu:hover, .btn-home:hover, .btn-refresh:hover, .btn-syllable:hover, .btn-zoom:hover {
+    background: #D1C4E9;
+}
+
+/* Lettura per sillabe disattivata: tenue, con la barra nel colore dell'app */
+.btn-syllable.off {
+    background: #F5F2FA;
+}
+
+.btn-syllable.off i::after {
+    background: var(--primary-color);
+}
+
+/* Slidebar della dimensione su fondo bianco */
+.zoom-control {
+    background: #EDE7F6;
+}
+
+.zoom-control input[type="range"] {
+    background: rgba(103, 58, 183, 0.3);
+}
+
+.zoom-control input[type="range"]::-webkit-slider-thumb {
+    background: var(--primary-color);
+}
+
+.zoom-control input[type="range"]::-moz-range-thumb {
+    background: var(--primary-color);
+}
+
+/* Pulsanti con testo: «Configurazione» (esercizio), «Vai all'esercizio» (configurazione) */
+.btn-header-testo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    height: 45px;
+    padding: 0 1rem;
+    border: none;
+    border-radius: 23px;
+    background: #EDE7F6;
+    color: var(--primary-color);
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-header-testo i {
+    font-size: 1.25rem;
+}
+
+.btn-header-testo:hover {
+    background: #D1C4E9;
+}
+
+.btn-header-primario {
+    background: var(--primary-color);
+    color: #FFFFFF;
+}
+
+.btn-header-primario:hover {
+    background: var(--primary-dark);
+}
+
+.btn-header-testo:focus-visible, .btn-back:focus-visible, .btn-menu:focus-visible,
+.btn-refresh:focus-visible, .btn-syllable:focus-visible {
+    outline: 3px solid var(--primary-dark);
+    outline-offset: 2px;
+}
+
+/* Esercizio: con la slidebar l'intestazione è piena, «Configurazione» resta solo icona */
+@media (max-width: 1100px) {
+    .exercise-page .btn-header-testo:not(.btn-header-primario) {
+        width: 45px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .exercise-page .btn-header-testo:not(.btn-header-primario) span {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .logo-lega {
+        height: 40px;
+    }
+}
+
+/* Schermi stretti: il titolo va su una seconda riga, sotto logo e pulsanti */
+@media (max-width: 600px) {
+    .header-content {
+        flex-wrap: wrap;
+        row-gap: 0.4rem;
+    }
+
+    .app-title {
+        order: 3;
+        flex-basis: 100%;
+    }
+
+    .header-buttons-left,
+    .header-buttons-right {
+        gap: 0.35rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-lega {
+        height: 32px;
+    }
+
+    /* Pulsanti un po' più piccoli e slidebar senza le due «T»:
+       logo e pulsanti stanno su una riga anche nell'esercizio */
+    .header-content {
+        gap: 0.5rem;
+    }
+
+    .header-buttons-right {
+        margin-left: auto;
+    }
+
+    .btn-back, .btn-menu, .btn-home, .btn-refresh, .btn-syllable, .btn-zoom {
+        width: 40px;
+        height: 40px;
+        font-size: 1.15rem;
+    }
+
+    .btn-header-testo {
+        height: 40px;
+        padding: 0 0.8rem;
+        font-size: 0.95rem;
+    }
+
+    .exercise-page .btn-header-testo:not(.btn-header-primario) {
+        width: 40px;
+    }
+
+    .zoom-control {
+        padding: 0.3rem 0.5rem;
+    }
+
+    .zoom-control i {
+        display: none;
+    }
+
+    .zoom-control input[type="range"] {
+        width: 70px;
+    }
+}

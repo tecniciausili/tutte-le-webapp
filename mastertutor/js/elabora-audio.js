@@ -189,13 +189,15 @@ const ElaboraAudio = (() => {
   // ==================== COMPONENTE: REGISTRA / CARICA / ANTEPRIMA ====================
   // opzioni:
   //   titoloAnteprima: testo sopra l'anteprima
-  //   nomeSuggerito:   nome proposto per le registrazioni
+  //   nomeSuggerito:   nome proposto per le registrazioni (testo, oppure funzione che lo restituisce)
+  //   nomeAncheFile:   true = il nome proposto vale anche per i file caricati (al posto del nome del file)
   //   etichettaSalva:  testo del pulsante di salvataggio
   //   onSalva:         async ({nome, blob, durata, origine}) => messaggio di conferma
 
   function crea(contenitore, opzioni = {}) {
     const {
       nomeSuggerito = '',
+      nomeAncheFile = false,
       etichettaSalva = 'Salva audio',
       onSalva = async () => '',
     } = opzioni;
@@ -238,6 +240,8 @@ const ElaboraAudio = (() => {
         <div class="status-message" role="status" aria-live="polite"></div>
       </div>
     `;
+
+    const suggerito = () => (typeof nomeSuggerito === 'function' ? nomeSuggerito() : nomeSuggerito) || '';
 
     const el = {
       registra: contenitore.querySelector('.btn-registra'),
@@ -325,7 +329,7 @@ const ElaboraAudio = (() => {
         try {
           const risultato = await elabora(blob);
           mostraStato('');
-          mostraAnteprima(risultato, 'registrazione', nomeSuggerito);
+          mostraAnteprima(risultato, 'registrazione', suggerito());
         } catch (e) {
           mostraStato(`Errore nell'elaborazione della registrazione: ${e.message}`, 'error');
         }
@@ -382,7 +386,7 @@ const ElaboraAudio = (() => {
       try {
         const risultato = await elabora(file, { nome: file.name, onStato: (testo) => mostraStato(testo, 'info') });
         mostraStato('');
-        mostraAnteprima(risultato, 'upload', file.name.replace(/\.[^.]+$/, ''));
+        mostraAnteprima(risultato, 'upload', (nomeAncheFile && suggerito()) || file.name.replace(/\.[^.]+$/, ''));
       } catch (e) {
         mostraStato(`Non riesco a convertire questo file: ${e.message || 'formato non riconosciuto'}.`, 'error');
       }
@@ -418,6 +422,13 @@ const ElaboraAudio = (() => {
 
     // Permette a chi usa il componente di interrompere tutto (cambio sezione)
     return {
+      // Nuovo nome proposto (per esempio cambiando la categoria di un anticipatore):
+      // se l'anteprima è aperta, aggiorna anche il campo del nome
+      suggerisci(nome) {
+        if (!el.anteprima.hidden) {
+          el.nome.value = nome || '';
+        }
+      },
       chiudi() {
         if (st.recorder && st.recorder.state === 'recording') {
           fermaRegistrazione();

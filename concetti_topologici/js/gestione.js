@@ -1,5 +1,5 @@
 /**
- * Concetti topologici - Area Educatore (Web App autonoma)
+ * Concetti topologici - Configurazione, la parte dell'educatore (Web App autonoma)
  *
  * UN DISPOSITIVO = UN UTENTE: niente login, tutto resta su questo dispositivo.
  * L'educatore (o il familiare) prepara per l'utente:
@@ -55,7 +55,7 @@
         const prova = $('btnProva'), uso = $('btnUtente');
         prova.innerHTML = `${CT.icona('occhio')} Prova`;
         prova.title = 'Apre l\'esercizio come lo vede l\'utente, senza salvare i risultati';
-        uso.innerHTML = `${CT.icona('gioca')} Area Utente`;
+        uso.innerHTML = `${CT.icona('gioca')} Vai all'esercizio`;
         uso.title = 'Apre l\'esercizio per l\'utente: i risultati vengono salvati su questo dispositivo';
         prova.href = 'gioca.html?prova=1';
         uso.href = 'gioca.html';

@@ -17,6 +17,18 @@ body.gioco {
     flex: none; display: flex; align-items: center; gap: 12px;
     height: 64px; padding: 8px max(12px, env(safe-area-inset-left)) 8px max(12px, env(safe-area-inset-right));
 }
+/* Con il logo della Lega del Filo d'Oro (alto 54px) la barra cresce un poco; staccata dall'esercizio */
+.gioco-barra { height: auto; min-height: 64px; padding-top: 6px; padding-bottom: 6px; margin-bottom: clamp(8px, 1.5vw, 16px); }
+/* Il pulsante Avanti tiene la sua larghezza: si stringono i pallini (prima sui telefoni li copriva) */
+.gioco-barra .lis-box { flex: none; }
+.gioco-barra .avanzamento { min-width: 0; }
+/* Telefoni: i pallini vanno su una riga loro, sotto logo, lucchetto e Avanti */
+@media (max-width: 600px) {
+    .gioco-barra { flex-wrap: wrap; row-gap: 6px; }
+    .gioco-barra .avanzamento { order: 5; flex-basis: 100%; max-width: none; }
+}
+/* «Configurazione» nella schermata d'inizio (per l'educatore, prima di toccare ▶) */
+.schermo-centro .btn-configurazione { margin-top: 6px; }
 .gioco-barra .spazio { flex: 1; }
 .btn-blocco {
     position: relative; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;

@@ -52,6 +52,8 @@ const appState = {
 // AVVIO
 // =====================================================
 document.addEventListener('DOMContentLoaded', async () => {
+    // È l'esercizio che si aprirà da solo al prossimo avvio dell'app
+    Archivio.salvaUltimoEsercizio(MODO);
     initTTS();
     updateVoiceButton();
 
@@ -95,7 +97,7 @@ function mostraAttesa() {
     setPulsanti({ start: appState.pairs.length > 0, ascolta: false, avanti: false });
 
     if (appState.pairs.length === 0) {
-        testo.innerHTML = 'Non ci sono ancora esercizi.<br>L\'educatore crea le coppie parola-immagine nell\'<strong>Area Educatore</strong>.';
+        testo.innerHTML = 'Non ci sono ancora esercizi.<br>L\'educatore crea le coppie parola-immagine nella <strong>Configurazione</strong>.';
         link.hidden = false;
     } else {
         testo.innerHTML = 'Premi <strong>Inizia</strong> per cominciare l\'esercizio';
@@ -116,9 +118,10 @@ function confermaUscita() {
     return !appState.isStarted || confirm('Vuoi davvero uscire? La sessione in corso si interrompe.');
 }
 
+// Pulsante «Configurazione» nell'intestazione
 function goBack() {
     if (!confermaUscita()) return;
-    window.location.href = './';              // pagina iniziale di Parola-Immagine
+    window.location.href = 'gestione.html';
 }
 
 // =====================================================
@@ -371,7 +374,7 @@ function closeSummary() {
 }
 
 // =====================================================
-// ASPETTO DELLE PAROLE (impostato nell'Area Educatore)
+// ASPETTO DELLE PAROLE (impostato nella Configurazione)
 // =====================================================
 function applicaTesto() {
     const t = appState.testo;

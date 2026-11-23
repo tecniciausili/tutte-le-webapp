@@ -1,7 +1,7 @@
 /**
  * Blocco tocchi involontari nelle pagine degli esercizi (LIM, tablet):
  * niente menu contestuale, niente zoom a pizzico o doppio tocco, niente selezione del testo.
- * L'Area Educatore NON lo usa: lì serve poter selezionare e scrivere.
+ * La Configurazione NON lo usa: lì serve poter selezionare e scrivere.
  */
 (function () {
     'use strict';

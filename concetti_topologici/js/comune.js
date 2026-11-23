@@ -4,7 +4,7 @@
  */
 window.CT = window.CT || {};
 
-CT.VERSIONE = '1.1.6';
+CT.VERSIONE = '1.1.7';
 CT.APP_NAME = 'concetti_topologici';
 
 /* ---------- Icone SVG inline (tratti a 2px su griglia 24x24) ---------- */
@@ -145,7 +145,7 @@ CT.util = {
     modaleAperta() { return !!document.getElementById('modaleAttiva'); }
 };
 
-/* ---------- Aggiorna l'app (voce del menu ☰ nella pagina iniziale, pulsante ⟳ nell'Area Educatore) ----------
+/* ---------- Aggiorna l'app (voce del menu ☰ nella pagina iniziale, pulsante ⟳ nella Configurazione) ----------
    Scarica di nuovo i file dell'app dalla rete. Sullo stesso dominio convivono più app: qui si tocca SOLO questa.
    - NON si toccano localStorage né IndexedDB: profilo, scene, foto e risultati restano dove sono.
    - Si cancella solo la cache dei file dell'app: i pittogrammi ARASAAC già scaricati e il modello
@@ -184,7 +184,7 @@ CT.aggiornaApp = async function () {
     location.reload();
 };
 
-// Ogni pulsante con data-aggiorna-app (Area Educatore) riceve icona e azione
+// Ogni pulsante con data-aggiorna-app (Configurazione) riceve icona e azione
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-aggiorna-app]').forEach(b => {
         b.innerHTML = CT.icona('aggiorna');

@@ -4,34 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#673AB7">
-    <meta name="description" content="Area Educatore - Scrivo Parole con le Sillabe">
+    <meta name="description" content="Configurazione - Scrivo Parole con le Sillabe">
     
-    <title>Area Educatore - Scrivo Parole con le Sillabe</title>
+    <title>Configurazione - Scrivo Parole con le Sillabe</title>
     
     <!-- Styles -->
     <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/styles.css?v=20261118.1">
+    <link rel="stylesheet" href="css/styles.css?v=20261123.1">
     <link rel="manifest" href="../manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     
     <!-- Chart.js 4.4.1 per le statistiche (copia locale: funziona offline) -->
     <script src="assets/js/chart.min.js"></script>
     <script src="js/raccolta.js?v=1.1"></script>
+    <!-- Ultima variante usata: la pagina di scelta riapre questa -->
+    <script src="../js/apertura.js?v=1.0"></script>
+    <script>ScrivoApertura.ricorda('sillabe');</script>
 </head>
 <body class="educator-page">
     <!-- Header -->
     <header class="app-header">
         <div class="header-content">
             <div class="header-buttons-left">
+                <img class="logo-lega" src="assets/img/logo-lega-filo-oro.png" alt="Lega del Filo d'Oro">
                 <button class="btn-back" onclick="goBack()" aria-label="Torna a: Scrivo parole con le sillabe" title="Torna a: Scrivo parole con le sillabe">
                     <i class="bi bi-arrow-left"></i>
                 </button>
             </div>
             <h1 class="app-title">
-                <i class="bi bi-person-gear"></i>
-                Area Educatore
+                <i class="bi bi-gear-fill"></i>
+                Configurazione
             </h1>
             <div class="header-buttons-right">
+                <!-- All'esercizio dell'utente (se non ce ne sono, l'esercizio lo dice e riporta qui) -->
+                <a href="esercizio.html" class="btn-header-testo btn-header-primario" aria-label="Vai all'esercizio" title="Vai all'esercizio">
+                    <i class="bi bi-play-fill"></i><span>Vai all'esercizio</span>
+                </a>
                 <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Aggiorna l'app" title="Aggiorna l'app (i dati restano)">
                     <i class="bi bi-arrow-clockwise"></i>
                 </button>
@@ -209,7 +217,7 @@
     <!-- Scripts -->
     <script src="js/clear-cache.js?v=5.1"></script>
     <script src="js/archivio.js?v=5.0"></script>
-    <script src="js/educatore-app.js?v=20261110.1"></script>
+    <script src="js/educatore-app.js?v=20261123.1"></script>
     <script>
         // Service worker: registrato anche da questa pagina (come nelle lettere), così dopo
         // «Aggiorna l'app» l'app torna subito utilizzabile senza connessione.

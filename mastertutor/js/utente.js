@@ -18,7 +18,7 @@ const Utente = (() => {
     casuale: {
       titolo: 'Stimolazione casuale',
       icona: 'bi-shuffle',
-      info: 'L\'educatore preme <strong>Avvia</strong>. A intervalli casuali suona l\'audio anticipatore e parte lo stimolo successivo della lista (l\'ordine si cambia trascinando gli stimoli), oppure uno a caso.',
+      info: 'L\'educatore preme <strong>Avvia</strong>. A intervalli casuali suona l\'audio anticipatore e parte uno stimolo: prima si estrae a caso la <strong>categoria</strong> (video, voci, prese), poi uno stimolo a caso di quella categoria.',
     },
     richiesta: {
       titolo: 'Stimolo su richiesta',
@@ -43,7 +43,7 @@ const Utente = (() => {
   let aperta = false;
   let ui = {};
   let prefs = {};
-  let dati = { audio: [], youtube: [], anticipatore: null };
+  let dati = { audio: [], youtube: [], anticipatore: null, tuttiAudio: new Map() };
   let elementi = [];                // lista corrente dell'ascolto con switch
   const tastiPremuti = new Set();
   let rimuoviAscoltoPresa = null;
@@ -140,6 +140,8 @@ const Utente = (() => {
     dati.audio = audio.filter((a) => a.attivo && a.blob);
     dati.youtube = Archivio.getYoutube().filter((v) => v.attivo && !Riproduttore.erroreDefinitivo(v.errore));
     dati.anticipatore = null;
+    // Tutti gli audio con un file, anticipatori compresi (non sono stimoli: non stanno in dati.audio)
+    dati.tuttiAudio = new Map(audio.filter((a) => a.blob).map((a) => [a.id, a]));
     if (typeof imp.anticipatore === 'number') {
       const record = audio.find((a) => a.id === imp.anticipatore);
       dati.anticipatore = record?.blob ? record : null;
@@ -204,7 +206,7 @@ const Utente = (() => {
           <div class="intestazione-area">
             <h2 id="titoloModalita"></h2>
             <button type="button" class="btn-secondary btn-piccolo" data-azione="vai-educatore">
-              <i class="bi bi-person-workspace"></i> Educatore
+              <i class="bi bi-gear-fill"></i> Configurazione
             </button>
           </div>
           <div id="contenutoPannello"></div>
@@ -380,7 +382,19 @@ const Utente = (() => {
     return { chiave: `y${v.id}`, tipo: 'youtube', nome: v.nome, categoria: v.categoria || 'Video', video: v };
   }
 
-  const ELEMENTO_PRESA = { chiave: 'presa', tipo: 'presa', nome: 'Presa smart', categoria: 'Presa smart' };
+  // Ogni presa scelta è uno stimolo a sé, con il suo nome e il suo anticipatore
+  // (scelte nella scheda Presa; nessuna scelta = tutte quelle configurate)
+  function elementiPrese() {
+    if (!Presa.disponibile()) {
+      return [];
+    }
+    const tutte = Presa.elenco();
+    const scelte = Archivio.getImpostazioni().presa.prese || [];
+    const inGioco = scelte.length ? tutte.filter((p) => scelte.includes(p.id)) : tutte;
+    return (inGioco.length ? inGioco : tutte).map((p) => ({
+      chiave: `presa:${p.id}`, tipo: 'presa', nome: p.nome || 'Presa smart', categoria: 'Presa smart', presa: p,
+    }));
+  }
 
   function iconaElemento(el) {
     if (el.tipo === 'audio') {
@@ -412,7 +426,7 @@ const Utente = (() => {
     if (lista.length === 0) {
       contenitore.innerHTML = `
         <p class="vuoto"><i class="bi bi-inbox"></i> Nessuno stimolo nel gioco.<br>
-        <small>Aggiungili dall'<strong>Area Educatore</strong>.</small></p>`;
+        <small>Aggiungili dalla <strong>Configurazione</strong>.</small></p>`;
       return;
     }
     contenitore.innerHTML = lista.map((el) => `
@@ -443,7 +457,7 @@ const Utente = (() => {
     return Archivio.inOrdine([
       ...(conAudio ? dati.audio.map(elementoAudio) : []),
       ...dati.youtube.map(elementoVideo),
-      ...(Presa.disponibile() ? [ELEMENTO_PRESA] : []),
+      ...elementiPrese(),
     ], (el) => el.chiave);
   }
 
@@ -500,7 +514,7 @@ const Utente = (() => {
   // Esegue uno stimolo qualsiasi e restituisce l'esito ('fine' | 'stop' | 'errore')
   async function eseguiStimolo(el, { maxSecondi = 0, segnale } = {}) {
     evidenzia(el);
-    titoloCorrente(el.tipo === 'presa' ? 'Presa smart' : el.nome);
+    titoloCorrente(el.nome);
     if (el.tipo === 'audio') {
       Riproduttore.scena('audio', { titolo: el.nome });
       return Riproduttore.riproduciAudio(el.record.blob, { maxSecondi, segnale });
@@ -517,7 +531,7 @@ const Utente = (() => {
       }
       return esito;
     }
-    return eseguiPresa(segnale);
+    return eseguiPresa(el, segnale);
   }
 
   // Il video non si può riprodurre fuori da YouTube: lo segno (l'educatore lo vede
@@ -530,11 +544,12 @@ const Utente = (() => {
     }
   }
 
-  async function eseguiPresa(segnale) {
+  async function eseguiPresa(el, segnale) {
     const conf = Archivio.getImpostazioni().presa;
-    Riproduttore.scena('presa', { titolo: 'Presa accesa', contatore: conf.secondi });
+    const ids = el.presa ? [el.presa.id] : conf.prese;
+    Riproduttore.scena('presa', { titolo: el.presa ? `${el.nome}: accesa` : 'Presa accesa', contatore: conf.secondi });
     try {
-      await Presa.accendi(conf.prese, conf.secondi);
+      await Presa.accendi(ids, conf.secondi);
     } catch (e) {
       console.warn('Presa:', e.message);
       Riproduttore.scena('riposo', { titolo: 'La presa non risponde', sottotitolo: e.message });
@@ -543,7 +558,7 @@ const Utente = (() => {
     }
     const completato = await Util.attendi(conf.secondi * 1000, segnale);
     if (!completato) {
-      Presa.spegni(conf.prese).catch(() => {});
+      Presa.spegni(ids).catch(() => {});
       return 'stop';
     }
     return 'fine';
@@ -609,18 +624,12 @@ const Utente = (() => {
       <div class="contatori" id="contatori"></div>
       <div class="disponibili" id="disponibili"></div>
       <h4 class="titolo-lista"><i class="bi bi-collection-play"></i> Stimoli nel gioco</h4>
-      <div class="scelta-ordine" role="radiogroup" aria-label="Ordine di audio e video">
-        <span>Audio e video:</span>
-        <label><input type="radio" name="ordineSessione" value="successivo" /> <span>come nella lista</span></label>
-        <label><input type="radio" name="ordineSessione" value="random" /> <span>a caso</span></label>
-      </div>
-      <p class="nota-presa-casuale"><i class="bi bi-plug-fill"></i> Se la presa è collegata, parte ogni ${PRESA_OGNI} stimoli: tre audio o video, poi la presa.</p>
+      <p class="nota-presa-casuale"><i class="bi bi-shuffle"></i> <span>A ogni stimolo si estrae a caso una <strong>categoria</strong> tra video YouTube, voci e prese Tapo, poi uno stimolo a caso di quella categoria. La categoria successiva si sceglie tra quelle rimaste: le tre escono tutte prima di ricominciare, e mai la stessa due volte di fila. Dentro una categoria nessuno stimolo si ripete finché non sono usciti tutti.</span></p>
       <div class="brani-list" id="listaStimoli"></div>
     `;
     const st = Archivio.getImpostazioni().stimolazione;
     ui.pannello.querySelector('#cursoreAttesaMin').value = st.attesa_min;
     ui.pannello.querySelector('#cursoreAttesaMax').value = st.attesa_max;
-    ui.pannello.querySelector(`input[name="ordineSessione"][value="${st.ordine === 'random' ? 'random' : 'successivo'}"]`).checked = true;
     mostraValoriAttesa();
     aggiornaDisponibili();
     aggiornaContatori();
@@ -677,6 +686,14 @@ const Utente = (() => {
     return dati.anticipatore.nome;
   }
 
+  // Quanti tipi di stimolo hanno un anticipatore proprio (diverso dal generale)
+  function anticipatoriPropri() {
+    const per = Archivio.getImpostazioni().anticipatori || {};
+    const valori = [per.audio, per.youtube, ...elementiPrese().map((el) => per.prese?.[el.presa.id])];
+    const n = valori.filter((v) => v !== undefined && v !== 'generale').length;
+    return n ? ` · ${n} ${n === 1 ? 'tipo di stimolo ha' : 'tipi di stimolo hanno'} il proprio` : '';
+  }
+
   function aggiornaDisponibili() {
     const box = ui.pannello?.querySelector('#disponibili');
     if (!box) {
@@ -692,8 +709,8 @@ const Utente = (() => {
       riga(st.eventi.youtube && dati.youtube.length > 0 && yt, 'bi-youtube',
         `Video: ${dati.youtube.length} nel gioco${st.eventi.youtube ? '' : ' (esclusi nei Tempi)'}${dati.youtube.length && !yt ? ' · YouTube non raggiungibile' : ''}`),
       riga(st.eventi.presa && Presa.disponibile(), 'bi-plug-fill',
-        `Presa: ${Presa.disponibile() ? 'collegata · a caso' : 'non collegata'}${st.eventi.presa ? '' : ' (esclusa nei Tempi)'}`),
-      riga(true, 'bi-bell-fill', `Anticipatore: ${Util.escapeHtml(nomeAnticipatore())}`),
+        `Prese: ${Presa.disponibile() ? `${elementiPrese().length} · una alla volta` : 'non collegate'}${st.eventi.presa ? '' : ' (escluse nei Tempi)'}`),
+      riga(true, 'bi-bell-fill', `Anticipatore generale: ${Util.escapeHtml(nomeAnticipatore())}${anticipatoriPropri()}`),
       riga(true, 'bi-stopwatch', `Attesa ${st.attesa_min}–${st.attesa_max} s${prefs.modalita === 'richiesta'
         ? ` · risposta ${st.risposta_timeout ? `entro ${st.risposta_timeout} s` : 'senza limite'}` : ''}`),
     ].join('');
@@ -757,24 +774,28 @@ const Utente = (() => {
     return tipi;
   }
 
-  // Ogni quanti stimoli eseguiti parte la presa: con 4 escono tre audio/video, poi la presa
-  const PRESA_OGNI = 4;
-
-  // Prossimo stimolo della sessione tra quelli dei tipi disponibili adesso.
-  // AUDIO e VIDEO vanno a giri: nessuno si ripete finché non sono usciti tutti gli altri
-  // (in ordine di lista, o mescolati a ogni giro se scelto "a caso").
-  // La PRESA non dipende dal caso: parte a cadenza fissa, ogni PRESA_OGNI stimoli eseguiti
-  // (eseguitiDopoPresa = audio/video eseguiti dall'ultima presa). Se non ci sono audio
-  // o video disponibili, esce la presa.
-  function prossimoStimolo(giro, tipi, casuale, eseguitiDopoPresa) {
-    const disponibili = stimoliInGioco().filter((el) => tipi.includes(el.tipo));
-    const presa = disponibili.find((el) => el.tipo === 'presa');
-    const altri = disponibili.filter((el) => el.tipo !== 'presa');
-    if (presa && (altri.length === 0 || eseguitiDopoPresa >= PRESA_OGNI - 1)) {
-      return presa;
+  // Prossimo stimolo della sessione, in due estrazioni:
+  //  1. una CATEGORIA a caso tra quelle con stimoli disponibili adesso: video YouTube ('youtube'),
+  //     voci ('audio'), prese Tapo ('presa'). La successiva si sceglie tra quelle rimaste: le
+  //     categorie escono tutte prima di ricominciare un giro, e mai la stessa due volte di fila;
+  //  2. uno STIMOLO a caso di quella categoria: nessuno si ripete finché non sono usciti tutti.
+  // Una categoria vuota o non disponibile (nessun video, prese scollegate) viene saltata.
+  function prossimoStimolo(giroCategorie, giriStimoli, tipi) {
+    const perCategoria = new Map();
+    for (const el of stimoliInGioco().filter((e) => tipi.includes(e.tipo))) {
+      if (!perCategoria.has(el.tipo)) {
+        perCategoria.set(el.tipo, []);
+      }
+      perCategoria.get(el.tipo).push(el);
     }
-    // In ordine di lista: se l'educatore riordina a sessione avviata, vale da subito
-    return giro.prossimo(altri, (lista) => (casuale ? Util.mescola(lista) : [...lista]), { seguiOrdine: !casuale });
+    if (perCategoria.size === 0) {
+      return null;
+    }
+    const categoria = giroCategorie.prossimo([...perCategoria.keys()], Util.mescola);
+    if (!giriStimoli.has(categoria)) {
+      giriStimoli.set(categoria, Util.creaGiro((e) => e.chiave));
+    }
+    return giriStimoli.get(categoria).prossimo(perCategoria.get(categoria), Util.mescola);
   }
 
 
@@ -799,7 +820,7 @@ const Utente = (() => {
 
     const st = Archivio.getImpostazioni().stimolazione;
     if (tipiDisponibili(st, false).length === 0) {
-      statoSessione('Nessuno stimolo disponibile: aggiungi audio o video nell\'Area Educatore, oppure collega la presa.');
+      statoSessione('Nessuno stimolo disponibile: aggiungi audio o video nella Configurazione, oppure collega la presa.');
       return;
     }
 
@@ -848,13 +869,38 @@ const Utente = (() => {
     }
   }
 
-  async function sorgenteAnticipatore() {
-    const a = Archivio.getImpostazioni().anticipatore;
+  // Scelta per il tipo dello stimolo: 'generale' | 'nessuno' | 'predefinito' | id di un audio
+  function sceltaAnticipatore(imp, el) {
+    const per = imp.anticipatori || {};
+    if (el?.tipo === 'presa' && el.presa) {
+      return per.prese?.[el.presa.id] ?? 'generale';
+    }
+    if (el?.tipo === 'audio' || el?.tipo === 'youtube') {
+      return per[el.tipo] ?? 'generale';
+    }
+    return 'generale';
+  }
+
+  // Audio da suonare prima dello stimolo el (null = nessuno). Se l'audio scelto per quel
+  // tipo non esiste più, suona l'anticipatore generale.
+  async function sorgenteAnticipatore(el) {
+    const imp = Archivio.getImpostazioni();
+    const scelta = sceltaAnticipatore(imp, el);
+    if (scelta === 'nessuno') {
+      return null;
+    }
+    if (scelta === 'predefinito') {
+      return ANTICIPATORE_PREDEFINITO;
+    }
+    if (typeof scelta === 'number' && dati.tuttiAudio.get(scelta)?.blob) {
+      return dati.tuttiAudio.get(scelta).blob;
+    }
+    const a = imp.anticipatore;
     if (a === 'nessuno') {
       return null;
     }
-    if (dati.anticipatore && a === dati.anticipatore.id) {
-      return dati.anticipatore.blob;
+    if (typeof a === 'number' && dati.tuttiAudio.get(a)?.blob) {
+      return dati.tuttiAudio.get(a).blob;
     }
     return ANTICIPATORE_PREDEFINITO;
   }
@@ -863,9 +909,8 @@ const Utente = (() => {
     const suRichiesta = prefs.modalita === 'richiesta';
     const record = sessione.record;
     let youtubeEscluso = false;
-    const giro = Util.creaGiro((e) => e.chiave);
-    let ordineGiro = null;   // 'random' o 'successivo': se cambia a sessione avviata, nuovo giro
-    let eseguitiDopoPresa = 0;   // audio/video eseguiti dall'ultima presa (cadenza PRESA_OGNI)
+    const giroCategorie = Util.creaGiro((categoria) => categoria);   // 'youtube' | 'audio' | 'presa'
+    const giriStimoli = new Map();   // categoria → giro dei suoi stimoli
     let nota = '';   // esito del giro precedente, mostrato durante l'attesa
 
     // iPad/iPhone: YouTube parte da solo solo dopo un primo tocco sul video
@@ -906,11 +951,7 @@ const Utente = (() => {
 
       // 2. Scelgo subito lo stimolo: se è un video si carica (muto, nascosto)
       //    mentre suona l'anticipatore, così alla fine parte senza attese
-      if (st.ordine !== ordineGiro) {
-        ordineGiro = st.ordine;
-        giro.ricomincia();
-      }
-      const el = prossimoStimolo(giro, tipi, st.ordine === 'random', eseguitiDopoPresa);
+      const el = prossimoStimolo(giroCategorie, giriStimoli, tipi);
       if (!el) {
         continue;
       }
@@ -919,7 +960,7 @@ const Utente = (() => {
       }
 
       // 3. Audio anticipatore
-      const anticipatore = await sorgenteAnticipatore();
+      const anticipatore = await sorgenteAnticipatore(el);
       if (anticipatore) {
         Riproduttore.scena('anticipatore', { titolo: 'Ascolta…' });
         titoloCorrente('Audio anticipatore');
@@ -957,8 +998,6 @@ const Utente = (() => {
       // 5. Stimolo
       statoSessione(`Stimolo: ${el.nome}`);
       const esito = await eseguiStimolo(el, { maxSecondi: limiteDurata(el, st.durata_max), segnale });
-      // Conta ogni stimolo mandato in esecuzione (anche se non è andato a buon fine)
-      eseguitiDopoPresa = el.tipo === 'presa' ? 0 : eseguitiDopoPresa + 1;
       if (esito !== 'errore') {
         record.stimoli++;
         record.per_tipo[el.tipo]++;

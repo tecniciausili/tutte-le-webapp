@@ -1,5 +1,5 @@
 /**
- * SCRIVO PAROLE CON LE SILLABE - Area Educatore
+ * SCRIVO PAROLE CON LE SILLABE - Configurazione (area dell'educatore)
  * Versione 5.0.0 (autonoma)
  *
  * Gestione esercizi: sillabe disponibili, parole target, accessibilità.
@@ -76,7 +76,8 @@ function cacheUIRefs() {
 // ============================================
 
 function goBack() {
-    window.location.href = './';   // pagina iniziale di Scrivo parole con le sillabe
+    // pagina iniziale di Scrivo parole con le sillabe (?menu: senza reindirizzamento all'esercizio)
+    window.location.href = 'index.html?menu';
 }
 
 // ============================================

@@ -21,9 +21,12 @@
         PAGINA DI SCELTA di «Scrivo parole»: l'educatore sceglie su quale delle due app lavorare.
         Le due app (lettere/ e sillabe/) sono autonome: ognuna ha i suoi dati, il suo service worker
         e il suo Esporta/Importa (menu ☰ della sua pagina iniziale). La loro freccia ← riporta qui.
-        Grafica: riusa il foglio di stile e le icone dell'app lettere.
+        Grafica: riusa il foglio di stile, le icone e il logo dell'app lettere.
+        Apertura (js/apertura.js): se un esercizio è pronto si va direttamente all'esercizio della
+        variante usata l'ultima volta (o di quella pronta), altrimenti alla sua Configurazione;
+        questa pagina si vede la prima volta, o con ?scelta (freccia ← dal menu di una variante).
     -->
-    <link rel="stylesheet" href="lettere/css/styles.css?v=3.0">
+    <link rel="stylesheet" href="lettere/css/styles.css?v=20261123.1">
     <link rel="stylesheet" href="lettere/assets/fonts/bootstrap-icons/bootstrap-icons.css">
     <style>
         .area-card.sillabe-card {
@@ -64,11 +67,14 @@
         }
     </style>
     <script src="js/raccolta.js?v=1.1"></script>
+    <script src="js/apertura.js?v=1.0"></script>
+    <script>ScrivoApertura.apriDallaScelta();</script>
 </head>
 <body class="selection-page">
     <header class="app-header">
         <div class="header-content">
             <div class="header-buttons-left">
+                <img class="logo-lega" src="lettere/assets/img/logo-lega-filo-oro.png" alt="Lega del Filo d'Oro">
             </div>
             <h1 class="app-title">
                 <i class="bi bi-pencil-square"></i>
@@ -129,7 +135,7 @@
                 <i class="bi bi-info-circle"></i>
                 <div>
                     <strong>Due esercizi separati</strong>
-                    <p>Ognuno ha i suoi esercizi e i suoi risultati; «Esporta dati» e «Importa dati» stanno nel menu ☰ della pagina iniziale di ciascuno. La freccia ← di ciascuno riporta a questa pagina.</p>
+                    <p>Ognuno ha i suoi esercizi e i suoi risultati; «Esporta dati» e «Importa dati» stanno nel menu ☰ della pagina iniziale di ciascuno, che si apre con la freccia ← dall'esercizio o dalla Configurazione; da lì la freccia ← riporta a questa pagina. All'apertura dell'app si va direttamente all'esercizio usato l'ultima volta.</p>
                 </div>
             </div>
         </div>

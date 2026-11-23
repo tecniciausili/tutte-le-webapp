@@ -17,15 +17,17 @@
     <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
-    <link rel="stylesheet" href="assets/fonts/simboli/simboli.css?v=1.5.5">
-    <link rel="stylesheet" href="css/styles.css?v=1.5.5">
+    <link rel="stylesheet" href="assets/fonts/simboli/simboli.css?v=1.5.6">
+    <link rel="stylesheet" href="css/styles.css?v=1.5.6">
+    <link rel="stylesheet" href="css/intestazione.css?v=1.5.6">
     <!-- L'app non torna all'elenco di tutte le Web App (js/raccolta.js): niente ← né 🏠 -->
-    <script src="js/raccolta.js?v=1.5.5"></script>
+    <script src="js/raccolta.js?v=1.5.6"></script>
 </head>
 <body>
     <header class="app-header">
         <div class="header-content">
             <div class="header-actions-left">
+                <img class="logo-lega" src="assets/img/logo-lega-filo-oro.png" alt="Lega del Filo d'Oro">
                 <button type="button" class="btn-menu" id="btnSchermoIntero" data-app="schermo-intero" title="Schermo intero" aria-label="Schermo intero" hidden>
                     <span class="ms" aria-hidden="true">fullscreen</span>
                 </button>
@@ -198,21 +200,21 @@
         </div>
     </div>
 
-    <script src="js/lessico.js?v=1.5.5"></script>
-    <script src="js/util.js?v=1.5.5"></script>
-    <script src="js/archivio.js?v=1.5.5"></script>
-    <script src="js/voce.js?v=1.5.5"></script>
-    <script src="js/simboli.js?v=1.5.5"></script>
-    <script src="js/arasaac.js?v=1.5.5"></script>
-    <script src="js/mulberry-dati.js?v=1.5.5"></script>
-    <script src="js/mulberry.js?v=1.5.5"></script>
-    <script src="js/editor.js?v=1.5.5"></script>
-    <script src="js/app.js?v=1.5.5"></script>
+    <script src="js/lessico.js?v=1.5.6"></script>
+    <script src="js/util.js?v=1.5.6"></script>
+    <script src="js/archivio.js?v=1.5.6"></script>
+    <script src="js/voce.js?v=1.5.6"></script>
+    <script src="js/simboli.js?v=1.5.6"></script>
+    <script src="js/arasaac.js?v=1.5.6"></script>
+    <script src="js/mulberry-dati.js?v=1.5.6"></script>
+    <script src="js/mulberry.js?v=1.5.6"></script>
+    <script src="js/editor.js?v=1.5.6"></script>
+    <script src="js/app.js?v=1.5.6"></script>
 
     <script>
         if ('serviceWorker' in navigator && location.protocol !== 'file:') {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js?v=1.5.5')
+                navigator.serviceWorker.register('./service-worker.js?v=1.5.6')
                     .then((registrazione) => {
                         setInterval(() => registrazione.update().catch(() => {}), 60000);
                     })

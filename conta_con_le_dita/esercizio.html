@@ -17,7 +17,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 
-    <link rel="stylesheet" href="css/styles.css?v=20261118.1">
+    <link rel="stylesheet" href="css/styles.css?v=20261123.1">
     <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
     <script src="js/raccolta.js?v=1.1"></script>
 </head>
@@ -25,7 +25,8 @@
     <header class="app-header">
         <div class="header-content">
             <div class="header-buttons-left">
-                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Conta con le dita" title="Torna a: Conta con le dita">
+                <img class="logo-lega" src="assets/img/logo-lega-filo-oro.png" alt="Lega del Filo d'Oro">
+                <button class="btn-back" onclick="goBack()" aria-label="Indietro" title="Indietro">
                     <i class="bi bi-arrow-left"></i>
                 </button>
             </div>
@@ -34,6 +35,10 @@
                 Conta con le Dita
             </h1>
             <div class="header-buttons-right">
+                <button class="btn-configurazione" onclick="goToConfig()" aria-label="Configurazione" title="Configurazione">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Configurazione</span>
+                </button>
                 <button class="btn-voce" id="btnVoce" onclick="toggleVoce()" aria-label="Attiva o disattiva la voce" title="Voce">
                     <i class="bi bi-volume-up-fill" id="iconVoce"></i>
                 </button>
@@ -237,7 +242,7 @@
 
     <script src="js/clear-cache.js?v=1.1"></script>
     <script src="js/archivio.js?v=20261104.3"></script>
-    <script src="js/esercizio-app.js?v=20261110.1"></script>
+    <script src="js/esercizio-app.js?v=20261123.1"></script>
 
     <script>
         if ('serviceWorker' in navigator) {

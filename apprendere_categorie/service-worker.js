@@ -6,7 +6,7 @@
 // Tutte le cache dell'app iniziano con PREFISSO: sullo stesso indirizzo ci sono altre app,
 // e le loro cache non vanno toccate.
 const PREFISSO = 'apprendere_categorie_';
-const CACHE_NAME = `${PREFISSO}v1.0.0`;
+const CACHE_NAME = `${PREFISSO}v1.0.1`;
 const URLS_TO_CACHE = [
   './',
   './index.html',
@@ -17,6 +17,7 @@ const URLS_TO_CACHE = [
   './assets/icons/icon-maskable-192.png',
   './assets/icons/icon-maskable-512.png',
   './assets/icons/apple-touch-icon.png',
+  './assets/img/logo-lega-filo-oro.png',
 ];
 
 self.addEventListener('install', (event) => {

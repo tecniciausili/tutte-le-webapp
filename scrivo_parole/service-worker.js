@@ -7,7 +7,7 @@
  * Strategia: prima la rete, la cache serve quando non c'è connessione.
  */
 const PREFISSO = 'scrivo_parole_scelta_';
-const CACHE_NAME = `${PREFISSO}v1.0.9`;
+const CACHE_NAME = `${PREFISSO}v1.0.10`;
 
 const FILE_PAGINA = [
     './',
@@ -16,9 +16,11 @@ const FILE_PAGINA = [
     './js/raccolta.js?v=1.1',
     './js/installa.js?v=1.0',
     './js/clear-cache.js?v=1.1',
+    './js/apertura.js?v=1.0',
     './assets/icons/icon-192.png',
     './assets/icons/icon-512.png',
-    './lettere/css/styles.css?v=3.0',
+    './lettere/css/styles.css?v=20261123.1',
+    './lettere/assets/img/logo-lega-filo-oro.png',
     './lettere/assets/fonts/bootstrap-icons/bootstrap-icons.css',
     './lettere/assets/fonts/bootstrap-icons/bootstrap-icons.woff2?2ab2cbbe07fcebb53bdaa7313bb290f2',
     './lettere/assets/fonts/bootstrap-icons/bootstrap-icons.woff?2ab2cbbe07fcebb53bdaa7313bb290f2',

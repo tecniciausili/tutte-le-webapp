@@ -23,8 +23,8 @@
     ],
     "shortcuts": [
         {
-            "name": "Area Educatore",
-            "short_name": "Educatore",
+            "name": "Configurazione",
+            "short_name": "Configurazione",
             "description": "Configura l'esercizio",
             "url": "./gestione.html",
             "icons": [{ "src": "assets/icons/icon-96.png", "sizes": "96x96" }]

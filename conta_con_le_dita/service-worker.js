@@ -4,7 +4,7 @@
 // in localStorage.
 // Tutte le cache iniziano con PREFISSO: sullo stesso dominio ci sono altre app, e le loro cache non vanno toccate.
 const PREFISSO = 'conta_con_le_dita_';
-const CACHE_NAME = `${PREFISSO}v1.1.12`;
+const CACHE_NAME = `${PREFISSO}v1.1.13`;
 
 const URLS_TO_CACHE = [
   './',
@@ -31,6 +31,7 @@ const URLS_TO_CACHE = [
   './assets/icons/icon-192.png',
   './assets/icons/icon-384.png',
   './assets/icons/icon-512.png',
+  './assets/img/logo-lega-filo-oro.png',
   './assets/dita/mano-00.png',
   './assets/dita/mano-01.png',
   './assets/dita/mano-02.png',

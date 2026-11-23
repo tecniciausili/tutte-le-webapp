@@ -1,0 +1,30 @@
+/* Mastertutor per Windows: righe della scheda «Audio anticipatori» (un anticipatore per tipo di stimolo) */
+.riga-anticipatore .scelta-anticipatore {
+  margin: 0;
+  flex: 0 1 300px;
+  min-width: 220px;
+}
+
+.riga-anticipatore .scelta-anticipatore select {
+  width: 100%;
+}
+
+@media (max-width: 760px) {
+  .riga-anticipatore {
+    flex-wrap: wrap;
+  }
+
+  .riga-anticipatore .scelta-anticipatore {
+    flex: 1 1 100%;
+    order: 3;
+  }
+}
+
+/* Spiegazione della scelta casuale degli stimoli: testo su più righe, icona in alto */
+.nota-presa-casuale {
+  align-items: flex-start;
+}
+
+.nota-presa-casuale i {
+  margin-top: 0.1rem;
+}

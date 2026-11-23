@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#E91E63">
-    <meta name="description" content="Area Educatore - Scrivo Parole con le Lettere">
+    <meta name="description" content="Configurazione - Scrivo Parole con le Lettere">
 
     <!-- PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-title" content="Scrivo parole">
     <meta name="mobile-web-app-capable" content="yes">
 
-    <title>Area Educatore - Scrivo Parole con le Lettere</title>
+    <title>Configurazione - Scrivo Parole con le Lettere</title>
 
     <!-- PWA Manifest -->
     <link rel="manifest" href="../manifest.json">
@@ -22,24 +22,32 @@
     <link rel="apple-touch-icon" href="../assets/icons/icon-192.png">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="css/styles.css?v=20261118.1">
+    <link rel="stylesheet" href="css/styles.css?v=20261123.1">
     <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
     <script src="js/raccolta.js?v=1.1"></script>
+    <!-- Ultima variante usata: la pagina di scelta riapre questa -->
+    <script src="../js/apertura.js?v=1.0"></script>
+    <script>ScrivoApertura.ricorda('lettere');</script>
 </head>
 <body class="educator-page">
     <!-- Header -->
     <header class="app-header">
         <div class="header-content">
             <div class="header-buttons-left">
+                <img class="logo-lega" src="assets/img/logo-lega-filo-oro.png" alt="Lega del Filo d'Oro">
                 <button class="btn-back" onclick="goBack()" aria-label="Torna a: Scrivo parole con le lettere" title="Torna a: Scrivo parole con le lettere">
                     <i class="bi bi-arrow-left"></i>
                 </button>
             </div>
             <h1 class="app-title">
-                <i class="bi bi-person-gear"></i>
-                Area Educatore
+                <i class="bi bi-gear-fill"></i>
+                Configurazione
             </h1>
             <div class="header-buttons-right">
+                <!-- All'esercizio dell'utente (se non ce ne sono, l'esercizio lo dice e riporta qui) -->
+                <a href="esercizio.html" class="btn-header-testo btn-header-primario" aria-label="Vai all'esercizio" title="Vai all'esercizio">
+                    <i class="bi bi-play-fill"></i><span>Vai all'esercizio</span>
+                </a>
                 <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Aggiorna l'app" title="Aggiorna l'app (i dati restano)">
                     <i class="bi bi-arrow-clockwise"></i>
                 </button>
@@ -199,7 +207,7 @@
     <script src="js/arasaac-service.js?v=1.0"></script>
     <script src="js/clear-cache.js?v=3.1"></script>
     <script src="js/archivio.js?v=1.1"></script>
-    <script src="js/educatore-app.js?v=20261110.1"></script>
+    <script src="js/educatore-app.js?v=20261123.1"></script>
 
     <!-- Service Worker Registration -->
     <script>

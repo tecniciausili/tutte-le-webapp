@@ -83,7 +83,16 @@ function goBack() {
     if (appState.isStarted && !confirm('Vuoi davvero uscire? I progressi saranno persi.')) {
         return;
     }
-    window.location.href = './';   // pagina iniziale di Scrivo parole con le lettere
+    // pagina iniziale di Scrivo parole con le lettere (?menu: senza reindirizzamento all'esercizio)
+    window.location.href = 'index.html?menu';
+}
+
+// Tasto «Configurazione» dell'intestazione: area dell'educatore
+function vaiAConfigurazione() {
+    if (appState.isStarted && !confirm('Vuoi davvero uscire? I progressi saranno persi.')) {
+        return;
+    }
+    window.location.href = 'gestione.html';
 }
 
 // =====================================================

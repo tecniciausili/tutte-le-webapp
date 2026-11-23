@@ -10,7 +10,7 @@
  *   4. pausa LIS «dopo»: l'educatore conferma in LIS e tocca Avanti.
  *
  * URL:  gioca.html           → Area Utente: risultati salvati sul dispositivo
- *       gioca.html?prova=1   → prova dall'Area Educatore (nulla salvato)
+ *       gioca.html?prova=1   → prova dalla Configurazione (nulla salvato)
  */
 (function () {
     const C = CT.Concetti;
@@ -52,8 +52,7 @@
     /** Le scene da proporre: attive, delle coppie accese, adatte alla modalità */
     function preparaCoda() {
         const imp = stato.profilo.impostazioni;
-        let scene = stato.profilo.scene.filter(s => s.attiva !== false && imp.coppie.includes(C.CONCETTI[s.concetto]?.coppia));
-        if (imp.modalita === 'esegui') scene = scene.filter(s => s.tipo !== 'pronta');
+        let scene = CT.Archivio.sceneDaProporre(stato.profilo);
         if (imp.ordine === 'casuale') scene = CT.util.mescola(scene);
         if (imp.scenePerSessione > 0) scene = scene.slice(0, imp.scenePerSessione);
         return scene;
@@ -62,7 +61,7 @@
     function barraSinistra() {
         const sx = $('barraSx');
         if (stato.prova) {
-            sx.innerHTML = `<a class="btn btn-piccolo btn-esci-prova" href="gestione.html">${CT.icona('indietro')} Torna all'Area Educatore</a>`;
+            sx.innerHTML = `<a class="btn btn-piccolo btn-esci-prova" href="gestione.html">${CT.icona('indietro')} Torna alla Configurazione</a>`;
             return;
         }
         // Utente: lucchetto, si esce tenendolo premuto 2 secondi (o con Esc dal computer)
@@ -85,9 +84,9 @@
             <h2 class="modale-titolo">Menu dell'educatore</h2>
             <div class="scelte-esporta">
                 <button type="button" class="scelta" data-a="continua">${CT.icona('gioca')}<span><strong>Continua</strong><small>Torna all'esercizio</small></span></button>
-                <a class="scelta" href="./" style="text-decoration:none;color:inherit">${CT.icona('esci')}<span><strong>Pagina iniziale</strong><small>Scelta fra Area Educatore e Area Utente</small></span></a>
+                <a class="scelta" href="index.html?menu=1" style="text-decoration:none;color:inherit">${CT.icona('esci')}<span><strong>Pagina iniziale</strong><small>Scelta fra Configurazione e Area Utente</small></span></a>
                 <button type="button" class="scelta" data-a="ricomincia">${CT.icona('indietro')}<span><strong>Ricomincia</strong><small>Nuova sessione dall'inizio</small></span></button>
-                <a class="scelta" href="gestione.html" style="text-decoration:none;color:inherit">${CT.icona('modifica')}<span><strong>Area Educatore</strong><small>Scene, impostazioni e risultati</small></span></a>
+                <a class="scelta" href="gestione.html" style="text-decoration:none;color:inherit">${CT.icona('modifica')}<span><strong>Configurazione</strong><small>Scene, impostazioni e risultati</small></span></a>
             </div>`, { piccola: true });
         m.querySelector('[data-a="continua"]').addEventListener('click', () => CT.util.chiudiModale());
         m.querySelector('[data-a="ricomincia"]').addEventListener('click', () => { CT.util.chiudiModale(); schermoInizio(); });
@@ -100,8 +99,8 @@
         $('lisBox').innerHTML = '';
         stato.coda = preparaCoda();
         if (!stato.coda.length) {
-            return messaggio('Nessuna scena da proporre', 'Nell\'Area Educatore attiva almeno una scena di una coppia accesa (in Esegui servono scene composte, non immagini pronte).',
-                [{ testo: 'Area Educatore', href: 'gestione.html' }]);
+            return messaggio('Nessuna scena da proporre', 'Nella Configurazione attiva almeno una scena di una coppia accesa (in Esegui servono scene composte, non immagini pronte).',
+                [{ testo: 'Configurazione', href: 'gestione.html' }]);
         }
         const imp = stato.profilo.impostazioni;
         const coppie = imp.coppie.map(id => C.COPPIA[id]).filter(Boolean);
@@ -110,6 +109,7 @@
             <button type="button" class="btn-grande" id="btnInizia" aria-label="Inizia">${CT.icona('gioca')}</button>
             <p class="nota-educatore">${stato.coda.length} scene · ${{ riconosci: 'Riconosci', esegui: 'Esegui', alterna: 'Riconosci ed Esegui alternati' }[imp.modalita]}${stato.prova ? ' · prova: i risultati non vengono salvati' : ''}.
             ${imp.pausaPrima.tipo === 'tocco' || imp.pausaDopo.tipo === 'tocco' ? 'Il pulsante <strong>Avanti</strong> in alto a destra è per te: fai il segno LIS, poi toccalo (o premi Spazio).' : ''}</p>
+            ${stato.prova ? '' : `<a class="btn btn-piccolo btn-configurazione" href="gestione.html">${CT.icona('modifica')} Configurazione</a>`}
         </div>`;
         $('btnInizia').addEventListener('click', () => {
             if (matchMedia('(pointer: coarse)').matches && document.documentElement.requestFullscreen && !document.fullscreenElement) {

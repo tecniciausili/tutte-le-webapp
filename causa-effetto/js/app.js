@@ -8,7 +8,7 @@ const CACHE_ARASAAC = `${PREFISSO_CACHE}arasaac`;
 
 const APP_CONFIG = {
   nome: 'Causa Effetto',
-  versione: '1.0.8',
+  versione: '1.0.9',
 };
 window.APP_CONFIG = APP_CONFIG;
 
@@ -245,8 +245,32 @@ const App = (() => {
       }
     });
 
-    mostraBenvenuto();
+    apriPaginaIniziale();
     console.log(`${APP_CONFIG.nome} v${APP_CONFIG.versione}`);
+  }
+
+  // ==================== PAGINA D'APERTURA ====================
+  // Se c'è già un esercizio pronto l'app si apre direttamente sull'esercizio (Area Utente);
+  // altrimenti sulla Configurazione. La schermata iniziale resta raggiungibile dal menu e da ←.
+  // Pronto = almeno un oggetto in scena che fa partire almeno un video della lista
+  // (gli stessi controlli che l'Area Utente fa quando si preme «Inizia»).
+  function esercizioPronto() {
+    const video = Archivio.getYoutube().filter((v) => v.attivo && !Riproduttore.erroreDefinitivo(v.errore));
+    return Archivio.oggettiInScena().some((o) => Archivio.videoDellOggetto(o, video).length > 0);
+  }
+
+  function apriPaginaIniziale() {
+    let pronto = false;
+    try {
+      pronto = esercizioPronto();
+    } catch (e) {
+      console.warn('Controllo dell\'esercizio non riuscito:', e);
+    }
+    if (pronto) {
+      mostraUtente();
+    } else {
+      mostraEducatore();
+    }
   }
 
   document.addEventListener('DOMContentLoaded', avvia);

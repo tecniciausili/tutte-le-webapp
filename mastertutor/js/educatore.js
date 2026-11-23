@@ -67,11 +67,11 @@ const Educatore = (() => {
   function apri(contenitore) {
     contenitore.innerHTML = `
       <div class="educatore">
-        <section class="panel pannello-educatore" aria-label="Area Educatore">
+        <section class="panel pannello-educatore" aria-label="Configurazione">
           <div class="intestazione-area">
-            <h2><i class="bi bi-person-workspace"></i> Area Educatore</h2>
+            <h2><i class="bi bi-gear-fill"></i> Configurazione</h2>
             <button type="button" class="btn-secondary btn-piccolo" data-azione="vai-utente">
-              <i class="bi bi-headphones"></i> Area Utente
+              <i class="bi bi-play-circle-fill"></i> Vai all'esercizio
             </button>
           </div>
           <nav class="schede" role="tablist" aria-label="Sezioni">
@@ -162,7 +162,8 @@ const Educatore = (() => {
     const nAudio = audio.filter((a) => a.attivo && a.blob).length;
     const nVideo = Archivio.getYoutube().filter((v) => v.attivo && !Riproduttore.erroreDefinitivo(v.errore)).length;
     const presaOk = Presa.disponibile();
-    const anticipatoreOk = typeof imp.anticipatore !== 'number' || audio.some((a) => a.id === imp.anticipatore && a.blob);
+    const sceltiNumeri = categorieAnticipatore().map((c) => sceltaDi(imp, c.cat)).filter((v) => typeof v === 'number');
+    const anticipatoreOk = sceltiNumeri.every((id) => audio.some((a) => a.id === id && a.blob));
     const mancanti = [];
     if (ev.audio && !nAudio) {
       mancanti.push('nessun audio nel gioco');
@@ -179,7 +180,7 @@ const Educatore = (() => {
       audio: ev.audio ? (nAudio ? ['ok', `${nAudio} audio nel gioco`] : ['manca', 'Nessun audio nel gioco']) : null,
       youtube: ev.youtube ? (nVideo ? ['ok', `${nVideo} video nel gioco`] : ['manca', 'Nessun video nel gioco']) : null,
       presa: ev.presa ? (presaOk ? ['ok', 'Presa collegata'] : ['manca', 'La presa è tra gli stimoli usati ma non è collegata']) : null,
-      anticipatore: anticipatoreOk ? ['ok', 'Anticipatore scelto'] : ['manca', 'L\'audio anticipatore scelto non esiste più'],
+      anticipatore: anticipatoreOk ? ['ok', 'Anticipatori scelti'] : ['manca', 'Un audio anticipatore scelto non esiste più'],
       tempi: ['ok', 'Tempi impostati'],
     };
     document.querySelectorAll('.schede .scheda').forEach((b) => {
@@ -277,6 +278,7 @@ const Educatore = (() => {
     if (!contenuto?.querySelector('#listaAudio')) {
       return;
     }
+    audio = audio.filter((a) => !a.anticipa);
     if (audio.length === 0) {
       lista.innerHTML = '<p class="vuoto"><i class="bi bi-mic-mute"></i> Nessun audio archiviato su questo dispositivo.</p>';
       return;
@@ -284,12 +286,12 @@ const Educatore = (() => {
 
     // Stessa sequenza dell'Area Utente, dove si cambia trascinando gli stimoli
     audio = Archivio.inOrdine(audio, (a) => `a${a.id}`);
-    const anticipatore = Archivio.getImpostazioni().anticipatore;
+    const impAudio = Archivio.getImpostazioni();
     const inGioco = audio.filter((a) => a.attivo).length;
     lista.innerHTML = `
       <p class="conteggio">${inGioco} nel gioco su ${audio.length} · ${NOTA_ORDINE}</p>
       ${audio.map((a) => {
-        const eAnticipatore = anticipatore === a.id;
+        const eAnticipatore = usiDi(impAudio, a.id).length > 0;
         return `
           <div class="elemento ${a.attivo ? 'attivo' : ''}">
             <label class="spunta" title="Usa questo audio come stimolo">
@@ -866,63 +868,235 @@ const Educatore = (() => {
   }
 
   // ==================== SCHEDA ANTICIPATORE ====================
+  // Ogni tipo di stimolo può avere il suo audio anticipatore: uno per le voci registrate,
+  // uno per la musica (YouTube) e uno per ogni presa configurata. Dove si sceglie
+  // «Come il generale» suona l'anticipatore generale.
+  //
+  // Categorie: 'generale' | 'audio' | 'youtube' | 'presa:<id della presa>'
+
+  function categorieAnticipatore() {
+    const prese = Presa.elenco();
+    return [
+      { cat: 'generale', icona: 'bi-bell-fill', nome: 'Generale', nota: 'Suona per i tipi di stimolo che non ne hanno uno proprio' },
+      { cat: 'audio', icona: 'bi-mic-fill', nome: 'Voci registrate', nota: 'Prima di ogni audio registrato o caricato' },
+      { cat: 'youtube', icona: 'bi-music-note-beamed', nome: 'Musica (YouTube)', nota: 'Prima di ogni video o brano YouTube' },
+      ...prese.map((p) => ({
+        cat: `presa:${p.id}`, icona: 'bi-plug-fill', nome: `Presa: ${p.nome}`, nota: `Prima che si accenda «${p.nome}»`, presa: p,
+      })),
+    ];
+  }
+
+  function nomeCategoria(cat) {
+    if (cat === 'generale') return 'Generale';
+    if (cat === 'audio') return 'Voci registrate';
+    if (cat === 'youtube') return 'Musica (YouTube)';
+    if (String(cat).startsWith('presa:')) {
+      const id = cat.slice(6);
+      const p = Presa.elenco().find((x) => x.id === id);
+      return p ? `Presa: ${p.nome}` : 'Presa non più configurata';
+    }
+    return 'Senza categoria';
+  }
+
+  // Nome proposto per un anticipatore nuovo: anticipatore-voce, anticipatore-musica,
+  // anticipatore-ventilatore, anticipatore-luci-di-natale…
+  function nomeProposto(cat) {
+    if (cat === 'audio') return 'anticipatore-voce';
+    if (cat === 'youtube') return 'anticipatore-musica';
+    if (String(cat).startsWith('presa:')) {
+      const p = Presa.elenco().find((x) => x.id === cat.slice(6));
+      const parola = String(p?.nome || 'presa').normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+      return `anticipatore-${parola || 'presa'}`;
+    }
+    return 'anticipatore';
+  }
+
+  // Valore scelto per una categoria: 'generale' | 'nessuno' | 'predefinito' | id
+  function sceltaDi(imp, cat) {
+    if (cat === 'generale') return imp.anticipatore;
+    if (cat.startsWith('presa:')) return imp.anticipatori?.prese?.[cat.slice(6)] ?? 'generale';
+    return imp.anticipatori?.[cat] ?? 'generale';
+  }
+
+  function salvaScelta(cat, valore) {
+    if (cat === 'generale') {
+      Archivio.salvaImpostazioni({ anticipatore: valore });
+    } else if (cat.startsWith('presa:')) {
+      Archivio.salvaImpostazioni({ anticipatori: { prese: { [cat.slice(6)]: valore } } });
+    } else {
+      Archivio.salvaImpostazioni({ anticipatori: { [cat]: valore } });
+    }
+  }
+
+  // Tutti i riferimenti a un audio eliminato tornano al generale (o al suono predefinito)
+  function dimenticaAnticipatore(id) {
+    const imp = Archivio.getImpostazioni();
+    if (imp.anticipatore === id) {
+      Archivio.salvaImpostazioni({ anticipatore: 'predefinito' });
+    }
+    const per = imp.anticipatori || {};
+    const modifiche = {};
+    for (const tipo of ['audio', 'youtube']) {
+      if (per[tipo] === id) {
+        modifiche[tipo] = 'generale';
+      }
+    }
+    const prese = {};
+    for (const [idPresa, v] of Object.entries(per.prese || {})) {
+      if (v === id) {
+        prese[idPresa] = 'generale';
+      }
+    }
+    if (Object.keys(prese).length) {
+      modifiche.prese = prese;
+    }
+    if (Object.keys(modifiche).length) {
+      Archivio.salvaImpostazioni({ anticipatori: modifiche });
+    }
+  }
+
+  // Per quali categorie è in uso l'audio id
+  function usiDi(imp, id) {
+    return categorieAnticipatore().filter((c) => sceltaDi(imp, c.cat) === id).map((c) => c.nome);
+  }
+
+  let catNuovo = 'generale';
 
   async function schedaAnticipatore() {
     contenuto.innerHTML = `
-      <h3><i class="bi bi-bell"></i> Audio anticipatore</h3>
+      <h3><i class="bi bi-bell"></i> Audio anticipatori</h3>
       <p class="helper-text">
-        Suona prima di ogni stimolo nella <strong>stimolazione casuale</strong> e nello
-        <strong>stimolo su richiesta</strong>: avvisa l'utente che sta per succedere qualcosa.
+        Prima di ogni stimolo, nella <strong>stimolazione casuale</strong> e nello <strong>stimolo su
+        richiesta</strong>, suona un audio che avvisa l'utente di quello che sta per arrivare.
+        <strong>Ogni tipo di stimolo può avere il suo</strong>: uno per le voci registrate, uno per la
+        musica e uno per ogni presa (per esempio «anticipatore-ventilatore»). Dove scegli
+        <em>Come il generale</em> suona l'anticipatore generale.
       </p>
-      <div id="opzioniAnticipatore" class="opzioni-lista"></div>
+      <div id="tabellaAnticipatori" class="lista-elementi"></div>
+
       <h4 class="titolo-lista"><i class="bi bi-plus-circle"></i> Nuovo anticipatore</h4>
-      <p class="helper-text">Registrato o caricato qui, diventa subito l'anticipatore (e non entra tra gli stimoli).</p>
+      <div class="form-group">
+        <label for="nuovoAnticipatorePer">È l'anticipatore di</label>
+        <select id="nuovoAnticipatorePer"></select>
+      </div>
+      <p class="helper-text">Registralo o caricalo: diventa subito l'anticipatore di quello che hai
+        scelto qui sopra e non entra tra gli stimoli.</p>
       <div id="acqAnticipatore"></div>
+
+      <h4 class="titolo-lista"><i class="bi bi-collection-play"></i> Anticipatori registrati</h4>
+      <div id="listaAnticipatori" class="lista-elementi"></div>
     `;
 
     acquisizione = ElaboraAudio.crea(contenuto.querySelector('#acqAnticipatore'), {
-      nomeSuggerito: 'Anticipatore',
+      nomeSuggerito: () => nomeProposto(catNuovo),
+      nomeAncheFile: true,
       etichettaSalva: 'Usa come anticipatore',
       onSalva: async ({ nome, blob, durata, origine }) => {
-        const record = await Archivio.audioAggiungi({ nome, blob, durata, origine, attivo: false });
-        Archivio.salvaImpostazioni({ anticipatore: record.id });
-        disegnaOpzioniAnticipatore();
-        return `✅ "${nome}" è il nuovo audio anticipatore.`;
+        const cat = catNuovo;
+        const record = await Archivio.audioAggiungi({ nome, blob, durata, origine, attivo: false, anticipa: cat });
+        salvaScelta(cat, record.id);
+        disegnaAnticipatori();
+        return `✅ "${nome}" è ora l'anticipatore di: ${nomeCategoria(cat)}.`;
       },
     });
 
-    disegnaOpzioniAnticipatore();
+    contenuto.querySelector('#nuovoAnticipatorePer').addEventListener('change', (e) => {
+      catNuovo = e.target.value;
+      acquisizione?.suggerisci(nomeProposto(catNuovo));
+    });
+
+    // Le prese arrivano dal collegamento: quando cambiano, ridisegno l'elenco
+    rimuoviAscoltoPresa?.();
+    rimuoviAscoltoPresa = Presa.onCambio(() => disegnaAnticipatori());
+    disegnaAnticipatori();
   }
 
-  async function disegnaOpzioniAnticipatore() {
-    const box = contenuto?.querySelector('#opzioniAnticipatore');
-    if (!box) {
+  async function disegnaAnticipatori() {
+    const tabella = contenuto?.querySelector('#tabellaAnticipatori');
+    if (!tabella) {
       return;
     }
     let audio = [];
     try {
       audio = await Archivio.audioLista();
     } catch (e) { /* mostro comunque le opzioni base */ }
-    if (!contenuto?.querySelector('#opzioniAnticipatore')) {
+    if (!contenuto?.querySelector('#tabellaAnticipatori')) {
       return;
     }
-    const scelto = Archivio.getImpostazioni().anticipatore;
-    const opzione = (valore, icona, testo, ascoltabile) => `
-      <div class="opzione ${String(scelto) === String(valore) ? 'scelta' : ''}">
-        <label>
-          <input type="radio" name="anticipatore" data-azione="anticipatore" value="${valore}"
-            ${String(scelto) === String(valore) ? 'checked' : ''} />
-          <i class="bi ${icona}"></i> <span>${testo}</span>
-        </label>
-        ${ascoltabile ? `<button type="button" class="btn-icona" data-azione="anticipatore-ascolta" data-valore="${valore}" title="Ascolta"><i class="bi bi-play-fill"></i></button>` : ''}
-      </div>`;
+    const imp = Archivio.getImpostazioni();
+    const categorie = categorieAnticipatore();
+    const anticipatori = audio.filter((a) => a.anticipa && a.blob);
+    const perId = new Map(audio.map((a) => [a.id, a]));
+    const esc = Util.escapeHtml;
 
-    box.innerHTML = [
-      opzione('predefinito', 'bi-bell-fill', 'Suono predefinito', true),
-      opzione('nessuno', 'bi-bell-slash', 'Nessun anticipatore', false),
-      ...audio.map((a) => opzione(a.id, a.origine === 'registrazione' ? 'bi-mic-fill' : 'bi-file-earmark-music',
-        Util.escapeHtml(a.nome), true)),
-    ].join('');
+    const opzioniPer = (c) => {
+      const scelta = sceltaDi(imp, c.cat);
+      const sel = (v) => (String(scelta) === String(v) ? 'selected' : '');
+      const propri = anticipatori.filter((a) => a.anticipa === c.cat);
+      const altri = anticipatori.filter((a) => a.anticipa !== c.cat);
+      // Un audio scelto con la versione precedente (senza categoria) resta selezionabile
+      const vecchio = typeof scelta === 'number' && !anticipatori.some((a) => a.id === scelta) ? perId.get(scelta) : null;
+      return [
+        c.cat === 'generale' ? '' : `<option value="generale" ${sel('generale')}>Come il generale</option>`,
+        `<option value="predefinito" ${sel('predefinito')}>Suono predefinito</option>`,
+        `<option value="nessuno" ${sel('nessuno')}>Nessun anticipatore</option>`,
+        propri.length ? `<optgroup label="Registrati per questo">${propri.map((a) => `<option value="${a.id}" ${sel(a.id)}>${esc(a.nome)}</option>`).join('')}</optgroup>` : '',
+        altri.length ? `<optgroup label="Altri anticipatori">${altri.map((a) => `<option value="${a.id}" ${sel(a.id)}>${esc(a.nome)}</option>`).join('')}</optgroup>` : '',
+        vecchio ? `<option value="${vecchio.id}" selected>${esc(vecchio.nome)}</option>` : '',
+        typeof scelta === 'number' && !perId.has(scelta) ? '<option value="" selected>(audio eliminato: suona il generale)</option>' : '',
+      ].join('');
+    };
+
+    tabella.innerHTML = categorie.map((c) => `
+      <div class="elemento riga-anticipatore">
+        <i class="bi ${c.icona} elemento-icona"></i>
+        <div class="elemento-testo">
+          <strong>${esc(c.nome)}</strong>
+          <small>${esc(c.nota)}</small>
+        </div>
+        <div class="form-group scelta-anticipatore">
+          <select data-azione="anticipatore-scelta" data-categoria="${esc(c.cat)}" aria-label="Anticipatore: ${esc(c.nome)}">${opzioniPer(c)}</select>
+        </div>
+        <button type="button" class="btn-icona" data-azione="anticipatore-ascolta-cat" data-categoria="${esc(c.cat)}" title="Ascolta">
+          <i class="bi bi-play-fill"></i>
+        </button>
+      </div>`).join('')
+      + (Presa.elenco().length ? '' : `
+      <p class="helper-text"><i class="bi bi-plug"></i> Nessuna presa configurata: quando le configuri nella scheda
+        <strong>Presa</strong>, qui compare una riga per ognuna.</p>`);
+
+    // Menu «È l'anticipatore di»
+    const menu = contenuto.querySelector('#nuovoAnticipatorePer');
+    if (!categorie.some((c) => c.cat === catNuovo)) {
+      catNuovo = 'generale';
+    }
+    menu.innerHTML = categorie.map((c) => `<option value="${esc(c.cat)}" ${c.cat === catNuovo ? 'selected' : ''}>${esc(c.nome)}</option>`).join('');
+
+    // Elenco degli anticipatori registrati
+    const lista = contenuto.querySelector('#listaAnticipatori');
+    if (anticipatori.length === 0) {
+      lista.innerHTML = '<p class="vuoto"><i class="bi bi-bell-slash"></i> Nessun anticipatore registrato: si usa il suono predefinito.</p>';
+      return;
+    }
+    lista.innerHTML = anticipatori.map((a) => {
+      const usi = usiDi(imp, a.id);
+      return `
+        <div class="elemento ${usi.length ? 'attivo' : ''}">
+          <i class="bi ${a.origine === 'registrazione' ? 'bi-mic-fill' : 'bi-file-earmark-music'} elemento-icona"></i>
+          <div class="elemento-testo">
+            <strong>${esc(a.nome)}</strong>
+            <small>Registrato per: ${esc(nomeCategoria(a.anticipa))} · ${(Number(a.durata) || 0).toFixed(1)} s
+              ${usi.length ? ` · <span class="etichetta"><i class="bi bi-bell-fill"></i> in uso: ${esc(usi.join(', '))}</span>` : ' · non in uso'}</small>
+          </div>
+          <button type="button" class="btn-icona" data-azione="anticipatore-ascolta" data-valore="${a.id}" title="Ascolta">
+            <i class="bi bi-play-fill"></i>
+          </button>
+          <button type="button" class="btn-icona pericolo" data-azione="anticipatore-elimina" data-id="${a.id}" title="Elimina">
+            <i class="bi bi-trash3"></i>
+          </button>
+        </div>`;
+    }).join('');
   }
 
   // ==================== SCHEDA PRESA ====================
@@ -996,7 +1170,7 @@ const Educatore = (() => {
       : 'nessuno nel gioco: aggiungili nella scheda Audio', !attivi.length);
     scrivi('youtube', nVideo ? `${nVideo} nel gioco` : 'nessuno nel gioco: aggiungili nella scheda YouTube', !nVideo);
     scrivi('presa', Presa.disponibile()
-      ? `collegata · resta accesa ${secondi} s`
+      ? `${Presa.elenco().length} ${Presa.elenco().length === 1 ? 'presa' : 'prese'} · resta accesa ${secondi} s`
       : 'non collegata: configurala nella scheda Presa', !Presa.disponibile());
   }
 
@@ -1172,9 +1346,7 @@ const Educatore = (() => {
           return;
         }
         await Archivio.audioElimina(id);
-        if (Archivio.getImpostazioni().anticipatore === id) {
-          Archivio.salvaImpostazioni({ anticipatore: 'predefinito' });
-        }
+        dimenticaAnticipatore(id);
         disegnaListaAudio();
       } else if (azione === 'yt-riprova') {
         Archivio.aggiornaYoutube(id, { errore: null, errore_data: null });
@@ -1195,6 +1367,26 @@ const Educatore = (() => {
         }
         Archivio.eliminaYoutubePlaylist(playlistId);
         disegnaListaYoutube();
+      } else if (azione === 'anticipatore-elimina') {
+        const record = await Archivio.audioGet(id);
+        if (!record || !confirm(`Eliminare l'anticipatore "${record.nome}"?\n\nDove era in uso suonerà l'anticipatore generale. Non si può annullare.`)) {
+          return;
+        }
+        await Archivio.audioElimina(id);
+        dimenticaAnticipatore(id);
+        disegnaAnticipatori();
+      } else if (azione === 'anticipatore-ascolta-cat') {
+        const imp = Archivio.getImpostazioni();
+        let valore = sceltaDi(imp, btn.dataset.categoria);
+        if (valore === 'generale') {
+          valore = imp.anticipatore;
+        }
+        if (typeof valore === 'number') {
+          const record = await Archivio.audioGet(valore);
+          ascolta(record?.blob || ANTICIPATORE_PREDEFINITO);
+        } else if (valore === 'predefinito') {
+          ascolta(ANTICIPATORE_PREDEFINITO);
+        }
       } else if (azione === 'anticipatore-ascolta') {
         const valore = btn.dataset.valore;
         if (valore === 'predefinito') {
@@ -1252,12 +1444,14 @@ const Educatore = (() => {
         await Archivio.audioAggiorna(id, { intero: input.checked });
       } else if (azione === 'yt-inizio' || azione === 'yt-fine') {
         salvaTempiVideo(id);
-      } else if (azione === 'anticipatore') {
+      } else if (azione === 'anticipatore-scelta') {
         const valore = input.value;
-        Archivio.salvaImpostazioni({
-          anticipatore: (valore === 'predefinito' || valore === 'nessuno') ? valore : Number(valore),
-        });
-        disegnaOpzioniAnticipatore();
+        if (valore === '') {
+          return;
+        }
+        salvaScelta(input.dataset.categoria,
+          ['generale', 'predefinito', 'nessuno'].includes(valore) ? valore : Number(valore));
+        disegnaAnticipatori();
       }
     } catch (errore) {
       alert(`⚠️ ${errore.message}`);

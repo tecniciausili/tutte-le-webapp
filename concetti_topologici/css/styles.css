@@ -322,7 +322,7 @@ body.con-modale { overflow: hidden; }
 .tessera-disegno svg { display: block; width: 100%; height: auto; }
 .tessera-parola { font-family: var(--font-testo); font-weight: 700; font-size: 15px; letter-spacing: .04em; }
 
-/* ---------- Area Educatore ---------- */
+/* ---------- Configurazione (parte dell'educatore) ---------- */
 .barra-utente { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 4px 0 18px; }
 .barra-utente .azioni { display: flex; gap: 10px; flex-wrap: wrap; }
 .stato-salvataggio { font-size: 13px; color: var(--ink-3); min-height: 1.2em; }
@@ -473,3 +473,33 @@ button.ct-freccia { padding: 0; font: inherit; cursor: pointer; }
 .menu-app .menu-app-aggiorna { color: #b84300; }
 .menu-app + .nota { margin-top: 16px; }
 .barra-azioni { justify-content: flex-end; }
+
+/* ---------- Intestazione senza fascia colorata, con il logo della Lega del Filo d'Oro a sinistra ----------
+   (obiettivo comune alle app della raccolta). Vale per la pagina iniziale, la Configurazione
+   e la barra in alto dell'esercizio (css/gioco.css). */
+.avvio-testata,
+.gioco-barra {
+    background: #ffffff;
+    color: var(--ink);
+    box-shadow: 0 1px 0 #e3e8e7, 0 2px 8px rgba(0, 0, 0, .06);
+}
+.logo-lega { display: block; height: 54px; width: auto; flex: none; }
+.avvio-testata .logo-lega + .avvio-marchio { margin-right: auto; }
+.avvio-testata .ct-freccia { background: var(--sfondo); }
+.avvio-testata .ct-freccia:hover { background: var(--giallo); }
+.avvio-testata { margin-bottom: 8px; }
+/* Pagina iniziale: resta nascosta mentre si decide se aprire l'esercizio o la Configurazione */
+html.instradamento body { visibility: hidden; }
+
+@media (max-width: 768px) {
+    .logo-lega { height: 40px; }
+}
+@media (max-width: 600px) {
+    /* Sui telefoni: logo e pulsanti sulla prima riga, il nome dell'app sotto */
+    .avvio-testata .logo-lega { margin-right: auto; }
+    .avvio-testata .avvio-marchio { order: 10; flex-basis: 100%; margin-right: 0; }
+}
+@media (max-width: 480px) {
+    .logo-lega { height: 32px; }
+    .avvio-marchio h1 { font-size: 22px; }
+}

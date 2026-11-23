@@ -8,7 +8,7 @@
 // Tutte le cache dell'app iniziano con PREFISSO: sullo stesso dominio
 // ci sono altre app, e le loro cache non vanno toccate.
 const PREFISSO = 'concetti_topologici_';
-const CACHE_NAME = `${PREFISSO}v1.1.7`;
+const CACHE_NAME = `${PREFISSO}v1.1.8`;
 const CACHE_ARASAAC = `${PREFISSO}arasaac`;
 const CACHE_MODELLI = `${PREFISSO}modelli`;
 const LIMITE_ARASAAC = 800;
@@ -19,13 +19,13 @@ const URLS_TO_CACHE = [
   './gioca.html',
   './manifest.json',
   './js/raccolta.js?v=1.1',
-  './css/styles.css?v=1.1.6',
-  './css/gioco.css?v=1.1.6',
-  './js/comune.js?v=1.1.6',
-  './js/concetti.js?v=1.1.6',
-  './js/archivio.js?v=1.1.6',
-  './js/gestione.js?v=1.1.6',
-  './js/gioca.js?v=1.1.6',
+  './css/styles.css?v=1.1.7',
+  './css/gioco.css?v=1.1.7',
+  './js/comune.js?v=1.1.7',
+  './js/concetti.js?v=1.1.7',
+  './js/archivio.js?v=1.1.7',
+  './js/gestione.js?v=1.1.7',
+  './js/gioca.js?v=1.1.7',
   './assets/fonts/fonts.css',
   './assets/fonts/atkinson-hyperlegible-400-latin.woff2',
   './assets/fonts/atkinson-hyperlegible-400-latin-ext.woff2',
@@ -37,6 +37,7 @@ const URLS_TO_CACHE = [
   './assets/icons/icon-512.png',
   './assets/icons/icon-maskable-512.png',
   './assets/icons/apple-touch-icon.png',
+  './assets/img/logo-lega-filo-oro.png',
 ];
 
 self.addEventListener('install', (event) => {

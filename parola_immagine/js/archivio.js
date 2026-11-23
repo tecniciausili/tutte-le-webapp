@@ -12,6 +12,8 @@
 //       pi_risultati    → una riga per ogni risposta data negli esercizi
 //       pi_display_parola_immagine / pi_display_immagine_parola → menu ☰ di ogni esercizio
 //       pi_voce         → voce attiva ('true' / 'false')
+//       pi_ultimo_esercizio → 'parola-immagine' / 'immagine-parola': l'esercizio aperto per ultimo,
+//                         quello che si apre da solo all'avvio dell'app
 //
 // Le coppie hanno gli stessi campi della vecchia tabella parola_immagine_coppie:
 // id_coppia, parola_target, url_immagine_target, id_pittogramma_target (0 = immagine dal
@@ -25,8 +27,9 @@ const Archivio = (() => {
     displayPI: 'pi_display_parola_immagine',
     displayIP: 'pi_display_immagine_parola',
     voce: 'pi_voce',
+    ultimoEsercizio: 'pi_ultimo_esercizio',
   };
-  const PREFERENZE = [CHIAVI.displayPI, CHIAVI.displayIP, CHIAVI.voce];
+  const PREFERENZE = [CHIAVI.displayPI, CHIAVI.displayIP, CHIAVI.voce, CHIAVI.ultimoEsercizio];
   const DB_NOME = 'parola-immagine';
   const DB_ARCHIVIO = 'coppie';
   const MAX_PAROLA = 100;
@@ -115,6 +118,36 @@ const Archivio = (() => {
   async function getCoppie() {
     const tutte = (await transazione('readonly', (a) => a.getAll())) || [];
     return tutte.sort((a, b) => (b.id_coppia || 0) - (a.id_coppia || 0));
+  }
+
+  // Quante coppie ci sono (senza leggere le immagini): serve all'apertura dell'app
+  async function contaCoppie() {
+    return (await transazione('readonly', (a) => a.count())) || 0;
+  }
+
+  // ==================== ESERCIZIO DA APRIRE ====================
+
+  // Si ricorda l'esercizio aperto per ultimo (Parola → Immagine o Immagine → Parola)
+  function salvaUltimoEsercizio(modo) {
+    try {
+      localStorage.setItem(CHIAVI.ultimoEsercizio, modo === 'immagine-parola' ? 'immagine-parola' : 'parola-immagine');
+    } catch (e) { /* ignora */ }
+  }
+
+  // Esercizio aperto per ultimo; se non c'è, quello dell'ultima risposta registrata;
+  // altrimenti Parola → Immagine (il primo dei due)
+  function ultimoEsercizio() {
+    try {
+      const v = localStorage.getItem(CHIAVI.ultimoEsercizio);
+      if (v === 'parola-immagine' || v === 'immagine-parola') return v;
+    } catch (e) { /* ignora */ }
+    const arr = leggiJSON(CHIAVI.risultati, []);
+    const ultima = Array.isArray(arr) && arr.length ? arr[arr.length - 1] : null;
+    return ultima && ultima.modo === 'immagine-parola' ? 'immagine-parola' : 'parola-immagine';
+  }
+
+  function paginaEsercizio(modo = ultimoEsercizio()) {
+    return modo === 'immagine-parola' ? 'esercizio-immagine-parola.html' : 'esercizio.html';
   }
 
   function pulisciParola(p) {
@@ -334,6 +367,10 @@ const Archivio = (() => {
     PROVE_MAX,
     MAX_PAROLA,
     getCoppie,
+    contaCoppie,
+    salvaUltimoEsercizio,
+    ultimoEsercizio,
+    paginaEsercizio,
     salvaCoppia,
     eliminaCoppia,
     getImpostazioni,

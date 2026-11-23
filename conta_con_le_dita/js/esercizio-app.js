@@ -51,7 +51,13 @@ function goBack() {
         backToChooser();
         return;
     }
-    window.location.href = './';
+    // Menu iniziale: con ?menu non rimanda di nuovo qui
+    window.location.href = 'index.html?menu';
+}
+
+// Tasto «Configurazione» dell'intestazione
+function goToConfig() {
+    window.location.href = 'gestione.html';
 }
 
 // ===== INIT =====

@@ -4,7 +4,7 @@
 
 const APP_CONFIG = {
   nome: 'Mastertutor',
-  versione: '1.0.16',
+  versione: '1.0.19',
 };
 window.APP_CONFIG = APP_CONFIG;
 
@@ -230,8 +230,52 @@ const App = (() => {
       }
     });
 
-    mostraBenvenuto();
+    apriPaginaIniziale();
     console.log(`${APP_CONFIG.nome} v${APP_CONFIG.versione}`);
+  }
+
+  // ==================== PAGINA D'APERTURA ====================
+  // Se c'è già un esercizio pronto (almeno uno stimolo nel gioco tra quelli usati) l'app si apre
+  // direttamente sull'esercizio (Area Utente); altrimenti sulla Configurazione. La schermata
+  // iniziale resta raggiungibile dal menu.
+  async function esercizioPronto() {
+    const ev = Archivio.getImpostazioni().stimolazione.eventi;
+    if (ev.audio) {
+      try {
+        if ((await Archivio.audioLista()).some((a) => a.attivo && a.blob && !a.anticipa)) {
+          return true;
+        }
+      } catch (e) { /* archivio non leggibile: risulta vuoto */ }
+    }
+    if (ev.youtube && Archivio.getYoutube().some((v) => v.attivo && !Riproduttore.erroreDefinitivo(v.errore))) {
+      return true;
+    }
+    if (ev.presa) {
+      if (Presa.disponibile()) {
+        return true;
+      }
+      // Nell'app (Windows, Android) le prese sono configurate sul dispositivo
+      if (Presa.locale) {
+        try {
+          return ((await Presa.leggiConfigurazione()).prese || []).length > 0;
+        } catch (e) { /* configurazione non leggibile */ }
+      }
+    }
+    return false;
+  }
+
+  async function apriPaginaIniziale() {
+    let pronto = false;
+    try {
+      pronto = await esercizioPronto();
+    } catch (e) {
+      console.warn('Controllo dell\'esercizio non riuscito:', e);
+    }
+    if (pronto) {
+      mostraUtente();
+    } else {
+      mostraEducatore();
+    }
   }
 
   document.addEventListener('DOMContentLoaded', avvia);

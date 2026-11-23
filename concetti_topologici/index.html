@@ -16,13 +16,19 @@
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
     <link rel="stylesheet" href="assets/fonts/fonts.css">
-    <link rel="stylesheet" href="css/styles.css?v=1.1.6">
+    <link rel="stylesheet" href="css/styles.css?v=1.1.7">
     <script src="js/raccolta.js?v=1.1"></script>
+    <script>
+        // Apertura: se non si chiede il menu (index.html?menu=1) la pagina resta nascosta
+        // finché si decide se aprire l'esercizio o la Configurazione (script in fondo alla pagina)
+        if (!/[?&]menu=1(&|$)/.test(location.search)) document.documentElement.classList.add('instradamento');
+    </script>
 </head>
 <body class="avvio">
 
     <header class="avvio-testata">
-        <a class="avvio-marchio" href="./" title="Concetti topologici">
+        <img class="logo-lega" src="assets/img/logo-lega-filo-oro.png" alt="Lega del Filo d'Oro">
+        <a class="avvio-marchio" href="index.html?menu=1" title="Concetti topologici">
             <span class="ct-logo" aria-hidden="true"></span>
             <span><h1>Concetti topologici</h1><small>Sopra, sotto, dentro, fuori…</small></span>
         </a>
@@ -38,7 +44,7 @@
             <a href="gestione.html" class="area-card area-educatore" id="cardEducatore">
                 <span class="area-card-icona" aria-hidden="true"></span>
                 <span class="area-card-testo">
-                    <h2>Area Educatore</h2>
+                    <h2>Configurazione</h2>
                     <p>Prepara le scene dell'utente e scegli come proporle.</p>
                     <ul>
                         <li>Coppie di opposti: sopra/sotto, dentro/fuori, davanti/dietro, accanto/in mezzo e altre</li>
@@ -91,10 +97,26 @@
 
     <div id="toast" class="toast-contenitore" aria-live="polite"></div>
 
-    <script src="js/comune.js?v=1.1.6"></script>
-    <script src="js/concetti.js?v=1.1.6"></script>
-    <script src="js/archivio.js?v=1.1.6"></script>
+    <script src="js/comune.js?v=1.1.7"></script>
+    <script src="js/concetti.js?v=1.1.7"></script>
+    <script src="js/archivio.js?v=1.1.7"></script>
     <script>
+        // Apertura dell'app: se c'è almeno una scena da proporre (vale anche per le scene di
+        // partenza del libro, pronte da subito) si va dritti all'esercizio, altrimenti alla
+        // Configurazione. location.replace: il tasto Indietro del browser non torna qui (niente
+        // cicli). La pagina con la scelta delle aree resta raggiungibile con ?menu=1.
+        (function () {
+            const radice = document.documentElement;
+            if (!radice.classList.contains('instradamento')) return;
+            let pronto = false;
+            try {
+                pronto = CT.Archivio.sceneDaProporre().length > 0;
+            } catch (e) {
+                console.warn('[Apertura] Profilo non leggibile:', e);
+            }
+            location.replace(pronto ? 'gioca.html' : 'gestione.html');
+        })();
+
         (function () {
             const esc = CT.util.escapeHtml;
             document.querySelector('.area-educatore .area-card-icona').innerHTML = CT.icona('modifica');
@@ -151,7 +173,7 @@
 
             // ---------- Menu ☰: Esporta dati, Importa dati, Installa l'app, Aggiorna App ----------
             // Esporta/Importa portano scene, foto, impostazioni e risultati su un altro dispositivo:
-            // stanno qui, prima di entrare nelle aree, e non più nell'Area Educatore.
+            // stanno qui, prima di entrare nelle aree, e non più nella Configurazione.
             const campoFile = document.getElementById('fileImporta');
 
             async function esportaDati() {

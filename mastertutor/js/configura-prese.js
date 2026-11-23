@@ -75,7 +75,7 @@ const ConfiguraPrese = (() => {
             <li>Sempre lì, in fondo, c'è l'<strong>indirizzo IP</strong> (es. 192.168.1.23): va scritto qui sopra.</li>
             <li>L'account è quello con cui si accede all'app Tapo sul telefono.</li>
             <li data-ruolo="passo-ponte">Il ponte va avviato su un computer della stessa rete Wi-Fi, e il suo codice inserito in
-              <strong>Area Educatore → Presa</strong>.</li>
+              <strong>Configurazione → Presa</strong>.</li>
             <li data-ruolo="passo-tablet">Il tablet deve essere collegato alla <strong>stessa rete Wi-Fi</strong> delle prese.</li>
           </ol>
         </details>
@@ -152,7 +152,7 @@ const ConfiguraPrese = (() => {
       online: ['ok', 'bi-check-circle-fill', 'Ponte collegato: puoi leggere e salvare la configurazione.'],
       offline: ['errore', 'bi-wifi-off', 'Il ponte non risponde: è acceso e collegato a internet?'],
       connessione: ['attesa', 'bi-arrow-repeat', 'Collegamento al servizio in corso…'],
-      'non-configurata': ['spenta', 'bi-plug', 'Nessun ponte abbinato: inserisci prima il suo codice in Area Educatore → Presa.'],
+      'non-configurata': ['spenta', 'bi-plug', 'Nessun ponte abbinato: inserisci prima il suo codice in Configurazione → Presa.'],
     };
     const [classe, icona, testo] = testi[Presa.stato] || testi['non-configurata'];
     el.stato.className = `stato-presa ${classe}`;

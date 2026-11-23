@@ -17,14 +17,16 @@
     <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
-    <link rel="stylesheet" href="css/styles.css?v=1.0.8">
-    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css?v=1.0.8">
+    <link rel="stylesheet" href="css/styles.css?v=1.0.9">
+    <link rel="stylesheet" href="css/intestazione.css?v=1.0.9">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css?v=1.0.9">
 </head>
 <body>
     <header class="app-header">
         <div class="header-content">
             <div class="header-actions-left">
-                <!-- ← dall'Area Educatore o dall'Area Utente torna alla pagina iniziale dell'app (mai all'elenco delle app) -->
+                <img class="logo-lega" src="assets/img/logo-lega-filo-oro.png" alt="Lega del Filo d'Oro">
+                <!-- ← dalla Configurazione o dall'Area Utente torna alla pagina iniziale dell'app (mai all'elenco delle app) -->
                 <button type="button" class="btn-indietro" data-app="home" title="Torna a: Causa Effetto" aria-label="Torna a: Causa Effetto">
                     <i class="bi bi-arrow-left"></i>
                 </button>
@@ -49,8 +51,8 @@
             <p class="description">Scegli dove entrare:</p>
             <div class="mode-selection">
                 <button type="button" class="btn-mode btn-educator" data-app="educatore">
-                    <i class="bi bi-person-workspace"></i>
-                    <span>Area Educatore</span>
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Configurazione</span>
                 </button>
                 <button type="button" class="btn-mode btn-user" data-app="utente">
                     <i class="bi bi-hand-index-thumb"></i>
@@ -72,7 +74,7 @@
         </div>
         <ul class="menu-list">
             <li><button type="button" data-app="home"><i class="bi bi-arrow-left"></i> Schermata iniziale</button></li>
-            <li><button type="button" data-app="educatore"><i class="bi bi-person-workspace"></i> Area Educatore</button></li>
+            <li><button type="button" data-app="educatore"><i class="bi bi-gear-fill"></i> Configurazione</button></li>
             <li><button type="button" data-app="utente"><i class="bi bi-hand-index-thumb"></i> Area Utente</button></li>
             <li><button type="button" data-app="esporta"><i class="bi bi-box-arrow-up"></i> Esporta dati</button></li>
             <li><button type="button" data-app="importa"><i class="bi bi-box-arrow-in-down"></i> Importa dati</button></li>
@@ -94,7 +96,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <h4>Area Educatore</h4>
+                <h4>Configurazione</h4>
                 <ul>
                     <li><strong>Oggetti</strong>: pittogrammi ARASAAC e immagini dal computer o dal tablet. Le immagini si ritagliano quadrate, così sullo schermo sono grandi come un pittogramma (pulsante <i class="bi bi-crop"></i> per ritagliarle di nuovo). Si usa un solo oggetto, oppure più oggetti che compaiono uno alla volta a caso.</li>
                     <li><strong>Quali video fa partire ogni oggetto</strong>: nella scheda Oggetti spunta le categorie dei video di ogni oggetto (anche più di una). Senza spunte l'oggetto fa partire tutti i video.</li>
@@ -188,20 +190,20 @@
     <!-- YouTube IFrame Player API -->
     <script src="https://www.youtube.com/iframe_api"></script>
 
-    <script src="js/raccolta.js?v=1.0.8"></script>
-    <script src="js/util.js?v=1.0.8"></script>
-    <script src="js/archivio.js?v=1.0.8"></script>
-    <script src="js/oggetto.js?v=1.0.8"></script>
-    <script src="js/ritaglio.js?v=1.0.8"></script>
-    <script src="js/riproduttore.js?v=1.0.8"></script>
-    <script src="js/educatore.js?v=1.0.8"></script>
-    <script src="js/utente.js?v=1.0.8"></script>
-    <script src="js/app.js?v=1.0.8"></script>
+    <script src="js/raccolta.js?v=1.0.9"></script>
+    <script src="js/util.js?v=1.0.9"></script>
+    <script src="js/archivio.js?v=1.0.9"></script>
+    <script src="js/oggetto.js?v=1.0.9"></script>
+    <script src="js/ritaglio.js?v=1.0.9"></script>
+    <script src="js/riproduttore.js?v=1.0.9"></script>
+    <script src="js/educatore.js?v=1.0.9"></script>
+    <script src="js/utente.js?v=1.0.9"></script>
+    <script src="js/app.js?v=1.0.9"></script>
 
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js?v=1.0.8')
+                navigator.serviceWorker.register('./service-worker.js?v=1.0.9')
                     .then((registrazione) => {
                         // update() può fallire se nel frattempo il service worker è stato rimosso
                         setInterval(() => registrazione.update().catch(() => {}), 60000);

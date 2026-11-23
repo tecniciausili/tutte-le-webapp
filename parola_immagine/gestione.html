@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#2E7D32">
-    <meta name="description" content="Parola-Immagine - Area Educatore: coppie target-distrattore">
+    <meta name="description" content="Parola-Immagine - Configurazione: coppie target-distrattore">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Parola-Immagine">
     <meta name="mobile-web-app-capable" content="yes">
 
-    <title>Area Educatore - Parola-Immagine</title>
+    <title>Configurazione - Parola-Immagine</title>
 
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 
-    <link rel="stylesheet" href="css/styles.css?v=3.0.3">
+    <link rel="stylesheet" href="css/styles.css?v=3.0.4">
     <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
     <script src="js/raccolta.js?v=1.1"></script>
 </head>
@@ -25,13 +25,14 @@
     <header class="app-header">
         <div class="header-content">
             <div class="header-buttons-left">
-                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Parola-Immagine" title="Torna a: Parola-Immagine">
+                <img class="logo-lega" src="assets/img/logo-lega-filo-oro.png" alt="Lega del Filo d'Oro">
+                <button class="btn-back" onclick="goBack()" aria-label="Pagina iniziale di Parola-Immagine" title="Pagina iniziale di Parola-Immagine">
                     <i class="bi bi-arrow-left"></i>
                 </button>
             </div>
             <h1 class="app-title">
-                <i class="bi bi-person-gear"></i>
-                Area Educatore
+                <i class="bi bi-gear-fill"></i>
+                Configurazione
             </h1>
             <div class="header-buttons-right">
                 <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Aggiorna l'app" title="Aggiorna l'app (i dati restano)">
@@ -43,6 +44,14 @@
 
     <main class="app-main">
         <div class="gestione-container">
+
+            <!-- Passaggio all'esercizio dell'utente (quello aperto per ultimo; js/educatore.js) -->
+            <div class="barra-vai-esercizio">
+                <p id="notaEsercizio"></p>
+                <a href="esercizio.html" class="btn-vai-esercizio" id="btnVaiEsercizio">
+                    <i class="bi bi-play-circle-fill"></i> Vai all'esercizio
+                </a>
+            </div>
 
             <!-- Impostazioni della sessione -->
             <section class="settings-section">
@@ -235,7 +244,7 @@
     <div id="toastContainer" class="toast-container"></div>
 
     <script src="js/comune.js?v=3.0.2"></script>
-    <script src="js/archivio.js?v=3.0.2"></script>
-    <script src="js/educatore.js?v=3.0.2"></script>
+    <script src="js/archivio.js?v=3.0.3"></script>
+    <script src="js/educatore.js?v=3.0.3"></script>
 </body>
 </html>

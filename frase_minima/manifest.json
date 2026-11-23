@@ -66,8 +66,8 @@
     ],
     "shortcuts": [
         {
-            "name": "Area Educatore",
-            "short_name": "Educatore",
+            "name": "Configurazione",
+            "short_name": "Configurazione",
             "description": "Componi le frasi",
             "url": "./gestione.html",
             "icons": [

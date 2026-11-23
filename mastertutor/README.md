@@ -10,13 +10,17 @@ tablet**. **Un dispositivo = un utente**: audio, video e registro restano nel br
 
 ## Funzionalità
 
-### Area Educatore (accesso libero)
+### Configurazione (prima «Area Educatore», accesso libero)
+
+All'apertura l'app va **direttamente all'esercizio** se c'è almeno uno stimolo nel gioco, altrimenti
+sulla **Configurazione** (tasti «Vai all'esercizio» e «Configurazione» per passare dall'una all'altro).
+Intestazione bianca con il logo della Lega del Filo d'Oro (versione 1.0.19, 23/11/2026).
 
 | Scheda | Cosa si fa |
 |---|---|
 | **Audio** | Registrare la voce con il microfono del dispositivo, oppure caricare **qualsiasi file audio** dal disco (MP3, vocali **WhatsApp**, M4A, WAV, FLAC, AMR, WMA, AIFF, anche l'audio di un video). Tutto viene convertito in MP3 nel browser (lamejs) e il silenzio iniziale e finale viene tagliato. Con la spunta **Nel gioco** l'audio diventa uno stimolo |
 | **YouTube** | Ricerca integrata (scrivendo la categoria si apre YouTube), link, nome, **tempi di inizio e fine**, scelta **video** oppure **solo audio** |
-| **Anticipatore** | L'audio che annuncia ogni stimolo: suono predefinito, nessuno, oppure uno registrato o caricato |
+| **Anticipatore** | L'audio che annuncia ogni stimolo, **uno per ogni tipo**: voci, musica (YouTube) e ogni presa (es. «anticipatore-ventilatore»); oppure il generale: suono predefinito, nessuno, o uno registrato o caricato |
 | **Presa** | Abbinamento con il **ponte** (codice di 12 caratteri), scelta delle prese, durata, prova. Il pulsante **Configura le prese** (anche nel menu ⋮) apre una finestra a scomparsa per inserire account Tapo e indirizzi delle prese di una nuova rete, per esempio a casa, e salvarli sul ponte |
 | **Tempi** | Attesa casuale minima e massima, durata massima di audio e video, tipi di stimolo usati, tempo per rispondere allo switch |
 | **Registro** | Sessioni svolte: stimoli, risposte allo switch, tempi medi di risposta, pressioni |
@@ -37,7 +41,7 @@ La modalità si sceglie con il pulsante in alto a sinistra.
 - **Attesa tra gli stimoli** regolabile con due cursori sotto *Avvia*: vale dal prossimo stimolo.
 - **Ordine degli stimoli**: nell'elenco dell'Area Utente si trascinano con la maniglia ⠿ (mouse o
   dito; con la tastiera, frecce su e giù sulla maniglia). È un'unica sequenza, uguale in tutte le
-  modalità e negli elenchi dell'Area Educatore (dove è di sola lettura: l'ordine si cambia **solo**
+  modalità e negli elenchi della Configurazione (dove è di sola lettura: l'ordine si cambia **solo**
   nell'Area Utente). Nella stimolazione casuale e su richiesta la lista di audio e video si ripete
   dall'inizio e salta quelli non disponibili (tipo escluso nei *Tempi*, video non riproducibile).
   La **presa** non fa parte della sequenza: parte a caso, tra uno stimolo e l'altro.
@@ -76,7 +80,7 @@ Una PWA non può comandare le prese della rete locale, perché il browser lo imp
 
 L'APK comanda le prese **direttamente dal tablet**, senza ponte e senza Azure. Si scarica dal riquadro
 **Mastertutor Android** nella pagina iniziale della raccolta (cartella `mastertutor-android/`).
-Nell'app: **Area Educatore → Presa → Configura le prese** → account Tapo e indirizzi IP delle prese →
+Nell'app: **Configurazione → Presa → Configura le prese** → account Tapo e indirizzi IP delle prese →
 **Salva configurazione**. I dati restano nel tablet, che deve essere nella stessa rete Wi-Fi delle prese.
 Così si crea una configurazione nuova per ogni rete (sede, casa).
 

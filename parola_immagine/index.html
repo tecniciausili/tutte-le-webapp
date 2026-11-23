@@ -17,14 +17,20 @@
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 
-    <link rel="stylesheet" href="css/styles.css?v=3.0.3">
+    <link rel="stylesheet" href="css/styles.css?v=3.0.4">
     <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
     <script src="js/raccolta.js?v=1.1"></script>
+    <script>
+        // Apertura: se non si chiede il menu (index.html?menu=1) la pagina resta nascosta
+        // finché si decide se aprire l'esercizio o la Configurazione (script in fondo alla pagina)
+        if (!/[?&]menu=1(&|$)/.test(location.search)) document.documentElement.classList.add('instradamento');
+    </script>
 </head>
 <body class="selection-page">
     <header class="app-header">
         <div class="header-content">
             <div class="header-buttons-left">
+                <img class="logo-lega" src="assets/img/logo-lega-filo-oro.png" alt="Lega del Filo d'Oro">
             </div>
             <h1 class="app-title">
                 <i class="bi bi-image"></i>
@@ -51,12 +57,12 @@
             </div>
 
             <div class="area-cards three-columns">
-                <a href="gestione.html" class="area-card educatore-card" aria-label="Entra nell'area educatore">
+                <a href="gestione.html" class="area-card educatore-card" aria-label="Entra nella Configurazione">
                     <div class="card-icon">
-                        <i class="bi bi-person-gear"></i>
+                        <i class="bi bi-gear-fill"></i>
                     </div>
                     <div class="card-content">
-                        <h3>Area Educatore</h3>
+                        <h3>Configurazione</h3>
                         <p>Prepara gli esercizi per l'utente</p>
                         <ul class="card-features">
                             <li><i class="bi bi-check-circle"></i> Crea coppie target-distrattore</li>
@@ -137,9 +143,29 @@
 
     <script src="js/installa.js?v=1.0"></script>
     <script src="js/comune.js?v=3.0.2"></script>
-    <script src="js/archivio.js?v=3.0.2"></script>
+    <script src="js/archivio.js?v=3.0.3"></script>
     <script src="js/menu.js?v=1.0"></script>
     <script>
+        // Apertura dell'app: con almeno una coppia salvata si va dritti all'esercizio usato
+        // l'ultima volta, altrimenti alla Configurazione. location.replace: il tasto Indietro
+        // del browser non torna qui (niente cicli). Il menu resta raggiungibile con ?menu=1.
+        (function () {
+            const radice = document.documentElement;
+            if (!radice.classList.contains('instradamento')) return;
+            const mostraMenu = () => radice.classList.remove('instradamento');
+            const riserva = setTimeout(mostraMenu, 4000);   // archivio bloccato: si vede il menu
+            Archivio.contaCoppie()
+                .then((n) => {
+                    clearTimeout(riserva);
+                    location.replace(n > 0 ? Archivio.paginaEsercizio() : 'gestione.html');
+                })
+                .catch((e) => {
+                    clearTimeout(riserva);
+                    console.warn('[Apertura] Coppie non leggibili:', e);
+                    mostraMenu();
+                });
+        })();
+
         document.querySelectorAll('.area-card').forEach((card) => {
             card.addEventListener('keydown', (e) => {
                 if (e.key === ' ') {

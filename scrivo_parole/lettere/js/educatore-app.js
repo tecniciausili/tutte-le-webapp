@@ -1,5 +1,5 @@
 /**
- * Scrivo Parole con le Lettere - Area Educatore
+ * Scrivo Parole con le Lettere - Configurazione (area dell'educatore)
  */
 
 // =====================================================
@@ -46,7 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // NAVIGAZIONE
 // =====================================================
 function goBack() {
-    window.location.href = './';   // pagina iniziale di Scrivo parole con le lettere
+    // pagina iniziale di Scrivo parole con le lettere (?menu: senza reindirizzamento all'esercizio)
+    window.location.href = 'index.html?menu';
 }
 
 // =====================================================

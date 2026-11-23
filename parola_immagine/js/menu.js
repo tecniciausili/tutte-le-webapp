@@ -3,7 +3,7 @@
  *
  * Voci: Esporta dati, Importa dati, Installa l'app, Aggiorna App.
  * Esporta/Importa servono a portare i dati su un altro dispositivo: stanno qui, prima di
- * entrare nelle aree, e non nell'Area Educatore.
+ * entrare nelle aree, e non nella Configurazione.
  *
  * Uso: nella pagina iniziale dell'app mettere, nell'intestazione,
  *     <button class="btn-menu" data-menu-app

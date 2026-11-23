@@ -66,7 +66,7 @@ const SchedaPresa = (() => {
       </form>
       <div id="dettagliPresa" hidden>
         <h4 class="titolo-lista"><i class="bi bi-lightning-charge"></i> Prese da accendere come stimolo</h4>
-        <p class="helper-text">Se non ne scegli nessuna si accendono tutte quelle configurate.</p>
+        <p class="helper-text">Se non ne scegli nessuna partecipano tutte quelle configurate. Nella stimolazione si accendono una alla volta, scelte a caso, ognuna preceduta dal suo anticipatore (scheda Anticipatore).</p>
         <div id="listaPrese" class="lista-elementi"></div>
         <div class="form-group" style="margin-top: 1rem;">
           <label for="presaSecondi">Quanto resta accesa (secondi)</label>

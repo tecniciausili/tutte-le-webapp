@@ -16,13 +16,16 @@
     <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
-    <link rel="stylesheet" href="css/styles.css?v=1.0.16">
-    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css?v=1.0.16">
+    <link rel="stylesheet" href="css/styles.css?v=1.0.19">
+    <link rel="stylesheet" href="css/anticipatori.css?v=1.0.19">
+    <link rel="stylesheet" href="css/intestazione.css?v=1.0.19">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css?v=1.0.19">
 </head>
 <body>
     <header class="app-header">
         <div class="header-content">
             <div class="header-actions-left">
+                <img class="logo-lega" src="assets/img/logo-lega-filo-oro.png" alt="Lega del Filo d'Oro">
                 <button type="button" class="btn-user-options" data-app="opzioni" title="Modalità e opzioni di ascolto" aria-label="Modalità e opzioni">
                     <i class="bi bi-sliders"></i>
                 </button>
@@ -44,8 +47,8 @@
             <p class="description">Scegli dove entrare:</p>
             <div class="mode-selection">
                 <button type="button" class="btn-mode btn-educator" data-app="educatore">
-                    <i class="bi bi-person-workspace"></i>
-                    <span>Area Educatore</span>
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Configurazione</span>
                 </button>
                 <button type="button" class="btn-mode btn-user" data-app="utente">
                     <i class="bi bi-headphones"></i>
@@ -87,7 +90,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <h4>Area Educatore</h4>
+                <h4>Configurazione</h4>
                 <ul>
                     <li><strong>Audio</strong>: registra la voce con il microfono del dispositivo o carica un file (anche i vocali WhatsApp).</li>
                     <li><strong>YouTube</strong>: scrivi la categoria, scegli il video e incolla il link. Puoi far sentire solo l'audio e impostare inizio e fine.</li>
@@ -144,24 +147,24 @@
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <script src="js/lib/lame.min.js"></script>
-    <script src="js/util.js?v=1.0.16"></script>
-    <script src="js/archivio.js?v=1.0.16"></script>
-    <script src="js/elabora-audio.js?v=1.0.16"></script>
-    <script src="js/presa.js?v=1.0.16"></script>
-    <script src="js/presa-webpubsub.js?v=1.0.16"></script>
-    <script src="js/presa-nativa.js?v=1.0.16"></script>
-    <script src="js/riproduttore.js?v=1.0.16"></script>
-    <script src="js/ordinabile.js?v=1.0.16"></script>
-    <script src="js/scheda-presa.js?v=1.0.16"></script>
-    <script src="js/configura-prese.js?v=1.0.16"></script>
-    <script src="js/educatore.js?v=1.0.16"></script>
-    <script src="js/utente.js?v=1.0.16"></script>
-    <script src="js/app.js?v=1.0.16"></script>
+    <script src="js/util.js?v=1.0.19"></script>
+    <script src="js/archivio.js?v=1.0.19"></script>
+    <script src="js/elabora-audio.js?v=1.0.19"></script>
+    <script src="js/presa.js?v=1.0.19"></script>
+    <script src="js/presa-webpubsub.js?v=1.0.19"></script>
+    <script src="js/presa-nativa.js?v=1.0.19"></script>
+    <script src="js/riproduttore.js?v=1.0.19"></script>
+    <script src="js/ordinabile.js?v=1.0.19"></script>
+    <script src="js/scheda-presa.js?v=1.0.19"></script>
+    <script src="js/configura-prese.js?v=1.0.19"></script>
+    <script src="js/educatore.js?v=1.0.19"></script>
+    <script src="js/utente.js?v=1.0.19"></script>
+    <script src="js/app.js?v=1.0.19"></script>
 
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js?v=1.0.16')
+                navigator.serviceWorker.register('./service-worker.js?v=1.0.19')
                     .then((registrazione) => {
                         // update() può fallire se nel frattempo il service worker è stato rimosso
                         setInterval(() => registrazione.update().catch(() => {}), 60000);

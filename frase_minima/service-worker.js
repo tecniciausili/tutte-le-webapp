@@ -7,7 +7,7 @@
 // Tutte le cache iniziano con PREFISSO: sullo stesso dominio ci sono altre app,
 // e le loro cache non vanno toccate.
 const PREFISSO = 'frase_minima_';
-const CACHE_NAME = `${PREFISSO}v2.0.13`;
+const CACHE_NAME = `${PREFISSO}v2.0.14`;
 
 const URLS_TO_CACHE = [
   './',
@@ -35,6 +35,7 @@ const URLS_TO_CACHE = [
   './assets/icons/icon-192.png',
   './assets/icons/icon-384.png',
   './assets/icons/icon-512.png',
+  './assets/img/logo-lega-filo-oro.png',
 ];
 
 self.addEventListener('install', (event) => {

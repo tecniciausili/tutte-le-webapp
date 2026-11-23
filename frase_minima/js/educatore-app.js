@@ -38,7 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // ===== NAVIGAZIONE =====
 // Casetta: torna all'inizio di questa app
 function goBack() {
-    window.location.href = './';   // pagina iniziale di Frase minima
+    // Menu iniziale di Frase minima (Esporta/Importa/Installa): con ?menu non rimanda all'esercizio
+    window.location.href = 'index.html?menu';
 }
 
 function goToExercise() {

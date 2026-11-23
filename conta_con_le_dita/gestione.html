@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#673AB7">
-    <meta name="description" content="Area Educatore - Conta con le Dita">
+    <meta name="description" content="Configurazione - Conta con le Dita">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Conta con le Dita">
     <meta name="mobile-web-app-capable" content="yes">
 
-    <title>Area Educatore - Conta con le Dita</title>
+    <title>Configurazione - Conta con le Dita</title>
 
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 
-    <link rel="stylesheet" href="css/styles.css?v=20261118.1">
+    <link rel="stylesheet" href="css/styles.css?v=20261123.1">
     <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
     <script src="js/raccolta.js?v=1.1"></script>
 </head>
@@ -25,18 +25,19 @@
     <header class="app-header">
         <div class="header-content">
             <div class="header-buttons-left">
-                <button class="btn-back" onclick="goBack()" aria-label="Torna a: Conta con le dita" title="Torna a: Conta con le dita">
+                <img class="logo-lega" src="assets/img/logo-lega-filo-oro.png" alt="Lega del Filo d'Oro">
+                <button class="btn-back" onclick="goBack()" aria-label="Torna al menu iniziale" title="Torna al menu iniziale">
                     <i class="bi bi-arrow-left"></i>
                 </button>
             </div>
             <h1 class="app-title">
-                <i class="bi bi-person-gear"></i>
-                Area Educatore
+                <i class="bi bi-gear-fill"></i>
+                Configurazione
             </h1>
             <div class="header-buttons-right">
-                <button class="btn-go-exercise" onclick="goToExercise()" title="Vai agli esercizi" aria-label="Vai agli esercizi">
+                <button class="btn-go-exercise" onclick="goToExercise()" title="Vai all'esercizio" aria-label="Vai all'esercizio">
                     <i class="bi bi-controller"></i>
-                    <span>Esercizi</span>
+                    <span>Vai all'esercizio</span>
                 </button>
                 <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Aggiorna l'app" title="Aggiorna l'app (i dati restano)">
                     <i class="bi bi-arrow-clockwise"></i>
@@ -193,7 +194,7 @@
 
     <script src="js/clear-cache.js?v=1.1"></script>
     <script src="js/archivio.js?v=20261104.3"></script>
-    <script src="js/educatore-app.js?v=20261110.1"></script>
+    <script src="js/educatore-app.js?v=20261123.1"></script>
 
     <script>
         if ('serviceWorker' in navigator) {

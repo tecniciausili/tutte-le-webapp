@@ -81,7 +81,7 @@ const Utente = (() => {
             <div class="pannello-opzioni-controlli">${Oggetto.htmlControlliAspetto(Archivio.getImpostazioni().aspetto)}</div>
             <div class="pannello-opzioni-azioni">
               <button type="button" class="btn-secondary" data-comando="ricomincia"><i class="bi bi-arrow-counterclockwise"></i> Ricomincia</button>
-              <button type="button" class="btn-secondary" data-comando="educatore"><i class="bi bi-person-workspace"></i> Area Educatore</button>
+              <button type="button" class="btn-secondary" data-comando="educatore"><i class="bi bi-gear-fill"></i> Configurazione</button>
             </div>
           </aside>
         </div>
@@ -119,7 +119,7 @@ const Utente = (() => {
           icona: 'bi-wifi-off',
           titolo: 'L\'immagine dell\'oggetto non si carica',
           testo: 'Controlla la connessione a internet: i pittogrammi ARASAAC arrivano dal loro server.',
-          azioni: [['inizia', 'bi-play-fill', 'Riprova'], ['educatore', 'bi-person-workspace', 'Area Educatore']],
+          azioni: [['inizia', 'bi-play-fill', 'Riprova'], ['educatore', 'bi-gear-fill', 'Configurazione']],
         });
       }
     });
@@ -218,7 +218,7 @@ const Utente = (() => {
       testo: `${oggetti} · ${video.length} video nella lista · ${durata} · ${ordine}. `
         + 'Premi Inizia: comparirà l\'oggetto da toccare. '
         + 'Durante l\'attività lo schermo è bloccato: per fermarla premi ESC.',
-      azioni: [['inizia', 'bi-play-fill', 'Inizia'], ['educatore', 'bi-person-workspace', 'Area Educatore']],
+      azioni: [['inizia', 'bi-play-fill', 'Inizia'], ['educatore', 'bi-gear-fill', 'Configurazione']],
     });
   }
 
@@ -289,9 +289,9 @@ const Utente = (() => {
         icona: 'bi-image',
         titolo: random ? 'Nessun oggetto in scena' : 'Manca l\'oggetto da toccare',
         testo: random
-          ? 'Nell\'Area Educatore, scheda Oggetti, metti la spunta «In scena» ad almeno un oggetto.'
-          : 'Sceglilo nell\'Area Educatore, scheda Oggetti: un pittogramma ARASAAC o un\'immagine.',
-        azioni: [['educatore', 'bi-person-workspace', 'Area Educatore']],
+          ? 'Nella Configurazione, scheda Oggetti, metti la spunta «In scena» ad almeno un oggetto.'
+          : 'Sceglilo nella Configurazione, scheda Oggetti: un pittogramma ARASAAC o un\'immagine.',
+        azioni: [['educatore', 'bi-gear-fill', 'Configurazione']],
       });
       return;
     }
@@ -300,7 +300,7 @@ const Utente = (() => {
         icona: 'bi-wifi-off',
         titolo: 'Le immagini degli oggetti non si caricano',
         testo: 'Controlla la connessione a internet: i pittogrammi ARASAAC arrivano dal loro server.',
-        azioni: [['inizia', 'bi-arrow-repeat', 'Riprova'], ['educatore', 'bi-person-workspace', 'Area Educatore']],
+        azioni: [['inizia', 'bi-arrow-repeat', 'Riprova'], ['educatore', 'bi-gear-fill', 'Configurazione']],
       });
       return;
     }
@@ -309,8 +309,8 @@ const Utente = (() => {
       mostraMessaggio({
         icona: 'bi-youtube',
         titolo: 'Nessun video nella lista',
-        testo: 'Aggiungi i video nell\'Area Educatore, scheda YouTube, e lascia la spunta «Nella lista».',
-        azioni: [['educatore', 'bi-person-workspace', 'Area Educatore']],
+        testo: 'Aggiungi i video nella Configurazione, scheda YouTube, e lascia la spunta «Nella lista».',
+        azioni: [['educatore', 'bi-gear-fill', 'Configurazione']],
       });
       return;
     }
@@ -319,8 +319,8 @@ const Utente = (() => {
         icona: 'bi-link-45deg',
         titolo: 'Nessun oggetto ha video da far partire',
         testo: 'Le categorie collegate agli oggetti non hanno video nella lista. '
-          + 'Controllale nell\'Area Educatore, scheda Oggetti, «Quali video fa partire ogni oggetto».',
-        azioni: [['educatore', 'bi-person-workspace', 'Area Educatore']],
+          + 'Controllale nella Configurazione, scheda Oggetti, «Quali video fa partire ogni oggetto».',
+        azioni: [['educatore', 'bi-gear-fill', 'Configurazione']],
       });
       return;
     }
@@ -545,7 +545,7 @@ const Utente = (() => {
       azioni: [
         ['inizia', 'bi-play-fill', 'Continua'],
         ['ricomincia', 'bi-arrow-counterclockwise', 'Ricomincia'],
-        ['educatore', 'bi-person-workspace', 'Area Educatore'],
+        ['educatore', 'bi-gear-fill', 'Configurazione'],
       ],
     });
   }
@@ -719,8 +719,8 @@ const Utente = (() => {
     mostraMessaggio({
       icona: 'bi-exclamation-triangle',
       titolo: 'Nessun video riproducibile',
-      testo: 'I video della lista non si possono vedere fuori da YouTube. Controlla la scheda YouTube nell\'Area Educatore.',
-      azioni: [['educatore', 'bi-person-workspace', 'Area Educatore'], ['ricomincia', 'bi-arrow-counterclockwise', 'Ricomincia']],
+      testo: 'I video della lista non si possono vedere fuori da YouTube. Controlla la scheda YouTube nella Configurazione.',
+      azioni: [['educatore', 'bi-gear-fill', 'Configurazione'], ['ricomincia', 'bi-arrow-counterclockwise', 'Ricomincia']],
     });
   }
 

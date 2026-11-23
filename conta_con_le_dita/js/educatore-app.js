@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ===== NAVIGAZIONE =====
 function goBack() {
-    window.location.href = './';   // pagina iniziale di Conta con le dita
+    // Menu iniziale di Conta con le dita (Esporta/Importa/Installa): con ?menu non rimanda all'esercizio
+    window.location.href = 'index.html?menu';
 }
 
 function goToExercise() {

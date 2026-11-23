@@ -92,7 +92,7 @@ function goBack() {
         backToExercisesList();
         return;
     }
-    window.location.href = './';
+    window.location.href = 'index.html?menu';   // pagina iniziale (?menu: senza reindirizzamento all'esercizio)
 }
 
 // ============================================
@@ -145,9 +145,9 @@ function loadExercises() {
             <p class="empty-message" id="noExercisesMessage">
                 <i class="bi bi-inbox" style="font-size: 3rem; display: block; margin-bottom: 1rem;"></i>
                 Nessun esercizio trovato.
-                <br><small>L'educatore deve prima creare un esercizio nell'Area Educatore.</small>
+                <br><small>L'educatore deve prima creare un esercizio nella Configurazione.</small>
                 <br><a href="gestione.html" class="btn-primary" style="display: inline-flex; margin-top: 1.2rem; text-decoration: none;">
-                    <i class="bi bi-person-gear"></i>&nbsp;Vai all'Area Educatore
+                    <i class="bi bi-gear-fill"></i>&nbsp;Vai alla Configurazione
                 </a>
             </p>
         `;

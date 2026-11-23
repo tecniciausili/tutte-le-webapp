@@ -10,16 +10,20 @@
     
     <!-- Styles -->
     <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/styles.css?v=20261118.1">
+    <link rel="stylesheet" href="css/styles.css?v=20261123.1">
     <link rel="manifest" href="../manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <script src="js/raccolta.js?v=1.1"></script>
+    <!-- Ultima variante usata: la pagina di scelta riapre questa -->
+    <script src="../js/apertura.js?v=1.0"></script>
+    <script>ScrivoApertura.ricorda('sillabe');</script>
 </head>
 <body class="exercise-page">
     <!-- Header -->
     <header class="app-header">
         <div class="header-content">
             <div class="header-buttons-left">
+                <img class="logo-lega" src="assets/img/logo-lega-filo-oro.png" alt="Lega del Filo d'Oro">
                 <button class="btn-back" onclick="goBack()" aria-label="Torna a: Scrivo parole con le sillabe" title="Torna a: Scrivo parole con le sillabe">
                     <i class="bi bi-arrow-left"></i>
                 </button>
@@ -38,6 +42,10 @@
                 <button class="btn-syllable" id="btnSyllable" onclick="toggleSillabazione()" aria-label="Attiva o disattiva la lettura per sillabe" title="Lettura per sillabe">
                     <i class="bi bi-soundwave" id="iconSyllable"></i>
                 </button>
+                <!-- Configurazione dell'educatore (l'app si apre direttamente qui quando un esercizio è pronto) -->
+                <a href="gestione.html" class="btn-header-testo" aria-label="Configurazione" title="Configurazione">
+                    <i class="bi bi-gear-fill"></i><span>Configurazione</span>
+                </a>
                 <button class="btn-refresh" onclick="clearCacheAndReload()" aria-label="Aggiorna l'app" title="Aggiorna l'app (i dati restano)">
                     <i class="bi bi-arrow-clockwise"></i>
                 </button>
@@ -167,7 +175,7 @@
     <!-- Scripts -->
     <script src="js/clear-cache.js?v=5.1"></script>
     <script src="js/archivio.js?v=5.0"></script>
-    <script src="js/esercizio-app.js?v=20261110.1"></script>
+    <script src="js/esercizio-app.js?v=20261123.1"></script>
 
     <!-- LIM-touch-guard: blocco menu contestuale e zoom a pizzico su LIM/touch -->
     <script>

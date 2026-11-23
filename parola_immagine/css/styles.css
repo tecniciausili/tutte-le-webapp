@@ -2354,3 +2354,137 @@ body {
 .pictogram-grid > .loading {
     grid-column: 1 / -1;
 }
+
+/* =====================================================
+   INTESTAZIONE SENZA FASCIA COLORATA, con il logo della Lega del Filo d'Oro a sinistra
+   (obiettivo comune alle app della raccolta). Ogni pagina ha il suo colore:
+   verde (pagina iniziale, Configurazione), arancione (Parola → Immagine), viola (Immagine → Parola).
+   ===================================================== */
+.app-header {
+    --colore-testata: var(--primary-color);
+    --tenue-testata: #e9f4f2;
+    --tenue-testata-hover: #d3ebe7;
+}
+.exercise-page .app-header {
+    --colore-testata: #E65100;
+    --tenue-testata: #FFF3E0;
+    --tenue-testata-hover: #FFE0B2;
+}
+.exercise-page-purple .app-header {
+    --colore-testata: #7B1FA2;
+    --tenue-testata: #F3E5F5;
+    --tenue-testata-hover: #E1BEE7;
+}
+.app-header,
+.exercise-page .app-header,
+.exercise-page-purple .app-header {
+    background: #ffffff;
+    color: var(--colore-testata);
+    box-shadow: 0 1px 0 #e3e8e7, 0 2px 8px rgba(0, 0, 0, .06);
+    /* il logo è alto 54px: meno spazio sopra e sotto, così l'esercizio non perde altezza */
+    padding-top: calc(0.7rem + env(safe-area-inset-top));
+    padding-bottom: 0.7rem;
+}
+/* Titolo al centro, logo e pulsanti a sinistra, pulsanti a destra */
+.header-content {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--spacing-sm);
+}
+.header-buttons-left { justify-self: start; }
+.header-buttons-right { justify-self: end; }
+.app-title { color: var(--colore-testata); }
+.logo-lega {
+    display: block;
+    height: 54px;
+    width: auto;
+    flex-shrink: 0;
+    margin-right: var(--spacing-xs, 4px);
+}
+.app-header .btn-back, .app-header .btn-menu, .app-header .btn-home,
+.app-header .btn-refresh, .app-header .btn-menu-hamburger, .app-header .btn-configurazione {
+    background: var(--tenue-testata);
+    color: var(--colore-testata);
+}
+.app-header .btn-back:hover, .app-header .btn-menu:hover, .app-header .btn-home:hover,
+.app-header .btn-refresh:hover, .app-header .btn-menu-hamburger:hover, .app-header .btn-configurazione:hover {
+    background: var(--tenue-testata-hover);
+}
+.app-header .btn-back:focus-visible, .app-header .btn-refresh:focus-visible,
+.app-header .btn-menu-hamburger:focus-visible, .app-header .btn-configurazione:focus-visible,
+.app-header .btn-menu:focus-visible {
+    outline: 3px solid var(--colore-testata);
+    outline-offset: 2px;
+}
+.app-header .btn-refresh.voce-spenta {
+    color: #C62828;
+    background: #FDECEA;
+}
+/* Pulsante «Configurazione» degli esercizi: icona e scritta (solo icona sui telefoni) */
+.btn-configurazione {
+    border: none;
+    height: 44px;
+    padding: 0 16px;
+    border-radius: 22px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    flex-shrink: 0;
+    transition: var(--transition-normal);
+}
+.btn-configurazione i { font-size: 1.2rem; }
+/* Barra «Vai all'esercizio» in cima alla Configurazione */
+.barra-vai-esercizio {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+.barra-vai-esercizio p {
+    margin: 0;
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+.barra-vai-esercizio p a { color: var(--primary-color); font-weight: 600; }
+.btn-vai-esercizio {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 28px;
+    background: var(--primary-color);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-decoration: none;
+    box-shadow: var(--shadow-md);
+}
+.btn-vai-esercizio:hover { background: var(--primary-dark); }
+.btn-vai-esercizio:focus-visible { outline: 3px solid var(--primary-dark); outline-offset: 3px; }
+/* Pagina iniziale: resta nascosta mentre si decide se aprire l'esercizio o la Configurazione */
+html.instradamento body { visibility: hidden; }
+
+@media (max-width: 768px) {
+    .logo-lega { height: 40px; }
+    .btn-configurazione { width: 44px; padding: 0; justify-content: center; border-radius: 50%; }
+    .btn-configurazione span { display: none; }
+}
+@media (max-width: 600px) {
+    .btn-configurazione { width: 40px; height: 40px; }
+}
+@media (max-width: 600px) {
+    /* Sui telefoni il titolo prende lo spazio che resta fra logo/pulsanti e pulsanti di destra */
+    .header-content { display: flex; }
+    .app-title { flex: 1 1 auto; min-width: 0; justify-content: center; }
+}
+@media (max-width: 480px) {
+    .logo-lega { height: 32px; }
+    .app-title { font-size: 1.05rem; }
+    .app-title i { display: none; }
+}

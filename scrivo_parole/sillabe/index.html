@@ -23,14 +23,19 @@
     
     <!-- Styles -->
     <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/styles.css?v=20261118.1">
+    <link rel="stylesheet" href="css/styles.css?v=20261123.1">
     <script src="js/raccolta.js?v=1.1"></script>
+    <!-- Apertura: direttamente all'esercizio se è pronto, altrimenti alla Configurazione.
+         Con ?menu (freccia ← dall'esercizio o dalla Configurazione) resta questa pagina. -->
+    <script src="../js/apertura.js?v=1.0"></script>
+    <script>ScrivoApertura.apriVariante('sillabe');</script>
 </head>
 <body class="selection-page">
     <!-- Header -->
     <header class="app-header">
         <div class="header-content">
             <div class="header-buttons-left">
+                <img class="logo-lega" src="assets/img/logo-lega-filo-oro.png" alt="Lega del Filo d'Oro">
                 <button class="btn-back" onclick="goBack()" aria-label="Torna a: Scrivo parole (scelta lettere o sillabe)" title="Torna a: Scrivo parole (scelta lettere o sillabe)">
                     <i class="bi bi-arrow-left"></i>
                 </button>
@@ -61,13 +66,13 @@
             </div>
             
             <div class="area-cards">
-                <!-- Card Educatore -->
-                <a href="gestione.html" class="area-card educatore-card" tabindex="0" aria-label="Entra nell'area educatore">
+                <!-- Card Configurazione (educatore) -->
+                <a href="gestione.html" class="area-card educatore-card" tabindex="0" aria-label="Apri la configurazione">
                     <div class="card-icon">
-                        <i class="bi bi-person-gear"></i>
+                        <i class="bi bi-gear-fill"></i>
                     </div>
                     <div class="card-content">
-                        <h3>Area Educatore</h3>
+                        <h3>Configurazione</h3>
                         <p>Crea gli esercizi</p>
                         <ul class="card-features">
                             <li><i class="bi bi-check-circle"></i> Inserisci sillabe disponibili</li>
@@ -124,7 +129,7 @@
     <script>
         // ← porta alla pagina di scelta di «Scrivo parole» (lettere o sillabe)
         function goBack() {
-            window.location.href = '../';   // Scrivo parole (scelta lettere o sillabe)
+            window.location.href = '../?scelta';   // Scrivo parole (scelta lettere o sillabe), senza reindirizzamento
         }
 
         // Gestione tasti per accessibilità

@@ -1961,3 +1961,113 @@ body {
     .answer-area, .letters-area { padding: var(--spacing-md) var(--spacing-lg); }
     .answer-header, .letters-label { margin-bottom: var(--spacing-sm); }
 }
+
+/* =====================================================
+   INTESTAZIONE BIANCA CON IL LOGO DELLA LEGA DEL FILO D'ORO
+   (obiettivo comune alle app della raccolta): niente fascia colorata,
+   testo e icone nel colore dell'app, logo a sinistra prima dei pulsanti.
+   Vale anche per la pagina di scelta (../index.html usa questo foglio).
+===================================================== */
+.app-header {
+    background: #FFFFFF;
+    color: var(--primary-color);
+    box-shadow: 0 1px 0 #e3e8e7, 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.app-title {
+    color: var(--primary-color);
+}
+
+.logo-lega {
+    display: block;
+    height: 54px;
+    width: auto;
+    flex-shrink: 0;
+}
+
+.btn-back, .btn-home, .btn-menu, .btn-refresh {
+    background: #FCE4EC;
+    color: var(--primary-color);
+}
+
+.btn-back:hover, .btn-home:hover, .btn-menu:hover, .btn-refresh:hover {
+    background: #F8BBD9;
+}
+
+/* Pulsanti con testo: «Configurazione» (esercizio), «Vai all'esercizio» (configurazione) */
+.btn-header-testo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    height: 44px;
+    padding: 0 1rem;
+    border: none;
+    border-radius: 22px;
+    background: #FCE4EC;
+    color: var(--primary-color);
+    font: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: var(--transition-normal);
+}
+
+.btn-header-testo i {
+    font-size: 1.2rem;
+}
+
+.btn-header-testo:hover {
+    background: #F8BBD9;
+}
+
+.btn-header-primario {
+    background: var(--primary-color);
+    color: #FFFFFF;
+}
+
+.btn-header-primario:hover {
+    background: var(--primary-dark);
+}
+
+.btn-header-testo:focus-visible, .btn-back:focus-visible, .btn-menu:focus-visible, .btn-refresh:focus-visible {
+    outline: 3px solid var(--primary-dark);
+    outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+    .logo-lega {
+        height: 40px;
+    }
+
+    /* «Configurazione» nell'esercizio: solo l'icona dell'ingranaggio */
+    .btn-header-testo:not(.btn-header-primario) {
+        width: 44px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    .btn-header-testo:not(.btn-header-primario) span {
+        display: none;
+    }
+}
+
+/* Schermi stretti: il titolo va su una seconda riga, sotto logo e pulsanti */
+@media (max-width: 600px) {
+    .header-content {
+        flex-wrap: wrap;
+        row-gap: 0.4rem;
+    }
+
+    .app-title {
+        order: 3;
+        flex-basis: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-lega {
+        height: 32px;
+    }
+}
