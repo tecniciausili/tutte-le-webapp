@@ -17,14 +17,16 @@ All'apertura l'app va **direttamente all'esercizio** se c'è almeno uno stimolo 
 sulla **Configurazione** (tasti «Vai all'esercizio» e «Configurazione» per passare dall'una all'altro).
 Intestazione bianca con il logo della Lega del Filo d'Oro (versione 1.0.20, 23/11/2026).
 
-**Configurazioni (una per utente, versione 1.0.21).** In cima alla Configurazione si sceglie l'**utente**, cioè la
-configurazione in uso; **Nuova** ne crea una (vuota oppure copia di quella attuale: audio, video,
-anticipatori e tempi, senza registro), **Rinomina** ed **Elimina** agiscono su quella scelta (l'ultima
-rimasta non si può eliminare). Ognuna ha i suoi audio, video, impostazioni, ordine degli stimoli e
-registro; le prese (account Tapo e indirizzi) e il codice del ponte sono del dispositivo, comuni a
-tutte. Con più configurazioni la pagina dell'esercizio mostra il nome di quella in uso.
-I dati delle versioni precedenti diventano la configurazione «Utente 1» (stesse chiavi di `localStorage`;
-le altre usano `mt_…@c2`, `mt_…@c3`…; ogni audio in IndexedDB ha il campo `config`).
+**Configurazioni (una per utente, versioni 1.0.21 e 1.0.22).** Nella pagina dell'esercizio (Area
+Utente) c'è l'elenco delle configurazioni: toccandone una diventa quella dell'esercizio. Tre tasti:
+**Nuova** (chiede il nome, crea una configurazione da capo e apre la Configurazione), **Modifica** (apre
+la Configurazione di quella scelta) ed **Elimina** (la cancella con tutti i suoi dati; l'ultima rimasta
+non si può eliminare). Con una stimolazione in corso l'app chiede conferma prima di cambiare.
+In cima alla Configurazione resta solo «Configurazione di <nome>» con **Rinomina**.
+Ognuna ha i suoi audio, video, impostazioni, ordine degli stimoli e registro; le prese (account Tapo e
+indirizzi) e il codice del ponte sono del dispositivo, comuni a tutte. I dati delle versioni precedenti
+diventano la configurazione «Utente 1» (stesse chiavi di `localStorage`; le altre usano `mt_…@c2`,
+`mt_…@c3`…; ogni audio in IndexedDB ha il campo `config`).
 **Esporta/Importa** lavorano sulla configurazione in uso.
 
 | Scheda | Cosa si fa |
@@ -39,6 +41,9 @@ le altre usano `mt_…@c2`, `mt_…@c3`…; ogni audio in IndexedDB ha il campo 
 ### Area Utente
 
 La modalità si sceglie con il pulsante in alto a sinistra.
+
+All'inizio del pannello: l'**elenco delle configurazioni** (una per utente) con i tasti **Nuova**,
+**Modifica** ed **Elimina**.
 
 | Modalità | Comportamento |
 |---|---|

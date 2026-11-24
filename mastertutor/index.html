@@ -16,10 +16,10 @@
     <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
-    <link rel="stylesheet" href="css/styles.css?v=1.0.21">
-    <link rel="stylesheet" href="css/anticipatori.css?v=1.0.21">
-    <link rel="stylesheet" href="css/intestazione.css?v=1.0.21">
-    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css?v=1.0.21">
+    <link rel="stylesheet" href="css/styles.css?v=1.0.22">
+    <link rel="stylesheet" href="css/anticipatori.css?v=1.0.22">
+    <link rel="stylesheet" href="css/intestazione.css?v=1.0.22">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css?v=1.0.22">
 </head>
 <body>
     <header class="app-header">
@@ -92,7 +92,7 @@
             <div class="modal-body">
                 <h4>Configurazione</h4>
                 <ul>
-                    <li><strong>Utente</strong> (in alto): ogni utente ha la sua configurazione, con un nome. «Nuova» la crea vuota o come copia di quella attuale, «Rinomina» e «Elimina» agiscono su quella scelta. Ognuna ha i suoi audio, video, anticipatori, tempi e registro; le prese sono comuni.</li>
+                    <li><strong>Configurazione di …</strong> (in alto): di quale utente è la configurazione aperta; «Rinomina» ne cambia il nome. Ogni utente ha la sua configurazione, con i suoi audio, video, anticipatori, tempi e registro; le prese sono comuni.</li>
                     <li><strong>Audio</strong>: registra la voce con il microfono del dispositivo o carica un file (anche i vocali WhatsApp).</li>
                     <li><strong>YouTube</strong>: scrivi la categoria, scegli il video e incolla il link. Puoi far sentire solo l'audio e impostare inizio e fine.</li>
                     <li><strong>Anticipatore</strong>: l'audio che avvisa che sta per arrivare uno stimolo.</li>
@@ -102,6 +102,7 @@
                 </ul>
                 <h4>Area Utente</h4>
                 <ul>
+                    <li><strong>Configurazioni</strong>: l'elenco degli utenti; toccandone uno l'esercizio diventa il suo. «Nuova» ne crea una da capo e apre la Configurazione, «Modifica» apre la Configurazione di quella scelta, «Elimina» la cancella con tutti i suoi dati.</li>
                     <li><strong>Stimolazione casuale</strong>: dopo un'attesa casuale suona l'anticipatore e parte uno stimolo a caso.</li>
                     <li><strong>Stimolo su richiesta</strong>: dopo l'anticipatore lo stimolo parte solo se l'utente preme lo switch.</li>
                     <li><strong>Ascolto con switch</strong>: diretto, random, temporizzato, timer persistente e navigazione assistita.</li>
@@ -148,24 +149,24 @@
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <script src="js/lib/lame.min.js"></script>
-    <script src="js/util.js?v=1.0.21"></script>
-    <script src="js/archivio.js?v=1.0.21"></script>
-    <script src="js/elabora-audio.js?v=1.0.21"></script>
-    <script src="js/presa.js?v=1.0.21"></script>
-    <script src="js/presa-webpubsub.js?v=1.0.21"></script>
-    <script src="js/presa-nativa.js?v=1.0.21"></script>
-    <script src="js/riproduttore.js?v=1.0.21"></script>
-    <script src="js/ordinabile.js?v=1.0.21"></script>
-    <script src="js/scheda-presa.js?v=1.0.21"></script>
-    <script src="js/configura-prese.js?v=1.0.21"></script>
-    <script src="js/educatore.js?v=1.0.21"></script>
-    <script src="js/utente.js?v=1.0.21"></script>
-    <script src="js/app.js?v=1.0.21"></script>
+    <script src="js/util.js?v=1.0.22"></script>
+    <script src="js/archivio.js?v=1.0.22"></script>
+    <script src="js/elabora-audio.js?v=1.0.22"></script>
+    <script src="js/presa.js?v=1.0.22"></script>
+    <script src="js/presa-webpubsub.js?v=1.0.22"></script>
+    <script src="js/presa-nativa.js?v=1.0.22"></script>
+    <script src="js/riproduttore.js?v=1.0.22"></script>
+    <script src="js/ordinabile.js?v=1.0.22"></script>
+    <script src="js/scheda-presa.js?v=1.0.22"></script>
+    <script src="js/configura-prese.js?v=1.0.22"></script>
+    <script src="js/educatore.js?v=1.0.22"></script>
+    <script src="js/utente.js?v=1.0.22"></script>
+    <script src="js/app.js?v=1.0.22"></script>
 
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js?v=1.0.21')
+                navigator.serviceWorker.register('./service-worker.js?v=1.0.22')
                     .then((registrazione) => {
                         // update() può fallire se nel frattempo il service worker è stato rimosso
                         setInterval(() => registrazione.update().catch(() => {}), 60000);

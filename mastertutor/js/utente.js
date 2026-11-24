@@ -209,9 +209,7 @@ const Utente = (() => {
               <i class="bi bi-gear-fill"></i> Configurazione
             </button>
           </div>
-          ${Archivio.configurazioni().length > 1 ? `
-            <p class="configurazione-in-uso"><i class="bi bi-person-badge"></i>
-              <strong>${Util.escapeHtml(Archivio.configurazioneAttiva().nome)}</strong></p>` : ''}
+          <div class="utenti-esercizio" id="boxUtenti"></div>
           <div id="contenutoPannello"></div>
         </section>
         <section class="user-player-panel">
@@ -278,6 +276,135 @@ const Utente = (() => {
     });
     ui.pannello.addEventListener('click', alClickPannello);
     ui.pannello.addEventListener('change', alCambioPannello);
+    ui.utenti = contenitore.querySelector('#boxUtenti');
+    ui.utenti.addEventListener('click', alClickUtenti);
+    ui.utenti.addEventListener('keydown', (e) => {
+      if (e.target.id !== 'nomeNuovaConfigurazione') {
+        return;
+      }
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        ui.utenti.querySelector('[data-utenti="crea"]')?.click();
+      } else if (e.key === 'Escape') {
+        e.stopPropagation();
+        disegnaUtenti();
+      }
+    });
+    disegnaUtenti();
+  }
+
+  // ==================== CONFIGURAZIONI (UNA PER UTENTE) ====================
+  // Elenco delle configurazioni salvate: toccandone una diventa quella dell'esercizio.
+  // Tre tasti: «Nuova» (una configurazione da capo), «Modifica» (apre la Configurazione di
+  // quella scelta) ed «Elimina» (quella scelta, con tutti i suoi dati).
+
+  function disegnaUtenti(modo = 'elenco', avviso = '') {
+    if (!ui.utenti) {
+      return;
+    }
+    const elenco = Archivio.configurazioni();
+    const attiva = Archivio.configurazioneAttiva();
+    if (modo === 'nuova') {
+      ui.utenti.innerHTML = `
+        <div class="utenti-titolo"><i class="bi bi-plus-lg"></i> Nuova configurazione</div>
+        <input id="nomeNuovaConfigurazione" type="text" maxlength="40" autocomplete="off"
+          placeholder="Nome dell'utente (es. Marco)" aria-label="Nome della nuova configurazione" />
+        <div class="utenti-azioni">
+          <button type="button" class="btn-primary btn-piccolo" data-utenti="crea"><i class="bi bi-check-lg"></i> Crea e configura</button>
+          <button type="button" class="btn-secondary btn-piccolo" data-utenti="annulla">Annulla</button>
+        </div>
+        <div class="status-message ${avviso ? 'error' : ''}" role="status" aria-live="polite">${Util.escapeHtml(avviso)}</div>`;
+      ui.utenti.querySelector('#nomeNuovaConfigurazione').focus();
+      return;
+    }
+    ui.utenti.innerHTML = `
+      <div class="utenti-titolo"><i class="bi bi-people-fill"></i> Configurazioni</div>
+      <div class="utenti-elenco" role="radiogroup" aria-label="Configurazione dell'esercizio">
+        ${elenco.map((c) => {
+          const scelta = c.id === attiva.id;
+          return `
+            <button type="button" class="utente-voce ${scelta ? 'attiva' : ''}" role="radio" aria-checked="${scelta}"
+              data-utente="${Util.escapeHtml(c.id)}" title="${scelta ? 'In uso' : 'Usa questa configurazione'}">
+              <i class="bi ${scelta ? 'bi-check-circle-fill' : 'bi-circle'}"></i>
+              <span>${Util.escapeHtml(c.nome)}</span>
+            </button>`;
+        }).join('')}
+      </div>
+      <div class="utenti-azioni">
+        <button type="button" class="btn-secondary btn-piccolo" data-utenti="nuova" title="Crea una configurazione nuova, da capo">
+          <i class="bi bi-plus-lg"></i> Nuova</button>
+        <button type="button" class="btn-secondary btn-piccolo" data-utenti="modifica" title="Apre la Configurazione di «${Util.escapeHtml(attiva.nome)}»">
+          <i class="bi bi-pencil-square"></i> Modifica</button>
+        <button type="button" class="btn-secondary btn-piccolo pericolo" data-utenti="elimina"
+          ${elenco.length < 2 ? 'disabled title="È l\'unica configurazione"' : `title="Elimina «${Util.escapeHtml(attiva.nome)}»"`}>
+          <i class="bi bi-trash3"></i> Elimina</button>
+      </div>
+      <div class="status-message ${avviso ? 'error' : ''}" role="status" aria-live="polite">${Util.escapeHtml(avviso)}</div>`;
+  }
+
+  // Con una stimolazione in corso chiedo prima di cambiare pagina o configurazione
+  function lasciaSessione() {
+    return !sessione || confirm('La stimolazione in corso viene fermata. Continuare?');
+  }
+
+  async function alClickUtenti(e) {
+    const voce = e.target.closest('[data-utente]');
+    if (voce) {
+      if (voce.classList.contains('attiva') || !lasciaSessione()) {
+        return;
+      }
+      try {
+        Archivio.usaConfigurazione(voce.dataset.utente);
+      } catch (err) {
+        disegnaUtenti('elenco', err.message);
+        return;
+      }
+      App.mostraUtente();
+      return;
+    }
+    const btn = e.target.closest('[data-utenti]');
+    if (!btn) {
+      return;
+    }
+    const azione = btn.dataset.utenti;
+    if (azione === 'nuova') {
+      disegnaUtenti('nuova');
+    } else if (azione === 'annulla') {
+      disegnaUtenti();
+    } else if (azione === 'modifica') {
+      if (lasciaSessione()) {
+        App.mostraEducatore();
+      }
+    } else if (azione === 'elimina') {
+      const attiva = Archivio.configurazioneAttiva();
+      if (!confirm(`🗑 ELIMINA CONFIGURAZIONE\n\nEliminare «${attiva.nome}» con tutti i suoi audio, video, `
+        + 'impostazioni e registro?\n\nNon si può annullare. Le prese restano.')) {
+        return;
+      }
+      btn.disabled = true;
+      try {
+        await Archivio.eliminaConfigurazione(attiva.id);
+        App.mostraUtente();
+      } catch (err) {
+        disegnaUtenti('elenco', err.message);
+      }
+    } else if (azione === 'crea') {
+      const nome = ui.utenti.querySelector('#nomeNuovaConfigurazione').value;
+      if (!lasciaSessione()) {
+        return;
+      }
+      btn.disabled = true;
+      try {
+        await Archivio.creaConfigurazione(nome);
+        App.mostraEducatore();
+      } catch (err) {
+        btn.disabled = false;
+        const messaggio = ui.utenti.querySelector('.status-message');
+        messaggio.textContent = err.message;
+        messaggio.className = 'status-message error';
+        ui.utenti.querySelector('#nomeNuovaConfigurazione')?.focus();
+      }
+    }
   }
 
   function salvaPrefs() {
