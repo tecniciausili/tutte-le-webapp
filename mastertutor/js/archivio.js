@@ -1,11 +1,15 @@
 // ==================== ARCHIVIO LOCALE ====================
-// Come nelle altre app autonome: UN DISPOSITIVO = UN UTENTE, nessun server.
+// Nessun server: quello che si registra sul tablet resta sul tablet, quello che si
+// registra sul computer resta sul computer.
 //
 //  - Video YouTube, impostazioni, registro sessioni → localStorage (JSON)
 //  - Audio registrati o caricati (blob MP3)         → IndexedDB
 //
-// Quello che si registra sul tablet resta sul tablet, quello che si registra
-// sul computer resta sul computer.
+// CONFIGURAZIONI: sullo stesso dispositivo si possono tenere più configurazioni con un nome,
+// una per ogni utente. Ognuna ha i suoi audio, video, impostazioni, ordine e registro; se ne
+// usa una alla volta (quella attiva). La prima («c1») usa le chiavi di sempre, così i dati
+// delle versioni precedenti diventano la sua configurazione senza conversioni.
+// Restano del dispositivo, comuni a tutte: le prese (account e indirizzi) e il codice del ponte.
 
 const Archivio = (() => {
   const CHIAVI = {
@@ -14,6 +18,10 @@ const Archivio = (() => {
     registro: 'mt_registro',
     ordine: 'mt_ordine',
   };
+  const CHIAVE_CONFIGURAZIONI = 'mt_configurazioni';
+  const CHIAVE_PONTE = 'mt_ponte_codice';   // codice del ponte: del dispositivo, non dell'utente
+  const PRIMA = 'c1';
+  const NOME_PRIMA = 'Utente 1';
 
   const DB_NOME = 'mastertutor';
   const DB_VERSIONE = 1;
@@ -76,6 +84,139 @@ const Archivio = (() => {
     return x !== null && typeof x === 'object' && !Array.isArray(x);
   }
 
+  // ==================== CONFIGURAZIONI (UNA PER UTENTE) ====================
+
+  function statoConfigurazioni() {
+    const s = leggiJSON(CHIAVE_CONFIGURAZIONI, null);
+    const elenco = (eOggetto(s) && Array.isArray(s.elenco) ? s.elenco : [])
+      .filter((c) => eOggetto(c) && typeof c.id === 'string' && c.id)
+      .map((c) => ({ id: c.id, nome: String(c.nome || '').trim() || c.id, creata: Number(c.creata) || 0 }));
+    if (elenco.length === 0) {
+      elenco.push({ id: PRIMA, nome: NOME_PRIMA, creata: 0 });
+    }
+    const attiva = elenco.some((c) => c.id === s?.attiva) ? s.attiva : elenco[0].id;
+    return { attiva, elenco };
+  }
+
+  function salvaStatoConfigurazioni(stato) {
+    scriviJSON(CHIAVE_CONFIGURAZIONI, stato);
+  }
+
+  // Chiave di localStorage di un dato per una configurazione
+  function chiaveDi(base, id = statoConfigurazioni().attiva) {
+    return id === PRIMA ? base : `${base}@${id}`;
+  }
+
+  function configurazioni() {
+    return statoConfigurazioni().elenco.slice();
+  }
+
+  function configurazioneAttiva() {
+    const s = statoConfigurazioni();
+    return s.elenco.find((c) => c.id === s.attiva);
+  }
+
+  function nomeLibero(nome, tranneId = null) {
+    const pulito = String(nome || '').trim().replace(/\s+/g, ' ').slice(0, 40);
+    if (!pulito) {
+      throw new Error('Scrivi un nome per la configurazione.');
+    }
+    const doppione = statoConfigurazioni().elenco
+      .some((c) => c.id !== tranneId && c.nome.toLocaleLowerCase('it') === pulito.toLocaleLowerCase('it'));
+    if (doppione) {
+      throw new Error(`Esiste già una configurazione «${pulito}».`);
+    }
+    return pulito;
+  }
+
+  function usaConfigurazione(id) {
+    const s = statoConfigurazioni();
+    if (!s.elenco.some((c) => c.id === id)) {
+      throw new Error('Configurazione non trovata.');
+    }
+    // Il codice del ponte resta del dispositivo anche passando a un'altra configurazione
+    localStorage.setItem(CHIAVE_PONTE, getImpostazioni().presa.codice || '');
+    salvaStatoConfigurazioni({ ...s, attiva: id });
+  }
+
+  // Crea una configurazione nuova e la rende attiva. Con copia = true parte da una copia di
+  // quella attiva (audio, video, anticipatori, tempi e ordine; il registro no).
+  async function creaConfigurazione(nome, { copia = false } = {}) {
+    const pulito = nomeLibero(nome);
+    const s = statoConfigurazioni();
+    let n = s.elenco.length + 1;
+    while (s.elenco.some((c) => c.id === `c${n}`)) {
+      n++;
+    }
+    const id = `c${n}`;
+    const datiDaCopiare = copia ? await esportaDati() : null;
+    // Pulisco eventuali resti di una configurazione eliminata con lo stesso id
+    await cancellaDatiConfigurazione(id);
+    salvaStatoConfigurazioni({ ...s, elenco: [...s.elenco, { id, nome: pulito, creata: Date.now() }] });
+    usaConfigurazione(id);
+    if (datiDaCopiare) {
+      await importaDati(datiDaCopiare);
+    }
+    return { id, nome: pulito };
+  }
+
+  function rinominaConfigurazione(id, nome) {
+    const pulito = nomeLibero(nome, id);
+    const s = statoConfigurazioni();
+    salvaStatoConfigurazioni({ ...s, elenco: s.elenco.map((c) => (c.id === id ? { ...c, nome: pulito } : c)) });
+    return pulito;
+  }
+
+  async function cancellaDatiConfigurazione(id) {
+    for (const base of Object.values(CHIAVI)) {
+      localStorage.removeItem(chiaveDi(base, id));
+    }
+    const ids = (await tuttiGliAudio()).filter((a) => (a.config || PRIMA) === id).map((a) => a.id);
+    if (ids.length) {
+      await transazione('readwrite', (store) => {
+        ids.forEach((k) => store.delete(k));
+      });
+    }
+  }
+
+  // Elimina una configurazione con tutti i suoi dati. L'ultima rimasta non si può eliminare;
+  // se si elimina quella attiva diventa attiva la prima dell'elenco.
+  async function eliminaConfigurazione(id) {
+    const s = statoConfigurazioni();
+    if (!s.elenco.some((c) => c.id === id)) {
+      throw new Error('Configurazione non trovata.');
+    }
+    if (s.elenco.length <= 1) {
+      throw new Error('È l\'unica configurazione: non si può eliminare.');
+    }
+    if (s.attiva === id) {
+      localStorage.setItem(CHIAVE_PONTE, getImpostazioni().presa.codice || '');
+    }
+    await cancellaDatiConfigurazione(id);
+    const elenco = s.elenco.filter((c) => c.id !== id);
+    salvaStatoConfigurazioni({ attiva: s.attiva === id ? elenco[0].id : s.attiva, elenco });
+  }
+
+  // Una presa tolta dalla configurazione delle prese (comuni a tutte le configurazioni):
+  // la dimentico nelle scelte e negli anticipatori di ogni configurazione, così un'eventuale
+  // presa nuova con lo stesso id non eredita impostazioni non sue
+  function dimenticaPresa(idPresa) {
+    for (const c of statoConfigurazioni().elenco) {
+      const chiave = chiaveDi(CHIAVI.impostazioni, c.id);
+      const imp = leggiJSON(chiave, null);
+      if (!eOggetto(imp)) {
+        continue;
+      }
+      if (eOggetto(imp.presa) && Array.isArray(imp.presa.prese)) {
+        imp.presa.prese = imp.presa.prese.filter((x) => x !== idPresa);
+      }
+      if (eOggetto(imp.anticipatori) && eOggetto(imp.anticipatori.prese)) {
+        delete imp.anticipatori.prese[idPresa];
+      }
+      scriviJSON(chiave, imp);
+    }
+  }
+
   // Unione profonda: i valori salvati prevalgono, i campi mancanti prendono il default
   function unisci(base, sopra) {
     const risultato = { ...base };
@@ -93,7 +234,11 @@ const Archivio = (() => {
   // ==================== IMPOSTAZIONI ====================
 
   function getImpostazioni() {
-    const imp = unisci(IMPOSTAZIONI_DEFAULT, leggiJSON(CHIAVI.impostazioni, {}));
+    const imp = unisci(IMPOSTAZIONI_DEFAULT, leggiJSON(chiaveDi(CHIAVI.impostazioni), {}));
+    const ponte = localStorage.getItem(CHIAVE_PONTE);
+    if (ponte !== null) {
+      imp.presa.codice = ponte;
+    }
     // Valori numerici sempre validi, anche se modificati a mano
     const st = imp.stimolazione;
     st.attesa_min = Math.max(1, Number(st.attesa_min) || IMPOSTAZIONI_DEFAULT.stimolazione.attesa_min);
@@ -106,19 +251,20 @@ const Archivio = (() => {
 
   function salvaImpostazioni(parziale) {
     const nuove = unisci(getImpostazioni(), parziale);
-    scriviJSON(CHIAVI.impostazioni, nuove);
+    scriviJSON(chiaveDi(CHIAVI.impostazioni), nuove);
+    localStorage.setItem(CHIAVE_PONTE, nuove.presa.codice || '');
     return nuove;
   }
 
   // ==================== VIDEO YOUTUBE ====================
 
   function getYoutube() {
-    const lista = leggiJSON(CHIAVI.youtube, []);
+    const lista = leggiJSON(chiaveDi(CHIAVI.youtube), []);
     return Array.isArray(lista) ? lista : [];
   }
 
   function salvaYoutube(lista) {
-    scriviJSON(CHIAVI.youtube, lista);
+    scriviJSON(chiaveDi(CHIAVI.youtube), lista);
   }
 
   function aggiungiYoutube(dati) {
@@ -229,6 +375,7 @@ const Archivio = (() => {
   //   'generale' | 'audio' | 'youtube' | 'presa:<id della presa>' (null = audio normale, uno stimolo)
   async function audioAggiungi(audio) {
     const record = {
+      config: statoConfigurazioni().attiva,   // configurazione (utente) a cui appartiene
       anticipa: typeof audio.anticipa === 'string' && audio.anticipa ? audio.anticipa : null,
       nome: audio.nome,
       origine: audio.origine === 'registrazione' ? 'registrazione' : 'upload',
@@ -245,18 +392,29 @@ const Archivio = (() => {
     return { ...record, id };
   }
 
-  function audioLista() {
+  // Tutti gli audio del dispositivo, di ogni configurazione
+  function tuttiGliAudio() {
     return transazione('readonly', (store, fine) => {
       const req = store.getAll();
       req.onsuccess = () => fine(req.result || []);
     });
   }
 
-  function audioGet(id) {
-    return transazione('readonly', (store, fine) => {
+  // Gli audio senza "config" sono quelli delle versioni precedenti: della prima configurazione
+  function dellaAttiva(record) {
+    return !!record && (record.config || PRIMA) === statoConfigurazioni().attiva;
+  }
+
+  async function audioLista() {
+    return (await tuttiGliAudio()).filter(dellaAttiva);
+  }
+
+  async function audioGet(id) {
+    const record = await transazione('readonly', (store, fine) => {
       const req = store.get(id);
       req.onsuccess = () => fine(req.result || null);
     });
+    return dellaAttiva(record) ? record : null;
   }
 
   function audioAggiorna(id, campi) {
@@ -283,12 +441,12 @@ const Archivio = (() => {
   // ascolto con switch, navigazione assistita ed elenchi dell'Area Educatore.
 
   function getOrdine() {
-    const lista = leggiJSON(CHIAVI.ordine, []);
+    const lista = leggiJSON(chiaveDi(CHIAVI.ordine), []);
     return Array.isArray(lista) ? lista.filter((k) => typeof k === 'string') : [];
   }
 
   function salvaOrdine(chiavi) {
-    scriviJSON(CHIAVI.ordine, Array.from(new Set(chiavi)));
+    scriviJSON(chiaveDi(CHIAVI.ordine), Array.from(new Set(chiavi)));
   }
 
   // Mette una lista nell'ordine scelto; chi non c'è ancora (appena aggiunto) va in fondo
@@ -303,7 +461,7 @@ const Archivio = (() => {
   // ==================== REGISTRO SESSIONI ====================
 
   function getRegistro() {
-    const lista = leggiJSON(CHIAVI.registro, []);
+    const lista = leggiJSON(chiaveDi(CHIAVI.registro), []);
     return Array.isArray(lista) ? lista : [];
   }
 
@@ -313,11 +471,11 @@ const Archivio = (() => {
     const lista = getRegistro().filter((s) => s.id !== sessione.id);
     lista.push(sessione);
     lista.sort((a, b) => a.inizio - b.inizio);
-    scriviJSON(CHIAVI.registro, lista.slice(-MAX_SESSIONI));
+    scriviJSON(chiaveDi(CHIAVI.registro), lista.slice(-MAX_SESSIONI));
   }
 
   function azzeraRegistro() {
-    localStorage.removeItem(CHIAVI.registro);
+    localStorage.removeItem(chiaveDi(CHIAVI.registro));
   }
 
   // ==================== ESPORTA / IMPORTA ====================
@@ -374,6 +532,7 @@ const Archivio = (() => {
       formato: FORMATO_BACKUP,
       versione_app: window.APP_CONFIG?.versione || '',
       esportato: Date.now(),
+      configurazione: configurazioneAttiva()?.nome || '',
       impostazioni,
       youtube: getYoutube(),
       ordine: getOrdine(),
@@ -395,15 +554,17 @@ const Archivio = (() => {
     const codicePonteLocale = getImpostazioni().presa.codice;
     const impFinale = unisci(IMPOSTAZIONI_DEFAULT, eOggetto(oggetto.impostazioni) ? oggetto.impostazioni : {});
     impFinale.presa.codice = codicePonteLocale;
-    scriviJSON(CHIAVI.impostazioni, impFinale);
+    scriviJSON(chiaveDi(CHIAVI.impostazioni), impFinale);
 
     // Video YouTube: gli id restano quelli del file, così l'ordine y* è ancora valido
-    scriviJSON(CHIAVI.youtube, Array.isArray(oggetto.youtube) ? oggetto.youtube : []);
+    scriviJSON(chiaveDi(CHIAVI.youtube), Array.isArray(oggetto.youtube) ? oggetto.youtube : []);
 
     // Audio: svuoto e re-inserisco. Gli id di IndexedDB cambiano, quindi tengo la
     // corrispondenza vecchio → nuovo per rimettere a posto l'ordine.
+    // (solo quelli della configurazione attiva: le altre non si toccano)
+    const daTogliere = (await audioLista()).map((a) => a.id);
     await transazione('readwrite', (store) => {
-      store.clear();
+      daTogliere.forEach((k) => store.delete(k));
     });
     const mappaAudio = new Map();
     const mappaId = new Map();   // vecchio id numerico → nuovo
@@ -433,7 +594,7 @@ const Archivio = (() => {
     for (const [id, v] of Object.entries(imp.anticipatori.prese || {})) {
       prese[id] = rimappa(v);
     }
-    scriviJSON(CHIAVI.impostazioni, {
+    scriviJSON(chiaveDi(CHIAVI.impostazioni), {
       ...imp,
       anticipatore: rimappa(imp.anticipatore),
       anticipatori: { audio: rimappa(imp.anticipatori.audio), youtube: rimappa(imp.anticipatori.youtube), prese },
@@ -478,6 +639,13 @@ const Archivio = (() => {
   }
 
   return {
+    configurazioni,
+    configurazioneAttiva,
+    usaConfigurazione,
+    creaConfigurazione,
+    rinominaConfigurazione,
+    eliminaConfigurazione,
+    dimenticaPresa,
     getImpostazioni,
     salvaImpostazioni,
     getYoutube,

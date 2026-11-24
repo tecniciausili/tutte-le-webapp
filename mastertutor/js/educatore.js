@@ -1,5 +1,6 @@
 // ==================== AREA EDUCATORE ====================
-// Qui l'educatore prepara gli stimoli e le regole della sessione:
+// Qui l'educatore prepara gli stimoli e le regole della sessione.
+// In cima: la configurazione attiva (una per utente), da scegliere, creare, rinominare, eliminare.
 //   Audio        registrazioni dal microfono e file dal disco
 //   YouTube      video (anche "solo audio") con tempi di inizio/fine
 //   Anticipatore l'audio che annuncia ogni stimolo
@@ -74,6 +75,7 @@ const Educatore = (() => {
               <i class="bi bi-play-circle-fill"></i> Vai all'esercizio
             </button>
           </div>
+          <div class="barra-configurazioni" id="barraConfigurazioni"></div>
           <nav class="schede" role="tablist" aria-label="Sezioni">
             ${SCHEDE.map((s) => `
               <button type="button" class="scheda" role="tab" data-scheda="${s.id}">
@@ -94,6 +96,18 @@ const Educatore = (() => {
       }
     });
     contenitore.querySelector('[data-azione="vai-utente"]').addEventListener('click', () => App.mostraUtente());
+    const barra = contenitore.querySelector('#barraConfigurazioni');
+    barra.addEventListener('click', (e) => alClickConfigurazioni(e, barra));
+    barra.addEventListener('change', (e) => alCambioConfigurazione(e));
+    barra.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.target.id === 'nomeConfigurazione') {
+        e.preventDefault();
+        barra.querySelector('[data-config="conferma"]')?.click();
+      } else if (e.key === 'Escape' && e.target.id === 'nomeConfigurazione') {
+        disegnaConfigurazioni(barra);
+      }
+    });
+    disegnaConfigurazioni(barra);
     contenuto.addEventListener('click', gestisciClick);
     contenuto.addEventListener('change', gestisciCambio);
     if (Util.apk) {
@@ -101,6 +115,120 @@ const Educatore = (() => {
     }
 
     mostraScheda(schedaAttiva);
+  }
+
+  // ==================== CONFIGURAZIONI (UNA PER UTENTE) ====================
+  // modo: 'scelta' (elenco e pulsanti) | 'nuova' | 'rinomina'
+
+  function disegnaConfigurazioni(barra, modo = 'scelta', avviso = '') {
+    const elenco = Archivio.configurazioni();
+    const attiva = Archivio.configurazioneAttiva();
+    const nomeAttiva = Util.escapeHtml(attiva.nome);
+    let html;
+    if (modo === 'scelta') {
+      html = `
+        <div class="riga-configurazioni">
+          <label for="sceltaConfigurazione"><i class="bi bi-person-badge"></i> Utente</label>
+          <select id="sceltaConfigurazione" aria-label="Configurazione in uso">
+            ${elenco.map((c) => `<option value="${Util.escapeHtml(c.id)}" ${c.id === attiva.id ? 'selected' : ''}>${Util.escapeHtml(c.nome)}</option>`).join('')}
+          </select>
+          <div class="azioni-configurazioni">
+            <button type="button" class="btn-secondary btn-piccolo" data-config="nuova"><i class="bi bi-plus-lg"></i> Nuova</button>
+            <button type="button" class="btn-secondary btn-piccolo" data-config="rinomina"><i class="bi bi-pencil"></i> Rinomina</button>
+            <button type="button" class="btn-secondary btn-piccolo pericolo" data-config="elimina" ${elenco.length < 2 ? 'disabled title="È l\'unica configurazione"' : ''}>
+              <i class="bi bi-trash3"></i> Elimina</button>
+          </div>
+        </div>
+        <p class="helper-text">Ogni utente ha la sua configurazione: audio, video, anticipatori, tempi e registro.
+          Le prese sono comuni a tutti.</p>`;
+    } else {
+      const nuova = modo === 'nuova';
+      html = `
+        <div class="riga-configurazioni">
+          <label for="nomeConfigurazione"><i class="bi ${nuova ? 'bi-plus-lg' : 'bi-pencil'}"></i> ${nuova ? 'Nuova configurazione' : 'Nuovo nome'}</label>
+          <input id="nomeConfigurazione" type="text" maxlength="40" autocomplete="off"
+            placeholder="Nome dell'utente (es. Marco)" value="${nuova ? '' : nomeAttiva}" />
+          <div class="azioni-configurazioni">
+            <button type="button" class="btn-primary btn-piccolo" data-config="conferma" data-modo="${modo}">
+              <i class="bi bi-check-lg"></i> ${nuova ? 'Crea' : 'Salva'}</button>
+            <button type="button" class="btn-secondary btn-piccolo" data-config="annulla">Annulla</button>
+          </div>
+        </div>
+        ${nuova ? `
+          <div class="scelta-partenza" role="radiogroup" aria-label="Da dove parte">
+            <label><input type="radio" name="partenzaConfig" value="vuota" checked /> <span>Vuota</span></label>
+            <label><input type="radio" name="partenzaConfig" value="copia" /> <span>Copia di «${nomeAttiva}» (audio, video, anticipatori e tempi; il registro no)</span></label>
+          </div>` : ''}`;
+    }
+    barra.innerHTML = `${html}<div class="status-message ${avviso ? 'error' : ''}" role="status" aria-live="polite">${Util.escapeHtml(avviso)}</div>`;
+    const campo = barra.querySelector('#nomeConfigurazione');
+    if (campo) {
+      campo.focus();
+      campo.select();
+    }
+  }
+
+  // Dopo un cambio di configurazione ridisegno tutta la Configurazione con i dati nuovi
+  function ricarica() {
+    App.mostraEducatore();
+  }
+
+  function alCambioConfigurazione(e) {
+    if (e.target.id !== 'sceltaConfigurazione') {
+      return;
+    }
+    try {
+      Archivio.usaConfigurazione(e.target.value);
+    } catch (err) {
+      alert(`❌ ${err.message}`);
+    }
+    ricarica();
+  }
+
+  async function alClickConfigurazioni(e, barra) {
+    const btn = e.target.closest('[data-config]');
+    if (!btn) {
+      return;
+    }
+    const azione = btn.dataset.config;
+    if (azione === 'nuova' || azione === 'rinomina') {
+      disegnaConfigurazioni(barra, azione);
+    } else if (azione === 'annulla') {
+      disegnaConfigurazioni(barra);
+    } else if (azione === 'elimina') {
+      const attiva = Archivio.configurazioneAttiva();
+      if (!confirm(`🗑 ELIMINA CONFIGURAZIONE\n\nEliminare «${attiva.nome}» con tutti i suoi audio, video, `
+        + 'impostazioni e registro?\n\nNon si può annullare. Le prese restano.')) {
+        return;
+      }
+      btn.disabled = true;
+      try {
+        await Archivio.eliminaConfigurazione(attiva.id);
+        ricarica();
+      } catch (err) {
+        btn.disabled = false;
+        disegnaConfigurazioni(barra, 'scelta', err.message);
+      }
+    } else if (azione === 'conferma') {
+      const modo = btn.dataset.modo;
+      const nome = barra.querySelector('#nomeConfigurazione').value;
+      btn.disabled = true;
+      try {
+        if (modo === 'nuova') {
+          const copia = barra.querySelector('input[name="partenzaConfig"]:checked')?.value === 'copia';
+          await Archivio.creaConfigurazione(nome, { copia });
+        } else {
+          Archivio.rinominaConfigurazione(Archivio.configurazioneAttiva().id, nome);
+        }
+        ricarica();
+      } catch (err) {
+        btn.disabled = false;
+        const messaggio = barra.querySelector('.status-message');
+        messaggio.textContent = err.message;
+        messaggio.className = 'status-message error';
+        barra.querySelector('#nomeConfigurazione')?.focus();
+      }
+    }
   }
 
   function chiudi() {

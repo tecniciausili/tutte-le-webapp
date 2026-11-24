@@ -28,3 +28,102 @@
 .nota-presa-casuale i {
   margin-top: 0.1rem;
 }
+
+/* Configurazioni (una per utente), in cima alla Configurazione */
+.barra-configurazioni {
+    border: 1px solid var(--primary-border);
+    background: var(--primary-soft);
+    border-radius: 14px;
+    padding: 0.7rem 0.9rem 0.2rem;
+    margin: 0.9rem 0 0.4rem;
+}
+.riga-configurazioni {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+}
+.riga-configurazioni label {
+    font-weight: 700;
+    color: var(--primary-dark);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.riga-configurazioni select,
+.riga-configurazioni input[type="text"] {
+    flex: 1 1 12rem;
+    min-width: 0;
+    border: 1px solid var(--primary-border);
+    border-radius: 12px;
+    padding: 0.55rem 0.8rem;
+    font-size: 1rem;
+    font-family: inherit;
+    background: white;
+    color: var(--text-color);
+}
+.riga-configurazioni select:focus,
+.riga-configurazioni input[type="text"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.15);
+}
+.azioni-configurazioni {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+.azioni-configurazioni .btn-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+.barra-configurazioni .helper-text {
+    margin: 0.45rem 0 0.3rem;
+}
+.scelta-partenza {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1.2rem;
+    margin: 0.6rem 0 0.2rem;
+    font-size: 0.92rem;
+}
+.scelta-partenza label {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    cursor: pointer;
+}
+.barra-configurazioni .status-message:empty {
+    display: none;
+}
+.configurazione-in-uso {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0.4rem 0 0.2rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    background: var(--primary-soft);
+    color: var(--primary-dark);
+    font-size: 0.95rem;
+}
+
+/* Prese configurate: elenco con «Prova» ed «Elimina» */
+.elemento .azioni-presa {
+    display: flex;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+.barra-configurazioni .status-message {
+    margin: 0.5rem 0 0.6rem;
+}
+@media (max-width: 480px) {
+    #listaPrese .elemento {
+        flex-wrap: wrap;
+    }
+    #listaPrese .azioni-presa {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}

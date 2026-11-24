@@ -6,7 +6,8 @@ luce, un ventilatore o un giocattolo.
 È la versione PWA del programma Python *Mastertutor_Tapo*.
 
 Applicazione **statica** (HTML/CSS/JavaScript) per Azure Static Web Apps, installabile su **computer e
-tablet**. **Un dispositivo = un utente**: audio, video e registro restano nel browser del dispositivo.
+tablet**. Audio, video e registro restano nel browser del dispositivo, divisi in **configurazioni con un
+nome, una per utente** (dalla versione 1.0.21).
 
 ## Funzionalità
 
@@ -16,12 +17,22 @@ All'apertura l'app va **direttamente all'esercizio** se c'è almeno uno stimolo 
 sulla **Configurazione** (tasti «Vai all'esercizio» e «Configurazione» per passare dall'una all'altro).
 Intestazione bianca con il logo della Lega del Filo d'Oro (versione 1.0.20, 23/11/2026).
 
+**Configurazioni (una per utente, versione 1.0.21).** In cima alla Configurazione si sceglie l'**utente**, cioè la
+configurazione in uso; **Nuova** ne crea una (vuota oppure copia di quella attuale: audio, video,
+anticipatori e tempi, senza registro), **Rinomina** ed **Elimina** agiscono su quella scelta (l'ultima
+rimasta non si può eliminare). Ognuna ha i suoi audio, video, impostazioni, ordine degli stimoli e
+registro; le prese (account Tapo e indirizzi) e il codice del ponte sono del dispositivo, comuni a
+tutte. Con più configurazioni la pagina dell'esercizio mostra il nome di quella in uso.
+I dati delle versioni precedenti diventano la configurazione «Utente 1» (stesse chiavi di `localStorage`;
+le altre usano `mt_…@c2`, `mt_…@c3`…; ogni audio in IndexedDB ha il campo `config`).
+**Esporta/Importa** lavorano sulla configurazione in uso.
+
 | Scheda | Cosa si fa |
 |---|---|
 | **Audio** | Registrare la voce con il microfono del dispositivo, oppure caricare **qualsiasi file audio** dal disco (MP3, vocali **WhatsApp**, M4A, WAV, FLAC, AMR, WMA, AIFF, anche l'audio di un video). Tutto viene convertito in MP3 nel browser (lamejs) e il silenzio iniziale e finale viene tagliato. Con la spunta **Nel gioco** l'audio diventa uno stimolo |
 | **YouTube** | Ricerca integrata (scrivendo la categoria si apre YouTube), link, nome, **tempi di inizio e fine**, scelta **video** oppure **solo audio** |
 | **Anticipatore** | L'audio che annuncia ogni stimolo, **uno per ogni tipo**: voci, musica (YouTube) e ogni presa (es. «anticipatore-ventilatore»); oppure il generale: suono predefinito, nessuno, o uno registrato o caricato |
-| **Presa** | Abbinamento con il **ponte** (codice di 12 caratteri), scelta delle prese, durata, prova. Il pulsante **Configura le prese** (anche nel menu ⋮) apre una finestra a scomparsa per inserire account Tapo e indirizzi delle prese di una nuova rete, per esempio a casa, e salvarli sul ponte |
+| **Presa** | Abbinamento con il **ponte** (codice di 12 caratteri), **elenco delle prese in funzione** con scelta, prova ed **Elimina**, durata. Il pulsante **Configura le prese** (anche nel menu ⋮) apre una finestra a scomparsa per inserire account Tapo e indirizzi delle prese di una nuova rete, per esempio a casa, e salvarli sul ponte |
 | **Tempi** | Attesa casuale minima e massima, durata massima di audio e video, tipi di stimolo usati, tempo per rispondere allo switch |
 | **Registro** | Sessioni svolte: stimoli, risposte allo switch, tempi medi di risposta, pressioni |
 
@@ -38,7 +49,8 @@ La modalità si sceglie con il pulsante in alto a sinistra.
 - **Switch**: SPAZIO, INVIO, frecce (Makey Makey, switch USB o Bluetooth) oppure **tocco sullo schermo**.
 - **Doppio switch** (opzione): la FRECCIA DESTRA fa sentire gli audio registrati. La musica YouTube va in
   pausa e riprende alla fine dell'audio.
-- **Attesa tra gli stimoli** regolabile con due cursori sotto *Avvia*: vale dal prossimo stimolo.
+- **Attesa tra gli stimoli**: si regola solo in Configurazione → *Tempi* (dalla 1.0.21 non ci sono più i
+  cursori sotto *Avvia*); la pagina dell'esercizio la mostra nel riepilogo.
 - **Ordine degli stimoli**: nell'elenco dell'Area Utente si trascinano con la maniglia ⠿ (mouse o
   dito; con la tastiera, frecce su e giù sulla maniglia). È un'unica sequenza, uguale in tutte le
   modalità e negli elenchi della Configurazione (dove è di sola lettura: l'ordine si cambia **solo**

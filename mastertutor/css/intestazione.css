@@ -20,7 +20,7 @@
 
 .logo-lega {
   display: block;
-  height: 80px;
+  height: 69px;
   width: auto;
 }
 
@@ -45,29 +45,29 @@
 
 @media (max-width: 768px) {
   .logo-lega {
-    height: 64px;
+    height: 55px;
   }
 }
 
 @media (max-width: 480px) {
   .logo-lega {
-    height: 48px;
+    height: 42px;
   }
 }
 
 /* Altezza dell'intestazione adatta al logo grande (80 / 64 / 48 px) */
 :root {
-  --header-h: 96px;
+  --header-h: 85px;
 }
 
 @media (max-width: 768px) {
   :root {
-    --header-h: 80px;
+    --header-h: 71px;
   }
 }
 
 @media (max-width: 480px) {
   :root {
-    --header-h: 64px;
+    --header-h: 57px;
   }
 }

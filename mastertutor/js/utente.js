@@ -209,6 +209,9 @@ const Utente = (() => {
               <i class="bi bi-gear-fill"></i> Configurazione
             </button>
           </div>
+          ${Archivio.configurazioni().length > 1 ? `
+            <p class="configurazione-in-uso"><i class="bi bi-person-badge"></i>
+              <strong>${Util.escapeHtml(Archivio.configurazioneAttiva().nome)}</strong></p>` : ''}
           <div id="contenutoPannello"></div>
         </section>
         <section class="user-player-panel">
@@ -275,7 +278,6 @@ const Utente = (() => {
     });
     ui.pannello.addEventListener('click', alClickPannello);
     ui.pannello.addEventListener('change', alCambioPannello);
-    ui.pannello.addEventListener('input', alInputPannello);
   }
 
   function salvaPrefs() {
@@ -608,29 +610,12 @@ const Utente = (() => {
         </button>
       </div>
       <div class="stato-sessione" id="statoSessione" role="status" aria-live="polite">Pronto</div>
-      <div class="regolazione-attesa">
-        <div class="regolazione-titolo"><i class="bi bi-hourglass-split"></i> Attesa tra gli stimoli</div>
-        <label class="cursore">
-          <span>Minima</span>
-          <input type="range" id="cursoreAttesaMin" min="1" max="120" step="1" />
-          <strong id="valoreAttesaMin"></strong>
-        </label>
-        <label class="cursore">
-          <span>Massima</span>
-          <input type="range" id="cursoreAttesaMax" min="1" max="120" step="1" />
-          <strong id="valoreAttesaMax"></strong>
-        </label>
-      </div>
       <div class="contatori" id="contatori"></div>
       <div class="disponibili" id="disponibili"></div>
       <h4 class="titolo-lista"><i class="bi bi-collection-play"></i> Stimoli nel gioco</h4>
       <p class="nota-presa-casuale"><i class="bi bi-shuffle"></i> <span>A ogni stimolo si estrae a caso una <strong>categoria</strong> tra video YouTube, voci e prese Tapo, poi uno stimolo a caso di quella categoria. La categoria successiva si sceglie tra quelle rimaste: le tre escono tutte prima di ricominciare, e mai la stessa due volte di fila. Dentro una categoria nessuno stimolo si ripete finché non sono usciti tutti.</span></p>
       <div class="brani-list" id="listaStimoli"></div>
     `;
-    const st = Archivio.getImpostazioni().stimolazione;
-    ui.pannello.querySelector('#cursoreAttesaMin').value = st.attesa_min;
-    ui.pannello.querySelector('#cursoreAttesaMax').value = st.attesa_max;
-    mostraValoriAttesa();
     aggiornaDisponibili();
     aggiornaContatori();
     Ordinabile.attiva(ui.pannello.querySelector('#listaStimoli'), { onCambio: nuovoOrdine });
@@ -645,34 +630,6 @@ const Utente = (() => {
     }
     // La presa parte a cadenza fissa, non segue la sequenza: qui mostro solo audio e video
     disegnaLista(contenitore, stimoliInGioco().filter((el) => el.tipo !== 'presa'), false);
-  }
-
-  function mostraValoriAttesa() {
-    const min = ui.pannello?.querySelector('#cursoreAttesaMin');
-    const max = ui.pannello?.querySelector('#cursoreAttesaMax');
-    if (min && max) {
-      ui.pannello.querySelector('#valoreAttesaMin').textContent = `${min.value} s`;
-      ui.pannello.querySelector('#valoreAttesaMax').textContent = `${max.value} s`;
-    }
-  }
-
-  // Cursori dell'attesa: valgono dal prossimo stimolo, anche a sessione avviata
-  function alInputPannello(e) {
-    const id = e.target.id;
-    if (id !== 'cursoreAttesaMin' && id !== 'cursoreAttesaMax') {
-      return;
-    }
-    const cMin = ui.pannello.querySelector('#cursoreAttesaMin');
-    const cMax = ui.pannello.querySelector('#cursoreAttesaMax');
-    if (id === 'cursoreAttesaMin' && Number(cMin.value) > Number(cMax.value)) {
-      cMax.value = cMin.value;
-    }
-    if (id === 'cursoreAttesaMax' && Number(cMax.value) < Number(cMin.value)) {
-      cMin.value = cMax.value;
-    }
-    mostraValoriAttesa();
-    Archivio.salvaImpostazioni({ stimolazione: { attesa_min: Number(cMin.value), attesa_max: Number(cMax.value) } });
-    aggiornaDisponibili();
   }
 
   function nomeAnticipatore() {

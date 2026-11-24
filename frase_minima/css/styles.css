@@ -44,7 +44,7 @@
     /* Spazio che resta per i due file di box sotto header, consegna,
        frase, barra di stato e spazi: con «Dimensione box» alta i box
        si fermano qui invece di spingere la barra fuori dallo schermo */
-    --spazio-box: calc(100 * var(--vh) - 347px);
+    --spazio-box: calc(100 * var(--vh) - 336px);
 
     /* Codice colore dei ruoli della frase */
     --col-soggetto: #1565C0;
@@ -107,7 +107,7 @@ body {
 
 .logo-lega {
     display: block;
-    height: 80px;
+    height: 69px;
     width: auto;
     flex-shrink: 0;
 }
@@ -204,7 +204,7 @@ body {
 }
 
 @media (max-width: 768px) {
-    .logo-lega { height: 64px; }
+    .logo-lega { height: 55px; }
 }
 
 @media (max-width: 700px) {
@@ -214,7 +214,7 @@ body {
 }
 
 @media (max-width: 480px) {
-    .logo-lega { height: 48px; }
+    .logo-lega { height: 42px; }
     /* Telefono: logo, tasti e titolo devono stare in una riga senza uscire dallo schermo */
     .app-header { padding: 8px 10px; }
     .header-content { grid-template-columns: auto minmax(0, 1fr) auto; gap: 6px; }
@@ -958,7 +958,7 @@ body {
     flex-direction: column;
     justify-content: center;
     gap: clamp(10px, 2vh, 22px);
-    min-height: calc(100 * var(--vh) - 104px);
+    min-height: calc(100 * var(--vh) - 93px);
 }
 
 .consegna {

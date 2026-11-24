@@ -65,8 +65,8 @@ const SchedaPresa = (() => {
         </div>
       </form>
       <div id="dettagliPresa" hidden>
-        <h4 class="titolo-lista"><i class="bi bi-lightning-charge"></i> Prese da accendere come stimolo</h4>
-        <p class="helper-text">Se non ne scegli nessuna partecipano tutte quelle configurate. Nella stimolazione si accendono una alla volta, scelte a caso, ognuna preceduta dal suo anticipatore (scheda Anticipatore).</p>
+        <h4 class="titolo-lista"><i class="bi bi-lightning-charge"></i> Prese in funzione</h4>
+        <p class="helper-text">Spunta quelle da accendere come stimolo: se non ne spunti nessuna partecipano tutte. Nella stimolazione si accendono una alla volta, scelte a caso, ognuna preceduta dal suo anticipatore (scheda Anticipatore). <strong>Elimina</strong> toglie la presa dall'elenco (per tutte le configurazioni).</p>
         <div id="listaPrese" class="lista-elementi"></div>
         <div class="form-group" style="margin-top: 1rem;">
           <label for="presaSecondi">Quanto resta accesa (secondi)</label>
@@ -162,10 +162,17 @@ const SchedaPresa = (() => {
                 <span class="elemento-testo"><strong>${Util.escapeHtml(p.nome || p.id)}</strong>
                   <small>${Util.escapeHtml(p.ip || '')}</small></span>
               </label>
-              <button type="button" class="btn-secondary btn-piccolo" data-azione="presa-prova-una"
-                data-id="${Util.escapeHtml(p.id)}" title="Accende solo questa presa per il tempo impostato">
-                <i class="bi bi-lightning-charge-fill"></i> Prova
-              </button>
+              <div class="azioni-presa">
+                <button type="button" class="btn-secondary btn-piccolo" data-azione="presa-prova-una"
+                  data-id="${Util.escapeHtml(p.id)}" title="Accende solo questa presa per il tempo impostato">
+                  <i class="bi bi-lightning-charge-fill"></i> Prova
+                </button>
+                <button type="button" class="btn-secondary btn-piccolo pericolo" data-azione="presa-elimina"
+                  data-id="${Util.escapeHtml(p.id)}" title="Toglie questa presa dall'elenco"
+                  aria-label="Elimina ${Util.escapeHtml(p.nome || p.id)}">
+                  <i class="bi bi-trash3"></i> Elimina
+                </button>
+              </div>
             </div>`).join('');
       }
     }
@@ -239,6 +246,30 @@ const SchedaPresa = (() => {
           messaggio(`"${nome}": ${errore.message}`, 'error');
         } finally {
           btn.disabled = false;
+        }
+      } else if (btn.dataset.azione === 'presa-elimina') {
+        const id = btn.dataset.id;
+        const presa = Presa.elenco().find((p) => p.id === id);
+        const nome = presa?.nome || id;
+        if (!confirm(`🗑 ELIMINA PRESA\n\nTogliere «${nome}»${presa?.ip ? ` (${presa.ip})` : ''} dalle prese?\n\n`
+          + 'Non si accenderà più come stimolo, in nessuna configurazione. '
+          + 'Per rimetterla si usa «Configura le prese».')) {
+          return;
+        }
+        btn.disabled = true;
+        messaggio(`⏳ Elimino "${nome}"…`, 'info');
+        try {
+          // Riscrivo la configurazione delle prese senza questa; la password vuota tiene quella salvata
+          const conf = await Presa.leggiConfigurazione();
+          const rimaste = (conf.prese || []).filter((p) => p.id !== id)
+            .map((p) => ({ id: p.id, nome: p.nome, ip: p.ip }));
+          await Presa.salvaConfigurazione({ account: { email: conf.account?.email || '', password: '' }, prese: rimaste });
+          Archivio.dimenticaPresa(id);
+          await Presa.verifica().catch(() => {});
+          messaggio(`✅ "${nome}" eliminata.${rimaste.length ? '' : ' Non ci sono più prese: aggiungile con «Configura le prese».'}`, 'success');
+        } catch (errore) {
+          btn.disabled = false;
+          messaggio(`"${nome}" non eliminata: ${errore.message}`, 'error');
         }
       } else if (btn.dataset.azione === 'presa-scollega') {
         Presa.scollega();

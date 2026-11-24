@@ -1,10 +1,10 @@
 // ==================== MASTERTUTOR - AVVIO E NAVIGAZIONE ====================
 // App statica per Azure Static Web Apps, installabile come PWA su computer e tablet.
-// Un dispositivo = un utente: i dati restano nel browser (vedi js/archivio.js).
+// I dati restano nel browser, divisi in configurazioni con un nome, una per utente (vedi js/archivio.js).
 
 const APP_CONFIG = {
   nome: 'Mastertutor',
-  versione: '1.0.20',
+  versione: '1.0.21',
 };
 window.APP_CONFIG = APP_CONFIG;
 
@@ -94,7 +94,9 @@ const App = (() => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `mastertutor-dati-${dataPerNomeFile()}.json`;
+      const nome = (Archivio.configurazioneAttiva()?.nome || 'dati').normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '').toLowerCase() || 'dati';
+      a.download = `mastertutor-${nome}-${dataPerNomeFile()}.json`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -106,8 +108,11 @@ const App = (() => {
 
   function importa() {
     alternaMenu(false);
+    const nome = Archivio.configurazioneAttiva()?.nome || '';
     if (!confirm('📥 IMPORTA DATI\n\nI dati del file (audio, video, impostazioni e ordine) '
-      + 'sostituiranno quelli attuali di questo dispositivo.\n\n'
+      + `sostituiranno quelli della configurazione «${nome}».\n\n`
+      + 'Le altre configurazioni non vengono toccate: per importare in una configurazione nuova, '
+      + 'creala prima in Configurazione → «Nuova».\n\n'
       + 'Il registro delle sessioni e il collegamento al ponte NON vengono toccati.\n\nContinuare?')) {
       return;
     }

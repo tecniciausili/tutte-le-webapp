@@ -2316,7 +2316,7 @@ body.user-mode-active .app-main {
 
 .logo-lega {
     display: block;
-    height: 80px;
+    height: 69px;
     width: auto;
     flex-shrink: 0;
 }
@@ -2414,7 +2414,7 @@ body.user-mode-active .app-main {
 
 @media (max-width: 768px) {
     .logo-lega {
-        height: 64px;
+        height: 55px;
     }
 }
 
@@ -2438,7 +2438,7 @@ body.user-mode-active .app-main {
 
 @media (max-width: 480px) {
     .logo-lega {
-        height: 48px;
+        height: 42px;
     }
 
     /* Pulsanti un po' più piccoli e slidebar senza le due «T»:

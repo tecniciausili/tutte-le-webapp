@@ -483,7 +483,7 @@ button.ct-freccia { padding: 0; font: inherit; cursor: pointer; }
     color: var(--ink);
     box-shadow: 0 1px 0 #e3e8e7, 0 2px 8px rgba(0, 0, 0, .06);
 }
-.logo-lega { display: block; height: 80px; width: auto; flex: none; }
+.logo-lega { display: block; height: 69px; width: auto; flex: none; }
 .avvio-testata .logo-lega + .avvio-marchio { margin-right: auto; }
 .avvio-testata .ct-freccia { background: var(--sfondo); }
 .avvio-testata .ct-freccia:hover { background: var(--giallo); }
@@ -492,7 +492,7 @@ button.ct-freccia { padding: 0; font: inherit; cursor: pointer; }
 html.instradamento body { visibility: hidden; }
 
 @media (max-width: 768px) {
-    .logo-lega { height: 64px; }
+    .logo-lega { height: 55px; }
 }
 @media (max-width: 600px) {
     /* Sui telefoni: logo e pulsanti sulla prima riga, il nome dell'app sotto */
@@ -500,6 +500,6 @@ html.instradamento body { visibility: hidden; }
     .avvio-testata .avvio-marchio { order: 10; flex-basis: 100%; margin-right: 0; }
 }
 @media (max-width: 480px) {
-    .logo-lega { height: 48px; }
+    .logo-lega { height: 42px; }
     .avvio-marchio h1 { font-size: 22px; }
 }
