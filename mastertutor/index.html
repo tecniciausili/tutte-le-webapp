@@ -16,12 +16,12 @@
     <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
-    <link rel="stylesheet" href="css/styles.css?v=1.0.23">
-    <link rel="stylesheet" href="css/anticipatori.css?v=1.0.23">
-    <link rel="stylesheet" href="css/intestazione.css?v=1.0.23">
-    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css?v=1.0.23">
+    <link rel="stylesheet" href="css/styles.css?v=1.0.24">
+    <link rel="stylesheet" href="css/anticipatori.css?v=1.0.24">
+    <link rel="stylesheet" href="css/intestazione.css?v=1.0.24">
+    <link rel="stylesheet" href="assets/fonts/bootstrap-icons/bootstrap-icons.css?v=1.0.24">
     <!-- Installazione sul dispositivo: barra in basso ben visibile (js/installa.js) -->
-    <script src="js/installa.js?v=2.0" data-nome="Mastertutor"></script>
+    <script src="js/installa.js?v=2.1" data-nome="Mastertutor"></script>
 </head>
 <body>
     <header class="app-header">
@@ -151,24 +151,24 @@
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <script src="js/lib/lame.min.js"></script>
-    <script src="js/util.js?v=1.0.23"></script>
-    <script src="js/archivio.js?v=1.0.23"></script>
-    <script src="js/elabora-audio.js?v=1.0.23"></script>
-    <script src="js/presa.js?v=1.0.23"></script>
-    <script src="js/presa-webpubsub.js?v=1.0.23"></script>
-    <script src="js/presa-nativa.js?v=1.0.23"></script>
-    <script src="js/riproduttore.js?v=1.0.23"></script>
-    <script src="js/ordinabile.js?v=1.0.23"></script>
-    <script src="js/scheda-presa.js?v=1.0.23"></script>
-    <script src="js/configura-prese.js?v=1.0.23"></script>
-    <script src="js/educatore.js?v=1.0.23"></script>
-    <script src="js/utente.js?v=1.0.23"></script>
-    <script src="js/app.js?v=1.0.23"></script>
+    <script src="js/util.js?v=1.0.24"></script>
+    <script src="js/archivio.js?v=1.0.24"></script>
+    <script src="js/elabora-audio.js?v=1.0.24"></script>
+    <script src="js/presa.js?v=1.0.24"></script>
+    <script src="js/presa-webpubsub.js?v=1.0.24"></script>
+    <script src="js/presa-nativa.js?v=1.0.24"></script>
+    <script src="js/riproduttore.js?v=1.0.24"></script>
+    <script src="js/ordinabile.js?v=1.0.24"></script>
+    <script src="js/scheda-presa.js?v=1.0.24"></script>
+    <script src="js/configura-prese.js?v=1.0.24"></script>
+    <script src="js/educatore.js?v=1.0.24"></script>
+    <script src="js/utente.js?v=1.0.24"></script>
+    <script src="js/app.js?v=1.0.24"></script>
 
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js?v=1.0.23')
+                navigator.serviceWorker.register('./service-worker.js?v=1.0.24')
                     .then((registrazione) => {
                         // update() può fallire se nel frattempo il service worker è stato rimosso
                         setInterval(() => registrazione.update().catch(() => {}), 60000);

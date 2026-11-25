@@ -1,7 +1,7 @@
 # Web app Lega del Filo d'Oro: raccolta
 
 Un solo sito con dentro più web app: `index.html` mostra un box per app, e ogni app sta nella sua
-cartella (`/conta_con_le_dita/`, `/scrivo_parole/`, `/frase_minima/`, `/concetti_topologici/`, `/causa-effetto/`, `/apprendere_categorie/`, `/mastertutor/`, …).
+cartella (`/conta_con_le_dita/`, `/scrivo_parole/`, `/frase_minima/`, `/concetti_topologici/`, `/causa-effetto/`, `/apprendere_categorie/`, `/mastertutor/`, `/trova-forma/`, …).
 Così su Azure si occupa **una sola** App Web statica (piano Gratuito) invece di una per app.
 
 Tutte le app sono **statiche** (HTML, CSS, JavaScript) e installabili come PWA (pulsante «Installa sul
@@ -26,7 +26,7 @@ Questo repository è **autonomo**: le app si modificano direttamente qui. Non di
 | Mastertutor Windows | Nessuna cartella: l'installatore (oltre 100 MB, troppo grande per GitHub e per il sito) è una **Release** del repository `tecniciausili/mastertutor`; nell'elenco `APP` c'è una voce con `url` al posto di `cartella`. A ogni versione nuova si aggiornano `url` e `dettaglio` |
 
 Le app condividono lo stesso indirizzo (origine), quindi ognuna usa un **prefisso suo** per le chiavi
-di localStorage (`cd_`, `spl_`, `sps_`, `fm_`, `ct_`, `ce_`, `ac_`, `mt_`) e per le cache del service worker. Nessuna app
+di localStorage (`cd_`, `spl_`, `sps_`, `fm_`, `ct_`, `ce_`, `ac_`, `mt_`, `tf.`) e per le cache del service worker. Nessuna app
 deve chiamare `localStorage.clear()`: cancellerebbe i dati di tutte le altre.
 
 ## Frecce di navigazione
@@ -49,15 +49,16 @@ uguale in tutte.
 
 ## Installa sul dispositivo
 
-Ogni app ha `js/installa.js` (uguale in tutte, versione 2.0). Nelle pagine dove l'app si apre
+Ogni app ha `js/installa.js` (uguale in tutte, versione 2.1). Nelle pagine dove l'app si apre
 (Configurazione ed esercizio) mostra una **barra fissa in basso** «Installa … su questo dispositivo»:
 - Chrome, Edge, Samsung Internet: compare quando il browser dice che l'app si può installare, e il
   pulsante apre subito la richiesta di installazione;
 - Safari (iPad, iPhone, Mac) e gli altri browser: compare subito e il pulsante mostra i passi;
 - non compare se l'app è già installata e aperta dalla sua icona, né in Mastertutor Windows e negli APK;
-- la ✕ la nasconde fino alla prossima apertura.
+- la ✕ la nasconde fino alla prossima apertura;
+- durante l'esercizio a schermo intero (e con `body.playing`) non si vede.
 
-Si aggiunge nel `<head>` della pagina: `<script src="js/installa.js?v=2.0" data-nome="Nome"></script>`
+Si aggiunge nel `<head>` della pagina: `<script src="js/installa.js?v=2.1" data-nome="Nome"></script>`
 (facoltativi `data-colore`, `data-icona`). Nelle pagine-menu con `<div data-installa>` resta il riquadro.
 
 ## Aggiungere o aggiornare un'app

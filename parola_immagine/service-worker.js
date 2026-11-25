@@ -7,7 +7,7 @@
 // cache non vanno toccate.
 // Quando si modifica l'app: aumentare la versione qui (e i ?v= nelle pagine).
 const PREFISSO = 'parola_immagine_';
-const CACHE_NAME = `${PREFISSO}v3.0.7`;
+const CACHE_NAME = `${PREFISSO}v3.0.8`;
 
 const URLS_TO_CACHE = [
   './',
@@ -18,7 +18,7 @@ const URLS_TO_CACHE = [
   './manifest.json',
   './css/styles.css?v=3.0.4',
   './js/raccolta.js?v=1.1',
-  './js/installa.js?v=2.0',
+  './js/installa.js?v=2.1',
   './js/menu.js?v=1.0',
   './js/comune.js?v=3.0.2',
   './js/archivio.js?v=3.0.3',

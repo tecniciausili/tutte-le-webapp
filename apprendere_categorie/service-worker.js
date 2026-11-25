@@ -6,11 +6,11 @@
 // Tutte le cache dell'app iniziano con PREFISSO: sullo stesso indirizzo ci sono altre app,
 // e le loro cache non vanno toccate.
 const PREFISSO = 'apprendere_categorie_';
-const CACHE_NAME = `${PREFISSO}v1.0.2`;
+const CACHE_NAME = `${PREFISSO}v1.0.3`;
 const URLS_TO_CACHE = [
   './',
   './index.html',
-  './js/installa.js?v=2.0',
+  './js/installa.js?v=2.1',
   './js/raccolta.js',
   './manifest.json',
   './assets/icons/icon-192.png',

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#007adf">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Trova Forma">
+  <title>Trova Forma</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/style.css?v=1.1.0">
+  <!-- Installazione sul dispositivo: barra in basso ben visibile (js/installa.js, uguale in tutte le app) -->
+  <script src="js/installa.js?v=2.1" data-nome="Trova Forma" data-colore="#0a8f6a"></script>
+</head>
+<body>
+
+<!-- Pagine dell'app (esercizio e Configurazione), nascoste durante il gioco a schermo intero -->
+<div id="app-shell">
+<!-- Intestazione bianca con il logo della Lega del Filo d'Oro, come nelle altre app della raccolta -->
+<header class="app-header">
+  <img class="logo-lega" src="assets/img/logo-lega-filo-oro.png" alt="Lega del Filo d'Oro">
+  <div class="app-titolo">
+    <h1>Trova Forma</h1>
+    <p>Esercizi oculo-manuali</p>
+  </div>
+  <span aria-hidden="true"></span>
+</header>
+
+<div class="contenitore">
+  <div id="session-banner" class="banner" hidden>
+    <div><strong>Ultima sessione</strong> — <span id="sb-text"></span></div>
+    <div class="row">
+      <button id="sb-download" class="small">Scarica dati (.json)</button>
+      <button id="sb-close" class="small ghost">Chiudi</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ESERCIZIO ===================== -->
+<!-- All'apertura: qui se c'è almeno un video di rinforzo, altrimenti la Configurazione -->
+<section id="esercizio-view" class="contenitore" hidden>
+  <div class="intestazione-pagina">
+    <h2>Esercizio</h2>
+    <button id="vai-config" type="button" class="ghost">⚙ Configurazione</button>
+  </div>
+  <div id="riepilogo" class="riepilogo"></div>
+  <button id="start" type="button" class="start">INIZIA GIOCO</button>
+  <p id="start-note" class="hint center"></p>
+  <p class="hint center">Per uscire dal gioco: tasto <kbd>Esc</kbd> oppure pressione lunga sulla rotellina in alto a destra.</p>
+</section>
+
+<!-- ===================== PAGINA DI CONFIGURAZIONE ===================== -->
+<main id="config-view" class="contenitore" hidden>
+  <div class="intestazione-pagina">
+    <h2>Configurazione</h2>
+    <button id="vai-esercizio" type="button">▶ Vai all'esercizio</button>
+  </div>
+
+  <div class="grid">
+
+    <!-- Sfondo e oggetto -->
+    <section class="card">
+      <h2>Sfondo e oggetto</h2>
+
+      <label class="field">Colore sfondo
+        <input type="color" data-k="background">
+      </label>
+
+      <div class="field">Oggetto (GIF animata o immagine fissa)
+        <div class="row">
+          <button id="pick-obj" type="button">Scegli file…</button>
+          <button id="clear-obj" type="button" class="ghost small">Rimuovi</button>
+          <img id="obj-thumb" alt="" hidden>
+        </div>
+        <small id="obj-name" class="hint">Nessun file: verrà usato un cerchio rosso.</small>
+        <input type="file" id="obj-file" accept="image/gif,image/png,image/jpeg,image/webp,image/svg+xml" hidden>
+      </div>
+
+      <div class="two">
+        <label class="field">Larghezza (cm)
+          <input type="number" data-k="sizeCm.w" min="0.5" max="60" step="0.5">
+        </label>
+        <label class="field">Altezza (cm)
+          <input type="number" data-k="sizeCm.h" min="0.5" max="60" step="0.5">
+        </label>
+      </div>
+
+      <label class="field">Contrasto dell'oggetto: <output id="o-contrast"></output>
+        <input type="range" data-k="contrast" min="40" max="400" step="5">
+      </label>
+
+      <details>
+        <summary>Taratura schermo (pixel per cm)</summary>
+        <label class="field">1 cm = quanti pixel CSS?
+          <input type="number" data-k="pxPerCm" min="10" max="120" step="0.1">
+        </label>
+        <small class="hint">37,8 è il valore standard (96 dpi). Per misure esatte: sul dispositivo reale disegna con la
+          "Anteprima" un quadrato di 10 cm, misuralo col righello e correggi il valore.</small>
+      </details>
+
+      <h3>Zona dello schermo in cui si muove</h3>
+      <div class="two">
+        <label class="field">Margine sinistro (cm)<input type="number" data-k="area.left" min="0" max="200" step="0.5"></label>
+        <label class="field">Margine destro (cm)<input type="number" data-k="area.right" min="0" max="200" step="0.5"></label>
+        <label class="field">Margine alto (cm)<input type="number" data-k="area.top" min="0" max="200" step="0.5"></label>
+        <label class="field">Margine basso (cm)<input type="number" data-k="area.bottom" min="0" max="200" step="0.5"></label>
+      </div>
+      <label class="field">Escursione verticale: <output id="o-vertical"></output>
+        <input type="range" data-k="vertical" min="0" max="100" step="5">
+      </label>
+      <div id="area-preview" aria-label="Anteprima area di movimento"><div id="ap-area"></div><div id="ap-obj"></div></div>
+      <small class="hint" id="ap-hint"></small>
+    </section>
+
+    <!-- Rinforzo -->
+    <section class="card">
+      <h2>Rinforzo (YouTube)</h2>
+
+      <div class="two">
+        <label class="field">Durata del rinforzo (secondi)
+          <input type="number" data-k="reinforcement.seconds" min="1" max="300" step="1">
+        </label>
+        <label class="field">Ordine clip
+          <select data-k="reinforcement.order">
+            <option value="seq">In sequenza</option>
+            <option value="random">Casuale</option>
+          </select>
+        </label>
+      </div>
+
+      <fieldset class="field">
+        <legend>Cosa si vede e si sente</legend>
+        <label class="radio"><input type="radio" name="mode" data-k="reinforcement.mode" value="av"> Audio + video a schermo intero</label>
+        <label class="radio"><input type="radio" name="mode" data-k="reinforcement.mode" value="audio"> Solo audio (schermo senza oggetto)</label>
+      </fieldset>
+
+      <label class="field">Al tocco successivo
+        <select data-k="reinforcement.resume">
+          <option value="resume">Riprendi da dove si era interrotto</option>
+          <option value="restart">Riparti dall'inizio della clip</option>
+        </select>
+      </label>
+
+      <h3>Aggiungi un video</h3>
+      <div class="field">
+        <div class="row grow">
+          <input type="search" id="q" placeholder="Cerca su YouTube…" enterkeyhint="search">
+          <button id="q-go" type="button">Cerca</button>
+        </div>
+        <details id="key-box">
+          <summary>Chiave API di YouTube (necessaria per la ricerca)</summary>
+          <input type="password" id="api-key" placeholder="AIza…" autocomplete="off">
+          <small class="hint">Serve solo per cercare dentro la pagina. Resta salvata solo su questo dispositivo e non viene mai
+            inclusa nei file di configurazione. Senza chiave puoi comunque incollare il link di un video qui sotto.</small>
+        </details>
+        <div id="results" class="results"></div>
+      </div>
+      <div class="field">
+        <div class="row grow">
+          <input type="url" id="link" placeholder="…oppure incolla il link / l'ID di un video">
+          <button id="link-add" type="button">Aggiungi</button>
+        </div>
+        <small id="add-msg" class="hint" role="status"></small>
+      </div>
+
+      <h3>Playlist <span id="pl-count" class="pill"></span></h3>
+      <ol id="playlist" class="playlist"></ol>
+      <small class="hint">Inizio e fine in secondi o m:ss (es. 1:05). Fine vuota = fino alla fine del video.
+        Con "Anteprima" puoi scegliere i punti ascoltando.</small>
+    </section>
+
+    <!-- Tocco e sessione -->
+    <section class="card">
+      <h2>Tocco e sessione</h2>
+
+      <label class="field">Tolleranza del tocco attorno all'oggetto: <output id="o-tol"></output>
+        <input type="range" data-k="touch.toleranceCm" min="0" max="5" step="0.25">
+      </label>
+      <small class="hint">Un tocco conta se cade entro questa distanza dal bordo dell'oggetto
+        (in più si tiene conto dell'ampiezza del dito quando il dispositivo la comunica).</small>
+
+      <label class="field">Se l'oggetto non viene toccato dopo (secondi, 0 = mai)
+        <input type="number" data-k="session.idleSec" min="0" max="600" step="1">
+      </label>
+
+      <label class="check"><input type="checkbox" data-k="touch.showGear"> Mostra la rotellina in alto a destra</label>
+      <label class="field">Pressione lunga sulla rotellina (secondi)
+        <input type="number" data-k="touch.gearHoldSec" min="1" max="10" step="0.5">
+      </label>
+      <label class="check"><input type="checkbox" data-k="session.autoSave"> Scarica i dati a fine sessione</label>
+      <small class="hint">Per uscire dal gioco: tasto <kbd>Esc</kbd> oppure pressione lunga sulla rotellina.</small>
+    </section>
+  </div>
+
+  <div class="actions">
+    <button id="save-cfg" type="button">Salva configurazione</button>
+    <button id="open-cfg" type="button">Apri configurazione</button>
+    <button id="reset-cfg" type="button" class="ghost">Ripristina predefiniti</button>
+    <input type="file" id="cfg-file" accept="application/json,.json" hidden>
+  </div>
+
+  <button id="vai-esercizio-2" type="button" class="start">▶ VAI ALL'ESERCIZIO</button>
+</main>
+</div>
+
+<!-- ===================== SCHERMATA DI GIOCO (a schermo intero) ===================== -->
+<div id="game-view" hidden>
+  <div id="stage">
+    <div id="vid-layer"></div>
+    <img id="object" alt="" draggable="false">
+    <div id="shield"></div>
+    <button id="gear" type="button" aria-label="Impostazioni (tieni premuto)" hidden>
+      <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path fill="currentColor"
+        d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6a.5.5 0 0 0 .1-.6l-2-3.5a.5.5 0 0 0-.6-.2l-2.5 1a7.4 7.4 0 0 0-1.7-1l-.4-2.6a.5.5 0 0 0-.5-.4h-4a.5.5 0 0 0-.5.4l-.4 2.6a7.4 7.4 0 0 0-1.7 1l-2.5-1a.5.5 0 0 0-.6.2l-2 3.5a.5.5 0 0 0 .1.6L4.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6a.5.5 0 0 0-.1.6l2 3.5c.1.2.4.3.6.2l2.5-1c.5.4 1.1.7 1.7 1l.4 2.6c0 .2.3.4.5.4h4c.3 0 .5-.2.5-.4l.4-2.6c.6-.3 1.2-.6 1.7-1l2.5 1c.2.1.5 0 .6-.2l2-3.5a.5.5 0 0 0-.1-.6L19.4 13zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ===================== ANTEPRIMA CLIP ===================== -->
+<dialog id="clip-dlg">
+  <h3 id="clip-title">Anteprima</h3>
+  <div id="clip-box"><div id="clip-player"></div></div>
+  <div class="row wrap">
+    <button id="clip-set-start" type="button" class="small">Imposta inizio qui</button>
+    <button id="clip-set-end" type="button" class="small">Imposta fine qui</button>
+    <button id="clip-test" type="button" class="small ghost">Prova il tratto</button>
+  </div>
+  <p id="clip-info" class="hint"></p>
+  <div class="row end"><button id="clip-close" type="button">Chiudi</button></div>
+</dialog>
+
+<script src="js/config.js"></script>
+<script src="js/touch-guard.js"></script>
+<script src="js/youtube.js"></script>
+<script src="js/game.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

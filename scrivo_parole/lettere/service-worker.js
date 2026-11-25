@@ -6,7 +6,7 @@
 // Tutte le cache iniziano con PREFISSO: sullo stesso dominio ci sono altre app,
 // e le loro cache non vanno toccate.
 const PREFISSO = 'scrivo_parole_con_le_lettere_';
-const CACHE_NAME = `${PREFISSO}v3.0.13`;
+const CACHE_NAME = `${PREFISSO}v3.0.14`;
 
 const URLS_TO_CACHE = [
   './',
@@ -23,7 +23,7 @@ const URLS_TO_CACHE = [
   '../js/apertura.js?v=1.0',
   './assets/img/logo-lega-filo-oro.png',
   './js/raccolta.js?v=1.1',
-  './js/installa.js?v=2.0',
+  './js/installa.js?v=2.1',
   './js/menu.js?v=1.0',
   './assets/js/chart.min.js',
   './assets/fonts/bootstrap-icons/bootstrap-icons.css',

@@ -6,14 +6,14 @@
 // localStorage e IndexedDB. YouTube va sempre in rete.
 // Tutte le cache dell'app iniziano con PREFISSO: sullo stesso dominio ci sono altre app, e le loro cache non vanno toccate.
 const PREFISSO = 'causa_effetto_';
-const CACHE_NAME = `${PREFISSO}v1.0.10`;
+const CACHE_NAME = `${PREFISSO}v1.0.11`;
 const CACHE_ARASAAC = `${PREFISSO}arasaac`;
 const URLS_TO_CACHE = [
   './',
   './index.html',
   './css/styles.css',
   './css/intestazione.css',
-  './js/installa.js?v=2.0',
+  './js/installa.js?v=2.1',
   './js/util.js',
   './js/archivio.js',
   './js/raccolta.js',

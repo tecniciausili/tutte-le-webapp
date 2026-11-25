@@ -5,7 +5,7 @@
 // Tutte le cache dell'app iniziano con PREFISSO: sullo stesso dominio
 // ci sono altre app, e le loro cache non vanno toccate.
 const PREFISSO = 'scrittura_simboli_';
-const CACHE_NAME = `${PREFISSO}v1.5.7`;
+const CACHE_NAME = `${PREFISSO}v1.5.8`;
 // Pittogrammi ARASAAC (facoltativi, da static.arasaac.org): cache a parte, che resta tra le versioni
 const CACHE_ARASAAC = `${PREFISSO}arasaac`;
 const HOST_ARASAAC = 'static.arasaac.org';
@@ -18,7 +18,7 @@ const URLS_TO_CACHE = [
   './index.html',
   './css/styles.css',
   './css/intestazione.css',
-  './js/installa.js?v=2.0',
+  './js/installa.js?v=2.1',
   './js/lessico.js',
   './js/raccolta.js',
   './js/util.js',

@@ -4,7 +4,7 @@
 
 const APP_CONFIG = {
   nome: 'Mastertutor',
-  versione: '1.0.23',
+  versione: '1.0.24',
 };
 window.APP_CONFIG = APP_CONFIG;
 

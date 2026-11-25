@@ -67,6 +67,12 @@
             }
         },
         {
+            "route": "/trova-forma/service-worker.js",
+            "headers": {
+                "Cache-Control": "no-cache"
+            }
+        },
+        {
             "route": "/controlla.sh",
             "statusCode": 404
         },

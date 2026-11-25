@@ -1,9 +1,9 @@
 /**
- * Installazione dell'app sul dispositivo — uguale in tutte le web app della raccolta (versione 2.0).
+ * Installazione dell'app sul dispositivo — uguale in tutte le web app della raccolta (versione 2.1).
  *
  * Due modi:
  *  1. BARRA in basso, fissa e ben visibile, nelle pagine dove l'app si apre (Configurazione ed esercizio):
- *         <script src="js/installa.js?v=2.0" data-nome="Nome dell'app"></script>
+ *         <script src="js/installa.js?v=2.1" data-nome="Nome dell'app"></script>
  *     Facoltativi sullo stesso <script>: data-colore (altrimenti il theme-color), data-icona.
  *  2. RIQUADRO dentro la pagina, se la pagina ha un elemento
  *         <div data-installa data-nome="Nome dell'app"></div>
@@ -16,7 +16,8 @@
  *    può installare («beforeinstallprompt»), e il pulsante apre subito la richiesta di installazione;
  *  - Safari su iPad/iPhone/Mac e gli altri browser: compare subito e il pulsante mostra i passi da fare;
  *  - la ✕ la nasconde fino alla prossima apertura dell'app (sessionStorage);
- *  - appena installata la barra lo dice e sparisce.
+ *  - appena installata la barra lo dice e sparisce;
+ *  - si nasconde durante l'esercizio a schermo intero e durante il gioco (body.playing).
  */
 (function () {
     'use strict';
@@ -69,6 +70,7 @@
   .inst-barra .inst-pulsante{order:3;flex:1 1 100%;min-height:44px;padding:10px 16px}
 }
 @media print{.inst-barra{display:none}}
+.inst-barra[hidden],body.playing .inst-barra{display:none}
 .inst-sfondo{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;
   padding:16px;z-index:10000}
 .inst-modale{background:#fff;color:#263238;border-radius:18px;max-width:460px;width:100%;padding:22px 22px 18px;
@@ -247,7 +249,15 @@
                 el.remove();
             });
             document.body.appendChild(el);
+            nascondiSeSchermoIntero();
         };
+
+        // Durante l'esercizio a schermo intero la barra non deve coprire niente
+        const nascondiSeSchermoIntero = () => {
+            if (el) el.hidden = !!(document.fullscreenElement || document.webkitFullscreenElement);
+        };
+        document.addEventListener('fullscreenchange', nascondiSeSchermoIntero);
+        document.addEventListener('webkitfullscreenchange', nascondiSeSchermoIntero);
 
         window.addEventListener('appinstalled', () => {
             richiesta = null;
