@@ -5,13 +5,14 @@
 // Tutte le cache dell'app iniziano con PREFISSO: sullo stesso indirizzo ci sono
 // altre app della raccolta, e le loro cache non vanno toccate.
 const PREFISSO = 'mastertutor_';
-const CACHE_NAME = `${PREFISSO}v1.0.22`;
+const CACHE_NAME = `${PREFISSO}v1.0.23`;
 const URLS_TO_CACHE = [
   './',
   './index.html',
   './css/styles.css',
   './css/anticipatori.css',
   './css/intestazione.css',
+  './js/installa.js?v=2.0',
   './js/lib/lame.min.js',
   './js/util.js',
   './js/archivio.js',

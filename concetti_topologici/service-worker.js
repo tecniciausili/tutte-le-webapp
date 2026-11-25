@@ -8,7 +8,7 @@
 // Tutte le cache dell'app iniziano con PREFISSO: sullo stesso dominio
 // ci sono altre app, e le loro cache non vanno toccate.
 const PREFISSO = 'concetti_topologici_';
-const CACHE_NAME = `${PREFISSO}v1.1.8`;
+const CACHE_NAME = `${PREFISSO}v1.1.9`;
 const CACHE_ARASAAC = `${PREFISSO}arasaac`;
 const CACHE_MODELLI = `${PREFISSO}modelli`;
 const LIMITE_ARASAAC = 800;
@@ -18,6 +18,7 @@ const URLS_TO_CACHE = [
   './gestione.html',
   './gioca.html',
   './manifest.json',
+  './js/installa.js?v=2.0',
   './js/raccolta.js?v=1.1',
   './css/styles.css?v=1.1.7',
   './css/gioco.css?v=1.1.7',

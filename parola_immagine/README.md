@@ -74,7 +74,7 @@ parola_immagine/
 │   ├── esercizio.js      # I due esercizi (modalità da <body data-modo>)
 │   ├── comune.js         # Aggiorna l'app, avvisi, registrazione del service worker
 │   ├── blocco-tocco.js   # Negli esercizi: niente zoom/menu con tocchi involontari (LIM, tablet)
-│   ├── installa.js       # Riquadro «Installa sul dispositivo» (uguale in tutte le app)
+│   ├── installa.js       # «Installa sul dispositivo»: barra in basso nelle pagine d'apertura, riquadro nel menu (uguale in tutte le app)
 │   └── raccolta.js       # L'app non torna all'indice della raccolta (RACCOLTA = null)
 └── assets/
     ├── icons/            # Icone PWA

@@ -47,6 +47,19 @@ dispositivo), **Installa l'app** e **Aggiorna App** (scarica l'ultima versione; 
 senza connessione non cancella nulla). Nelle app con le icone Bootstrap il menu è `js/menu.js`,
 uguale in tutte.
 
+## Installa sul dispositivo
+
+Ogni app ha `js/installa.js` (uguale in tutte, versione 2.0). Nelle pagine dove l'app si apre
+(Configurazione ed esercizio) mostra una **barra fissa in basso** «Installa … su questo dispositivo»:
+- Chrome, Edge, Samsung Internet: compare quando il browser dice che l'app si può installare, e il
+  pulsante apre subito la richiesta di installazione;
+- Safari (iPad, iPhone, Mac) e gli altri browser: compare subito e il pulsante mostra i passi;
+- non compare se l'app è già installata e aperta dalla sua icona, né in Mastertutor Windows e negli APK;
+- la ✕ la nasconde fino alla prossima apertura.
+
+Si aggiunge nel `<head>` della pagina: `<script src="js/installa.js?v=2.0" data-nome="Nome"></script>`
+(facoltativi `data-colore`, `data-icona`). Nelle pagine-menu con `<div data-installa>` resta il riquadro.
+
 ## Aggiungere o aggiornare un'app
 
 1. Modificare (o aggiungere) l'app nella sua cartella, qui nel repository.
