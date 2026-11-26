@@ -101,6 +101,12 @@ Nell'app: **Configurazione → Presa → Configura le prese** → account Tapo e
 **Salva configurazione**. I dati restano nel tablet, che deve essere nella stessa rete Wi-Fi delle prese.
 Così si crea una configurazione nuova per ogni rete (sede, casa).
 
+**Prese P100 e P110** (dalla 1.0.24 di Android, Windows e ponte): si possono usare insieme, purché siano
+tutte sullo stesso account Tapo. Le P110 con firmware 1.4.x (2026) vogliono attiva, nell'app Tapo del
+telefono, **Io → Servizi di terze parti → Compatibilità con terze parti**: se è spenta, Mastertutor lo dice.
+Dopo che una P110 è stata attaccata, Mastertutor la «sveglia» con il messaggio di scoperta e riprova per
+qualche secondo.
+
 ### 2. Webapp (computer, tablet, telefono) con il ponte
 
 ```
